@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background: black;
+}
+
+.react-calendar {
+  background-color: rgba(100, 100, 100, 0.5) !important;
+}
