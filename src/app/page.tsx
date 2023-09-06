@@ -1,5 +1,5 @@
 "use client";
-import { Reservas } from "@/components/domain/Reservas";
+import { Scheduling } from "@/components/domain/Scheduling";
 import { SignIn } from "@/components/domain/SignIn";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
@@ -24,8 +24,8 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-12">
-      {user ? <Reservas /> : <SignIn setUser={setUser} />}
+    <main className="flex min-h-screen flex-col items-center justify-around gap-3">
+      {user ? <Scheduling /> : <SignIn setUser={setUser} />}
     </main>
   );
 }
