@@ -37,7 +37,7 @@ export const SignIn = ({
     }
   };
   return (
-    <div className="border p-3 border-slate-200 rounded shadow-sm shadow-slate-200">
+    <div className="border p-3 border-slate-200 rounded shadow-sm shadow-slate-200 mx-5">
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="flex items-center border-b border-teal-500 py-2">
           <input

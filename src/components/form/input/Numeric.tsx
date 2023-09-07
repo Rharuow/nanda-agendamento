@@ -2,7 +2,7 @@ import classNames from "classnames";
 import React, { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 
-export const InputText = ({
+export const InputNumeric = ({
   name,
   label,
   ...rest
@@ -31,7 +31,9 @@ export const InputText = ({
       )}
       <input
         id={name}
-        type="text"
+        pattern="[0-9]*"
+        inputMode="numeric"
+        type="number"
         className={classNames(
           "bg-transparent border-b-[1px] animate-inputBlur text-white focus:outline-none caret-white focus:animate-inputFocus",
           {
