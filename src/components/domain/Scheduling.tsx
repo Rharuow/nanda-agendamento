@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Calendar from "react-calendar";
 import { InputText } from "../form/input/Text";
 import { FormProvider, useForm } from "react-hook-form";
+import { InputNumeric } from "../form/input/Numeric";
 
 type ValuePiece = Date | string | null;
 
@@ -23,14 +24,26 @@ export const Scheduling = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-around py-3 gap-3">
-      <div className="flex">
-        <FormProvider {...methods}>
-          <form>
+    <div className="flex flex-col items-center gap-3 w-full">
+      <FormProvider {...methods}>
+        <form className="flex flex-col gap-3 w-full">
+          <div className="flex justify-center gap-2">
             <InputText name="name" label="Nome do aluno" />
-          </form>
-        </FormProvider>
-      </div>
+          </div>
+          <div className="flex justify-around gap-2">
+            <InputNumeric
+              name="price"
+              className="w-50"
+              label="Valor por aula"
+            />
+            <InputNumeric
+              name="price"
+              className="w-50"
+              label="Quantidade aulas"
+            />
+          </div>
+        </form>
+      </FormProvider>
       <Calendar
         onChange={(date) => handleDate(date as Date | null)}
         {...(dates && { value: dates })}

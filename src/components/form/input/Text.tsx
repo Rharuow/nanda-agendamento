@@ -9,6 +9,7 @@ export const InputText = ({
 }: {
   name: string;
   label?: string;
+  className?: string;
 }) => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
@@ -17,7 +18,10 @@ export const InputText = ({
   const watchField = useWatch({ control, name });
 
   return (
-    <div className="relative">
+    <div
+      className="relative"
+      {...(rest.className && { className: rest.className })}
+    >
       {label && (
         <label
           htmlFor={name}

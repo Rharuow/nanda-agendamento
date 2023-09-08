@@ -9,6 +9,8 @@ export const InputNumeric = ({
 }: {
   name: string;
   label?: string;
+  className?: string;
+  inputClassName?: string;
 }) => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
@@ -17,7 +19,10 @@ export const InputNumeric = ({
   const watchField = useWatch({ control, name });
 
   return (
-    <div className="relative">
+    <div
+      className="relative"
+      {...(rest.className && { className: rest.className })}
+    >
       {label && (
         <label
           htmlFor={name}
@@ -35,7 +40,9 @@ export const InputNumeric = ({
         inputMode="numeric"
         type="number"
         className={classNames(
-          "bg-transparent border-b-[1px] animate-inputBlur text-white focus:outline-none caret-white focus:animate-inputFocus",
+          `bg-transparent border-b-[1px] animate-inputBlur text-white focus:outline-none caret-white focus:animate-inputFocus ${
+            rest.inputClassName || " "
+          }`,
           {
             "animate-inputFocus": watchField,
             "animate-inputBlur": !watchField,
