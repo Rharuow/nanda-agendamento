@@ -3,6 +3,7 @@ import Calendar from "react-calendar";
 import { InputText } from "../form/input/Text";
 import { FormProvider, useForm } from "react-hook-form";
 import { InputNumeric } from "../form/input/Numeric";
+import { Button } from "../Button";
 
 type ValuePiece = Date | string | null;
 
@@ -15,39 +16,44 @@ export type FormCreateScheduling = {
 };
 
 export const Scheduling = () => {
-  const [dates, setDates] = useState<Value>();
+  const [dates, setDates] = useState<Array<Date>>();
 
   const methods = useForm();
 
-  const handleDate = (date: ValuePiece) => {
+  const handleDate = (date: Date) => {
     console.log(date);
+    setDates((prevState) => [...(prevState || []), date]);
   };
 
   return (
-    <div className="flex flex-col items-center gap-3 w-full">
-      <FormProvider {...methods}>
-        <form className="flex flex-col gap-3 w-full">
-          <div className="flex justify-center gap-2">
-            <InputText name="name" label="Nome do aluno" />
-          </div>
-          <div className="flex justify-around gap-2">
-            <InputNumeric
-              name="price"
-              className="w-50"
-              label="Valor por aula"
-            />
-            <InputNumeric
-              name="price"
-              className="w-50"
-              label="Quantidade aulas"
-            />
-          </div>
-        </form>
-      </FormProvider>
+    <FormProvider {...methods}>
+      <form className="flex flex-col gap-3">
+        <InputText name="name" label="Nome do aluno" inputClassName="w-full" />
+        <div className="flex gap-3">
+          <InputNumeric
+            name="price"
+            label="Valor por aula"
+            className="w-1/2"
+            inputClassName="w-full"
+          />
+          <InputNumeric
+            name="amount"
+            label="Quantidade aulas"
+            className="w-1/2"
+            inputClassName="w-full"
+          />
+        </div>
+      </form>
       <Calendar
-        onChange={(date) => handleDate(date as Date | null)}
-        {...(dates && { value: dates })}
+        onChange={(date) => handleDate(date as Date)}
+        {...(dates && {
+          value: dates as Value,
+          tileDisabled: ({ date }) =>
+            dates.some((dt) => dt.getDate() === date.getDate()),
+        })}
       />
-    </div>
+
+      <Button text="Salvar" variant="success" />
+    </FormProvider>
   );
 };

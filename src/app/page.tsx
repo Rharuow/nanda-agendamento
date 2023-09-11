@@ -24,7 +24,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-around gap-3">
+    <main className="flex min-h-screen flex-col items-center justify-around gap-3 px-3">
       {user ? <Scheduling /> : <SignIn setUser={setUser} />}
     </main>
   );

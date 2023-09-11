@@ -6,6 +6,6 @@ body {
   background: black;
 }
 
-/* .react-calendar {
-  background-color: rgba(100, 100, 100, 0.5) !important;
-} */
+.react-calendar__tile:disabled {
+  background-color: slategray !important;
+}

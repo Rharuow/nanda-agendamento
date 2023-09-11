@@ -10,6 +10,8 @@ export const InputText = ({
   name: string;
   label?: string;
   className?: string;
+  inputClassName?: string;
+  labelClassName?: string;
 }) => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
@@ -18,17 +20,17 @@ export const InputText = ({
   const watchField = useWatch({ control, name });
 
   return (
-    <div
-      className="relative"
-      {...(rest.className && { className: rest.className })}
-    >
+    <div className={`relative ${rest.className || " "}`}>
       {label && (
         <label
           htmlFor={name}
-          className={classNames("text-gray-500 absolute align-top", {
-            "animate-labelFocus": isFocused || watchField,
-            "animate-labelBlur": !watchField && !isFocused,
-          })}
+          className={classNames(
+            `text-gray-500 absolute align-top ${rest.labelClassName || " "}`,
+            {
+              "animate-labelFocus": isFocused || watchField,
+              "animate-labelBlur": !watchField && !isFocused,
+            }
+          )}
         >
           {label}
         </label>
@@ -37,7 +39,9 @@ export const InputText = ({
         id={name}
         type="text"
         className={classNames(
-          "bg-transparent border-b-[1px] animate-inputBlur text-white focus:outline-none caret-white focus:animate-inputFocus",
+          `bg-transparent border-b-[1px] animate-inputBlur text-white focus:outline-none caret-white focus:animate-inputFocus ${
+            rest.inputClassName || " "
+          }`,
           {
             "animate-inputFocus": watchField,
             "animate-inputBlur": !watchField,

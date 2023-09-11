@@ -19,10 +19,7 @@ export const InputNumeric = ({
   const watchField = useWatch({ control, name });
 
   return (
-    <div
-      className="relative"
-      {...(rest.className && { className: rest.className })}
-    >
+    <div className={`relative ${rest.className || ""}`}>
       {label && (
         <label
           htmlFor={name}

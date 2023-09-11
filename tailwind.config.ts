@@ -15,12 +15,12 @@ const config: Config = {
       },
       keyframes: {
         fontSizeDown: {
-          "0%": { fontSize: "16px" },
+          "0%": { fontSize: "13px" },
           "100%": { fontSize: "11px" },
         },
         fontSizeUp: {
           "0%": { fontSize: "11px" },
-          "100%": { fontSize: "16px" },
+          "100%": { fontSize: "13px" },
         },
         fontWeightDown: {
           "0%": { fontWeight: "bold" },
