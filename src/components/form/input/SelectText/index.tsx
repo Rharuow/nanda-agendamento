@@ -52,7 +52,6 @@ export function InputSelectText<T extends OptionValue>({
           )}
           {...register(name, {
             onChange: (e) => {
-              console.log("target = ", e.target);
               handleFilterOptions(e.target.value);
               rest.onChange && rest.onChange(e.target.value);
             },
