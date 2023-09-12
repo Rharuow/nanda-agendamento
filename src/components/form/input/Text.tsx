@@ -39,7 +39,7 @@ export const InputText = ({
         id={name}
         type="text"
         className={classNames(
-          `bg-transparent border-b-[1px] animate-inputBlur text-white focus:outline-none caret-white focus:animate-inputFocus ${
+          `w-full bg-transparent border-b-[1px] animate-inputBlur text-white focus:outline-none caret-white focus:animate-inputFocus ${
             rest.inputClassName || " "
           }`,
           {

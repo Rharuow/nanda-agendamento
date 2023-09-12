@@ -1,17 +1,13 @@
 import classNames from "classnames";
 import React, { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
+import { OptionValue, Props } from "./types";
 
-export const InputNumeric = ({
+export function InputSelectText<T extends OptionValue>({
   name,
   label,
   ...rest
-}: {
-  name: string;
-  label?: string;
-  className?: string;
-  inputClassName?: string;
-}) => {
+}: Props<T>) {
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
   const { register, control } = useFormContext();
@@ -19,25 +15,26 @@ export const InputNumeric = ({
   const watchField = useWatch({ control, name });
 
   return (
-    <div className={`relative ${rest.className || ""}`}>
+    <div className={`relative ${rest.className || " "}`}>
       {label && (
         <label
           htmlFor={name}
-          className={classNames("text-gray-500 absolute align-top", {
-            "animate-labelFocus": isFocused || watchField,
-            "animate-labelBlur": !watchField && !isFocused,
-          })}
+          className={classNames(
+            `text-gray-500 absolute align-top ${rest.labelClassName || " "}`,
+            {
+              "animate-labelFocus": isFocused || watchField,
+              "animate-labelBlur": !watchField && !isFocused,
+            }
+          )}
         >
           {label}
         </label>
       )}
       <input
         id={name}
-        pattern="[0-9]*"
-        inputMode="numeric"
-        type="number"
+        type="text"
         className={classNames(
-          `bg-transparent w-full border-b-[1px] animate-inputBlur text-white focus:outline-none caret-white focus:animate-inputFocus ${
+          `bg-transparent border-b-[1px] animate-inputBlur text-white focus:outline-none caret-white focus:animate-inputFocus ${
             rest.inputClassName || " "
           }`,
           {
@@ -51,4 +48,4 @@ export const InputNumeric = ({
       />
     </div>
   );
-};
+}

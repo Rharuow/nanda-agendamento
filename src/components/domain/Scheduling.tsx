@@ -21,26 +21,19 @@ export const Scheduling = () => {
   const methods = useForm();
 
   const handleDate = (date: Date) => {
-    console.log(date);
     setDates((prevState) => [...(prevState || []), date]);
   };
 
   return (
     <FormProvider {...methods}>
       <form className="flex flex-col gap-3">
-        <InputText name="name" label="Nome do aluno" inputClassName="w-full" />
+        <InputText name="name" label="Nome do aluno" />
         <div className="flex gap-3">
-          <InputNumeric
-            name="price"
-            label="Valor por aula"
-            className="w-1/2"
-            inputClassName="w-full"
-          />
+          <InputNumeric name="price" label="Valor por aula" className="w-1/2" />
           <InputNumeric
             name="amount"
             label="Quantidade aulas"
             className="w-1/2"
-            inputClassName="w-full"
           />
         </div>
       </form>
