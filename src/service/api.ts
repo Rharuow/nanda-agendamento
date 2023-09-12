@@ -1,21 +1,29 @@
-import { Schedule, Studant } from "./index.d";
+import { Schedule, Student } from "./index.d";
 
-const studants: Array<Studant> = [];
+const mockedStudent: Student = {
+  id: "1",
+  name: "Fulano",
+};
+
+const Students: Array<Student> = [
+  mockedStudent,
+  { ...mockedStudent, name: "Sicrano" },
+];
 
 const schedules: Array<Schedule> = [];
 
-export const listStudants = () => studants;
+export const listStudents = () => Students;
 
-export const getStudant = (id: string) =>
-  studants.find((studant) => studant.id === id);
+export const getStudent = (id: string) =>
+  Students.find((Student) => Student.id === id);
 
 export const listSchedules = () => schedules;
 
 export const getSchedule = (id: string) =>
   schedules.find((schedule) => schedule.id === id);
 
-export const getSchedulesPerStudant = (id: string) =>
-  schedules.filter((schedule) => schedule.studant_id === id);
+export const getSchedulesPerStudent = (id: string) =>
+  schedules.filter((schedule) => schedule.Student_id === id);
 
-export const getStudantsPerSchedule = (id: string) =>
-  studants.filter((studant) => studant.schedules_id.includes(id));
+export const getStudentsPerSchedule = (id: string) =>
+  Students.filter((Student) => Student.schedules_id?.includes(id));

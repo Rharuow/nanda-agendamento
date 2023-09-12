@@ -30,22 +30,33 @@ export function InputSelectText<T extends OptionValue>({
           {label}
         </label>
       )}
-      <input
-        id={name}
-        type="text"
-        className={classNames(
-          `bg-transparent border-b-[1px] animate-inputBlur text-white focus:outline-none caret-white focus:animate-inputFocus ${
-            rest.inputClassName || " "
-          }`,
-          {
-            "animate-inputFocus": watchField,
-            "animate-inputBlur": !watchField,
-          }
+      <div className="flex flex-col gap-[1px]">
+        <input
+          id={name}
+          type="text"
+          className={classNames(
+            `bg-transparent border-b-[1px] animate-inputBlur text-white focus:outline-none caret-white focus:animate-inputFocus ${
+              rest.inputClassName || " "
+            }`,
+            {
+              "animate-inputFocus": watchField,
+              "animate-inputBlur": !watchField,
+            }
+          )}
+          {...register(name)}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+        />
+        {isFocused && (
+          <div className="flex flex-col bg-white p-2 rounded gap-1">
+            {rest.options.map((option, index) => (
+              <div key={index} className="flex border-b-[1px] p-1">
+                <span className="text-xs">{option.label}</span>
+              </div>
+            ))}
+          </div>
         )}
-        {...register(name)}
-        onFocus={() => setIsFocused(true)}
-        onBlur={() => setIsFocused(false)}
-      />
+      </div>
     </div>
   );
 }

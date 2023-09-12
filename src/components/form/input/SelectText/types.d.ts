@@ -1,4 +1,4 @@
-export type OptionValue = string | number;
+export type OptionValue = string | number | object;
 
 export type Option<T extends OptionValue> = {
   value: T;
@@ -7,11 +7,10 @@ export type Option<T extends OptionValue> = {
 
 export type Props<T extends OptionValue> = {
   options: Array<Option<T>>;
-  value: T;
   name: string;
   label?: string;
   className?: string;
   inputClassName?: string;
   labelClassName?: string;
-  onChange: (value: T) => void;
+  onChange?: (value: T) => void;
 };

@@ -1,12 +1,12 @@
-export type Studant = {
+export type Student = {
   id: string;
   name: string;
-  schedules_id: Array<Schedule.id>;
+  schedules_id?: Array<Schedule.id>;
 };
 
 export type Schedule = {
   id: string;
-  studant_id: Studant.id;
+  Student_id: Student.id;
   pricePerTime: number;
   amoutTime: number;
   paid: boolean;

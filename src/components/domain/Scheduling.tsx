@@ -4,6 +4,9 @@ import { InputText } from "../form/input/Text";
 import { FormProvider, useForm } from "react-hook-form";
 import { InputNumeric } from "../form/input/Numeric";
 import { Button } from "../Button";
+import { InputSelectText } from "../form/input/SelectText";
+import { listStudents } from "@/service/api";
+import { Student } from "@/service";
 
 type ValuePiece = Date | string | null;
 
@@ -27,7 +30,14 @@ export const Scheduling = () => {
   return (
     <FormProvider {...methods}>
       <form className="flex flex-col gap-3">
-        <InputText name="name" label="Nome do aluno" />
+        <InputSelectText<Student>
+          name="name"
+          label="Nome do aluno"
+          options={listStudents().map((Student) => ({
+            label: Student.name,
+            value: Student,
+          }))}
+        />
         <div className="flex gap-3">
           <InputNumeric name="price" label="Valor por aula" className="w-1/2" />
           <InputNumeric
