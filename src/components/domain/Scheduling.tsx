@@ -27,15 +27,30 @@ export const Scheduling = () => {
     setDates((prevState) => [...(prevState || []), date]);
   };
 
+  const onSubmit = (data: any) => {
+    console.log(data);
+  };
+
   return (
     <FormProvider {...methods}>
-      <form className="flex flex-col gap-3">
-        <InputSelectText<Student>
+      <Calendar
+        onChange={(date) => handleDate(date as Date)}
+        {...(dates && {
+          value: dates as Value,
+          tileDisabled: ({ date }) =>
+            dates.some((dt) => dt.getDate() === date.getDate()),
+        })}
+      />
+      <form
+        className="flex flex-col gap-3"
+        onSubmit={methods.handleSubmit(onSubmit)}
+      >
+        <InputSelectText<string>
           name="name"
           label="Nome do aluno"
           options={listStudents().map((Student) => ({
             label: Student.name,
-            value: Student,
+            value: Student.id,
           }))}
         />
         <div className="flex gap-3">
@@ -46,17 +61,8 @@ export const Scheduling = () => {
             className="w-1/2"
           />
         </div>
+        <Button text="Salvar" variant="success" />
       </form>
-      <Calendar
-        onChange={(date) => handleDate(date as Date)}
-        {...(dates && {
-          value: dates as Value,
-          tileDisabled: ({ date }) =>
-            dates.some((dt) => dt.getDate() === date.getDate()),
-        })}
-      />
-
-      <Button text="Salvar" variant="success" />
     </FormProvider>
   );
 };
