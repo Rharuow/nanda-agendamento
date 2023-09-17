@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { OptionValue, Props } from "./types";
 import { compare } from "@/utils/compareStrings";
@@ -16,14 +16,14 @@ export function InputSelectText<T extends OptionValue>({
   const { register, control, setValue } = useFormContext();
 
   const watchField = useWatch({ control, name });
-  const watchFieldSelect = useWatch({ control, name: `${name}-select` });
-
-  console.log("watchField = ", watchField);
-  console.log("watchFieldSelect = ", watchFieldSelect);
 
   const handleFilterOptions = (text: string) => {
     setOption(rest.options.filter((opt) => compare(opt.label, text)));
   };
+
+  const selectField = document.getElementById(
+    `${name}-select`
+  ) as HTMLInputElement;
 
   return (
     <div className={`relative ${rest.className || " "}`}>
@@ -56,35 +56,44 @@ export function InputSelectText<T extends OptionValue>({
               "border-b-0": isFocused,
             }
           )}
-          {...register(`${name}-select`, {
-            onChange: (e) => {
-              handleFilterOptions(e.target.value);
-              rest.onChange && rest.onChange(e.target.value);
-            },
-            onBlur: () => {
-              setIsFocused(false);
-            },
-          })}
-          onFocus={() => setIsFocused(true)}
+          onBlur={(e) => {
+            setIsFocused(false);
+            selectField.autofocus = true;
+          }}
+          onFocus={(e) => {
+            setIsFocused(true);
+          }}
+          onChange={(e) => {
+            handleFilterOptions(e.target.value);
+            rest.onChange && rest.onChange(e.target.value as T);
+          }}
         />
-        {isFocused && (
-          <div className="flex-col transition-all bg-slate-500 p-2 rounded gap-1">
-            {options
-              .filter((_, index) => index < amount)
-              .map((option, index) => (
-                <div
-                  key={index}
-                  onClick={() => {
-                    setValue(name, option.value);
-                    setValue(`${name}-select`, option.label);
-                  }}
-                  className="flex border-b-[1px] p-1"
-                >
-                  <span className="text-xs">{option.label}</span>
-                </div>
-              ))}
-          </div>
-        )}
+        <div
+          className={classNames(
+            "flex-col transition-all bg-slate-700  rounded gap-1",
+            { "p-2 expanded": isFocused, "max-h-0": !isFocused }
+          )}
+        >
+          {options
+            .filter((_, index) => index < amount)
+            .map((option, index) => (
+              <div
+                key={index}
+                onMouseDown={() => {
+                  setValue(name, option.value);
+                  selectField.value = option.label;
+                }}
+                className={classNames("p-1", {
+                  hidden: !isFocused,
+                  flex: isFocused,
+                })}
+              >
+                <span className="text-xs text-white font-bold">
+                  {option.label}
+                </span>
+              </div>
+            ))}
+        </div>
       </div>
     </div>
   );

@@ -58,6 +58,14 @@ const config: Config = {
             borderBottomRightRadius: "0px",
           },
         },
+        expanded: {
+          "0%": {
+            maxHeigth: "0",
+          },
+          "100%": {
+            maxHeigth: "100%",
+          },
+        },
       },
       animation: {
         fontSizeDown: "fontSizeDown 0.5s ease-out forwards",
@@ -66,7 +74,7 @@ const config: Config = {
         fontWeightUp: "fontWeightUp 0.5s ease-out forwards",
         paddingTopDown: "paddingTopDown 0.5s ease-out forwards",
         paddingTopUp: "paddingTopUp 0.5s ease-out forwards",
-
+        expanded: "expanded 2.5s ease-out forwards",
         // multiple animation
         labelFocus:
           "fontWeightDown 0.5s ease-out forwards, fontSizeDown 0.5s ease-out forwards",
