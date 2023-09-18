@@ -18,7 +18,17 @@ export function InputSelectText<T extends OptionValue>({
   const watchField = useWatch({ control, name });
 
   const handleFilterOptions = (text: string) => {
-    setOption(rest.options.filter((opt) => compare(opt.label, text)));
+    const filteredOptions = rest.options.filter((opt) =>
+      compare(opt.label, text)
+    );
+    text.length > 0
+      ? setOption(
+          filteredOptions.length > 0
+            ? filteredOptions
+            : [{ label: "Novo registro", value: "Novo registro" as T }]
+        )
+      : setOption(rest.options);
+    setValue(name, text);
   };
 
   const selectField = document.getElementById(
@@ -64,7 +74,9 @@ export function InputSelectText<T extends OptionValue>({
             setIsFocused(true);
           }}
           onChange={(e) => {
-            handleFilterOptions(e.target.value);
+            e.target.value.length > 0
+              ? handleFilterOptions(e.target.value)
+              : setValue(name, undefined);
             rest.onChange && rest.onChange(e.target.value as T);
           }}
         />

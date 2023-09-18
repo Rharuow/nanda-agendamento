@@ -1,12 +1,11 @@
 import React, { useState } from "react";
 import Calendar from "react-calendar";
-import { InputText } from "../form/input/Text";
-import { FormProvider, useForm } from "react-hook-form";
+import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { InputNumeric } from "../form/input/Numeric";
 import { Button } from "../Button";
 import { InputSelectText } from "../form/input/SelectText";
 import { listStudents } from "@/service/api";
-import { Student } from "@/service";
+import classNames from "classnames";
 
 type ValuePiece = Date | string | null;
 
@@ -19,12 +18,14 @@ export type FormCreateScheduling = {
 };
 
 export const Scheduling = () => {
-  const [dates, setDates] = useState<Array<Date>>();
+  const [date, setDate] = useState<string>();
 
-  const methods = useForm();
+  const methods = useForm<{ name: string; amount: number; price: number }>();
+
+  console.log(methods.watch("name"));
 
   const handleDate = (date: Date) => {
-    setDates((prevState) => [...(prevState || []), date]);
+    setDate(date.toLocaleString());
   };
 
   const onSubmit = (data: any) => {
@@ -33,14 +34,6 @@ export const Scheduling = () => {
 
   return (
     <FormProvider {...methods}>
-      <Calendar
-        onChange={(date) => handleDate(date as Date)}
-        {...(dates && {
-          value: dates as Value,
-          tileDisabled: ({ date }) =>
-            dates.some((dt) => dt.getDate() === date.getDate()),
-        })}
-      />
       <form
         className="flex flex-col gap-3"
         onSubmit={methods.handleSubmit(onSubmit)}
@@ -59,6 +52,21 @@ export const Scheduling = () => {
             name="amount"
             label="Quantidade aulas"
             className="w-1/2"
+          />
+        </div>
+
+        <div
+          className={classNames("w-full overflow-hidden", {
+            "animate-expanded": methods.watch("name"),
+          })}
+        >
+          <Calendar
+            onChange={(dt) => handleDate(dt as Date)}
+            {...(date && {
+              value: date as Value,
+              // tileDisabled: ({ date }) =>
+              //   dates.some((dt) => dt.getDate() === date.getDate()),
+            })}
           />
         </div>
         <Button text="Salvar" variant="success" />
