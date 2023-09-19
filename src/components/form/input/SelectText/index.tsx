@@ -1,5 +1,5 @@
 import classNames from "classnames";
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { OptionValue, Props } from "./types";
 import { compare } from "@/utils/compareStrings";
@@ -21,11 +21,11 @@ export function InputSelectText<T extends OptionValue>({
     const filteredOptions = rest.options.filter((opt) =>
       compare(opt.label, text)
     );
-    text.length > 0
+    text && text.length > 0
       ? setOption(
           filteredOptions.length > 0
             ? filteredOptions
-            : [{ label: "Novo registro", value: "Novo registro" as T }]
+            : [{ label: "Nenhum registro", value: "Nenhum registro" as T }]
         )
       : setOption(rest.options);
     setValue(name, text);
@@ -52,7 +52,10 @@ export function InputSelectText<T extends OptionValue>({
         </label>
       )}
       <div className="flex flex-col gap-[1px]">
-        <input type="hidden" {...register(name)} />
+        <input
+          type="hidden"
+          {...register(name, { ...(rest.required && { required: true }) })}
+        />
         <input
           id={`${name}-select`}
           type="text"
@@ -66,24 +69,22 @@ export function InputSelectText<T extends OptionValue>({
               "border-b-0": isFocused,
             }
           )}
-          onBlur={(e) => {
+          onBlur={() => {
             setIsFocused(false);
-            selectField.autofocus = true;
           }}
-          onFocus={(e) => {
+          onFocus={() => {
             setIsFocused(true);
           }}
           onChange={(e) => {
-            e.target.value.length > 0
-              ? handleFilterOptions(e.target.value)
-              : setValue(name, undefined);
+            handleFilterOptions(e.target.value);
             rest.onChange && rest.onChange(e.target.value as T);
           }}
+          {...(rest.required && { required: true })}
         />
         <div
           className={classNames(
             "flex-col transition-all bg-slate-700  rounded gap-1",
-            { "p-2 expanded": isFocused, "max-h-0": !isFocused }
+            { "p-2 animate-expanded": isFocused, "max-h-0": !isFocused }
           )}
         >
           {options

@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "sweetalert2/src/sweetalert2.scss";
 import "react-calendar/dist/Calendar.css";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,6 +20,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
+      <ToastContainer limit={1} />
       <body className={inter.className}>{children}</body>
     </html>
   );

@@ -63,7 +63,7 @@ const config: Config = {
             maxHeigth: "0",
           },
           "100%": {
-            maxHeigth: "100%",
+            maxHeigth: "100vh",
           },
         },
       },

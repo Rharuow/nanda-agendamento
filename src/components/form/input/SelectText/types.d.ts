@@ -8,6 +8,7 @@ export type Option<T extends OptionValue> = {
 export type Props<T extends OptionValue> = {
   options: Array<Option<T>>;
   name: string;
+  required?: boolean;
   amount?: number;
   label?: string;
   className?: string;

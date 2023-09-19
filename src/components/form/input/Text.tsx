@@ -12,6 +12,7 @@ export const InputText = ({
   className?: string;
   inputClassName?: string;
   labelClassName?: string;
+  required?: boolean;
 }) => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
@@ -47,7 +48,7 @@ export const InputText = ({
             "animate-inputBlur": !watchField,
           }
         )}
-        {...register(name)}
+        {...register(name, { ...(rest.required && { required: true }) })}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
       />

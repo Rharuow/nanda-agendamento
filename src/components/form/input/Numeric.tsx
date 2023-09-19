@@ -11,6 +11,7 @@ export const InputNumeric = ({
   label?: string;
   className?: string;
   inputClassName?: string;
+  required?: boolean;
 }) => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
@@ -45,7 +46,9 @@ export const InputNumeric = ({
             "animate-inputBlur": !watchField,
           }
         )}
-        {...register(name)}
+        {...register(name, {
+          ...(rest.required && { required: true }),
+        })}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
       />
