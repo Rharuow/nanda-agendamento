@@ -58,7 +58,7 @@ export const Scheduling = () => {
       {loading ? (
         <div className="flex flex-col items-center gap-2">
           <div className="animate-spin h-5 w-5 rounded-full border-white border-l-[3px]"></div>
-          <p className="text-white">Carregando...</p>
+          <p>Carregando...</p>
         </div>
       ) : (
         <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>

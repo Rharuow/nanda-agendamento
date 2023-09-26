@@ -60,7 +60,7 @@ export function InputSelectText<T extends OptionValue>({
           id={`${name}-select`}
           type="text"
           className={classNames(
-            `bg-transparent border-b-[1px] animate-inputBlur text-white focus:outline-none caret-white focus:animate-inputFocus ${
+            `bg-transparent border-b-[1px] animate-inputBlur focus:outline-none caret-white focus:animate-inputFocus ${
               rest.inputClassName || " "
             }`,
             {
@@ -101,9 +101,7 @@ export function InputSelectText<T extends OptionValue>({
                   flex: isFocused,
                 })}
               >
-                <span className="text-xs text-white font-bold">
-                  {option.label}
-                </span>
+                <span className="text-xs font-bold">{option.label}</span>
               </div>
             ))}
         </div>

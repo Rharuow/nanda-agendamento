@@ -12,13 +12,10 @@ export const Button = ({
 }) => {
   return (
     <button
-      className={classNames(
-        `p-2 rounded text-white shadow ${rest.className || " "}`,
-        {
-          "bg-green-700 hover:bg-green-400": rest.variant === "success",
-          "bg-slate-700 hover:bg-slate-400": !rest.variant,
-        }
-      )}
+      className={classNames(`p-2 rounded  shadow ${rest.className || " "}`, {
+        "bg-green-700 hover:bg-green-400": rest.variant === "success",
+        "bg-slate-700 hover:bg-slate-400": !rest.variant,
+      })}
     >
       {text}
     </button>

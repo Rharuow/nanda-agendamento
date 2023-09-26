@@ -1,4 +1,5 @@
 "use client";
+import { ListScheduling } from "@/components/domain/ListScheduling";
 import { Scheduling } from "@/components/domain/Scheduling";
 import { SignIn } from "@/components/domain/SignIn";
 import Cookies from "js-cookie";
@@ -25,7 +26,7 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-around px-3">
-      {user ? <Scheduling /> : <SignIn setUser={setUser} />}
+      {user ? <ListScheduling /> : <SignIn setUser={setUser} />}
     </main>
   );
 }
