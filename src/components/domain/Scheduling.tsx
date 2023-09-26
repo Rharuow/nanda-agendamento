@@ -4,7 +4,13 @@ import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { InputNumeric } from "../form/input/Numeric";
 import { Button } from "../Button";
 import { InputSelectText } from "../form/input/SelectText";
-import { getSchedulesPerStudent, listStudents } from "@/service/api";
+import {
+  createScheduling,
+  getSchedulesPerStudent,
+  getStudentByName,
+  listSchedules,
+  listStudents,
+} from "@/service/api";
 import classNames from "classnames";
 import dayjs from "dayjs";
 import { ToastContainer, toast } from "react-toastify";
@@ -21,7 +27,7 @@ export type FormCreateScheduling = {
 };
 
 export const Scheduling = () => {
-  const [date, setDate] = useState<string>();
+  const [loading, setLoading] = useState<boolean>(false);
 
   const students = listStudents();
 
@@ -29,7 +35,8 @@ export const Scheduling = () => {
 
   const { watch, handleSubmit, setValue, register } = methods;
 
-  const student = students.find((std) => std.id === watch("name"));
+  const student = getStudentByName(watch("name"));
+
   const schedulingByStudents = student
     ? getSchedulesPerStudent(student.id)
     : [];
@@ -39,59 +46,68 @@ export const Scheduling = () => {
   };
 
   const onSubmit = (data: FormCreateScheduling) => {
-    console.log(!data.date);
-    !data.date && toast.error("Data é obrigatória", { theme: "dark" });
-    console.log(data);
+    if (!data.date) return toast.error("Data é obrigatória");
+    setLoading(true);
+    createScheduling(data);
+    toast.success("Agendamento feito com sucesso...");
+    setLoading(false);
   };
 
   return (
     <FormProvider {...methods}>
-      <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
-        <input type="text" hidden {...register("date")} />
-        <InputSelectText<string>
-          name="name"
-          label="Nome do aluno"
-          required
-          options={students.map((Student) => ({
-            label: Student.name,
-            value: Student.id,
-          }))}
-        />
-        <div className="flex gap-3">
-          <InputNumeric
-            required
-            name="price"
-            label="Valor por aula"
-            className="w-1/2"
-          />
-          <InputNumeric
-            name="amount"
-            required
-            label="Quantidade aulas"
-            className="w-1/2"
-          />
+      {loading ? (
+        <div className="flex flex-col items-center gap-2">
+          <div className="animate-spin h-5 w-5 rounded-full border-white border-l-[3px]"></div>
+          <p className="text-white">Carregando...</p>
         </div>
+      ) : (
+        <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
+          <input type="text" hidden {...register("date")} />
+          <InputSelectText<string>
+            name="name"
+            label="Nome do aluno"
+            required
+            options={students.map((student) => ({
+              label: student.name,
+              value: student.name,
+            }))}
+          />
+          <div className="flex gap-3">
+            <InputNumeric
+              required
+              name="price"
+              label="Valor por aula"
+              className="w-1/2"
+            />
+            <InputNumeric
+              name="amount"
+              required
+              label="Quantidade aulas"
+              className="w-1/2"
+            />
+          </div>
 
-        <div
-          className={classNames("transition-all w-full overflow-hidden", {
-            "animate-expanded": watch("name"),
-            "max-h-0": !watch("name"),
-          })}
-        >
-          <Calendar
-            onChange={(dt) => handleDate(dt as Date)}
-            {...(watch("date") && {
-              value: watch("date") as Value,
-              tileDisabled: ({ date }) =>
-                schedulingByStudents &&
-                schedulingByStudents.some((dt) =>
-                  dayjs(dt.date).isSame(dayjs(date))
-                ),
+          <div
+            className={classNames("transition-all w-full overflow-hidden", {
+              "animate-expanded": watch("name"),
+              "max-h-0": !watch("name"),
             })}
-          />
-        </div>
-        <Button text="Salvar" variant="success" />
-      </form>
+          >
+            <Calendar
+              onChange={(dt) => handleDate(dt as Date)}
+              {...(watch("date") && {
+                value: watch("date") as Value,
+                tileDisabled: ({ date }) =>
+                  schedulingByStudents &&
+                  schedulingByStudents.some((dt) =>
+                    dayjs(dt.date).isSame(dayjs(date))
+                  ),
+              })}
+            />
+          </div>
+          <Button text="Salvar" variant="success" />
+        </form>
+      )}
     </FormProvider>
   );
 };

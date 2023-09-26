@@ -6,9 +6,9 @@ export type Student = {
 
 export type Schedule = {
   id: string;
-  Student_id: Student.id;
+  student_id: Student.id;
   pricePerTime: number;
-  amoutTime: number;
+  amountTime: number;
   paid: boolean;
   date: Date | string;
 };
