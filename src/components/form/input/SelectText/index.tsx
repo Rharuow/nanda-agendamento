@@ -1,8 +1,8 @@
 import classNames from "classnames";
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { OptionValue, Props } from "./types";
-import { compare } from "@/utils/compareStrings";
+import { compare } from "@/src/utils/compareStrings";
 
 export function InputSelectText<T extends OptionValue>({
   name,
@@ -31,9 +31,7 @@ export function InputSelectText<T extends OptionValue>({
     setValue(name, text);
   };
 
-  const selectField = document.getElementById(
-    `${name}-select`
-  ) as HTMLInputElement;
+  const selectField = useRef<HTMLInputElement>(null);
 
   return (
     <div className={`relative ${rest.className || " "}`}>
@@ -58,6 +56,7 @@ export function InputSelectText<T extends OptionValue>({
         />
         <input
           id={`${name}-select`}
+          ref={selectField}
           type="text"
           className={classNames(
             `bg-transparent border-b-[1px] animate-inputBlur focus:outline-none caret-white focus:animate-inputFocus ${
@@ -94,7 +93,8 @@ export function InputSelectText<T extends OptionValue>({
                 key={index}
                 onMouseDown={() => {
                   setValue(name, option.value);
-                  selectField.value = option.label;
+                  if (selectField && selectField.current)
+                    selectField.current.value = option.label;
                 }}
                 className={classNames("p-1", {
                   hidden: !isFocused,

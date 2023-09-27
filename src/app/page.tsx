@@ -1,10 +1,10 @@
 "use client";
-import { ListScheduling } from "@/components/domain/ListScheduling";
-import { Scheduling } from "@/components/domain/Scheduling";
-import { SignIn } from "@/components/domain/SignIn";
 import Cookies from "js-cookie";
 import { useEffect, useState } from "react";
 import Swal from "sweetalert2";
+
+import { ListScheduling } from "@/src/components/domain/ListScheduling";
+import { SignIn } from "@/src/components/domain/SignIn";
 
 const Toast = Swal.mixin({
   toast: true,
@@ -25,7 +25,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-around px-3">
+    <main className="flex min-h-screen items-center justify-center px-3">
       {user ? <ListScheduling /> : <SignIn setUser={setUser} />}
     </main>
   );

@@ -1,10 +1,11 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "sweetalert2/src/sweetalert2.scss";
-import "react-calendar/dist/Calendar.css";
-import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer } from "react-toastify";
+
+import "react-toastify/dist/ReactToastify.css";
+import "react-calendar/dist/Calendar.css";
+import "sweetalert2/src/sweetalert2.scss";
 
 const inter = Inter({ subsets: ["latin"] });
 

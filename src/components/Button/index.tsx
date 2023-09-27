@@ -1,4 +1,4 @@
-import { Variant } from "@/index";
+import { Variant } from "@/src/index";
 import classNames from "classnames";
 import React from "react";
 

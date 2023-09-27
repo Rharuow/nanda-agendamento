@@ -1,4 +1,4 @@
-import { FormCreateScheduling } from "@/components/domain/Scheduling";
+import { FormCreateScheduling } from "@/src/components/domain/Scheduling";
 import { Schedule, Student } from "./index.d";
 import dayjs from "dayjs";
 
