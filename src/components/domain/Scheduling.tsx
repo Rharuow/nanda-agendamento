@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import Calendar from "react-calendar";
 import { FormProvider, useForm } from "react-hook-form";
-import classNames from "classnames";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
 import { ArrowCircleLeft } from "@phosphor-icons/react";
@@ -10,13 +9,13 @@ import Link from "next/link";
 import { InputNumeric } from "../form/input/Numeric";
 import { Button } from "../Button";
 import { InputSelectText } from "../form/input/SelectText";
+import { Text } from "../Text";
 import {
   createScheduling,
   getSchedulesPerStudent,
   getStudentByName,
   listStudents,
 } from "@/src/service/api";
-import CurrencyInput from "react-currency-input-field";
 import { InputCurrency } from "../form/input/Currency";
 
 type ValuePiece = Date | string | null;
@@ -61,15 +60,17 @@ export const Scheduling = () => {
   return (
     <div className="flex flex-wrap">
       <div className="w-full self-start">
-        <Link href="/">
-          <ArrowCircleLeft size={28} />
-        </Link>
+        <Text>
+          <Link href="/">
+            <ArrowCircleLeft size={28} />
+          </Link>
+        </Text>
       </div>
       <FormProvider {...methods}>
         {loading ? (
           <div className="flex flex-col items-center gap-2">
             <div className="animate-spin h-5 w-5 rounded-full border-white border-l-[3px]"></div>
-            <p>Carregando...</p>
+            <Text>Carregando...</Text>
           </div>
         ) : (
           <form

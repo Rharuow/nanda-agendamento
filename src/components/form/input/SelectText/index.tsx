@@ -25,7 +25,7 @@ export function InputSelectText<T extends OptionValue>({
       ? setOption(
           filteredOptions.length > 0
             ? filteredOptions
-            : [{ label: "Nenhum registro", value: "Nenhum registro" as T }]
+            : [{ label: `Adicionar ${text}`, value: "Nenhum registro" as T }]
         )
       : setOption(rest.options);
     setValue(name, text);
@@ -92,8 +92,11 @@ export function InputSelectText<T extends OptionValue>({
               <div
                 key={index}
                 onMouseDown={() => {
+                  const hasOption = rest.options.some((opt) =>
+                    compare(opt.label, String(selectField?.current?.value))
+                  );
                   setValue(name, option.value);
-                  if (selectField && selectField.current)
+                  if (selectField && selectField.current && hasOption)
                     selectField.current.value = option.label;
                 }}
                 className={classNames("p-1", {

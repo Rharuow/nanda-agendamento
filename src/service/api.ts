@@ -12,7 +12,14 @@ const mockedStudents: Array<Student> = [
   { ...mockedStudent, name: "Sicrano" },
 ];
 
-const mockedSchedules: Array<Schedule> = [];
+const mockedSchedules: Array<Schedule> = Array(2).map((el, index) => ({
+  amountTime: 2,
+  date: dayjs().toDate().toISOString(),
+  id: String(index),
+  paid: false,
+  pricePerTime: 25.5 * (index + 1),
+  student_id: "1",
+}));
 
 export const listStudents = () => mockedStudents;
 
