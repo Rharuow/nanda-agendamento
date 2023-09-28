@@ -6,8 +6,17 @@ body {
   background: black;
 }
 
-* {
+p,
+h1,
+h2,
+h3,
+h4,
+input {
   color: white;
+}
+
+.react-calendar {
+  background-color: rgba(100, 100, 100, 0.4) !important;
 }
 
 .react-calendar__tile:disabled {

@@ -24,6 +24,7 @@
     "postcss": "8.4.29",
     "react": "18.2.0",
     "react-calendar": "^4.6.0",
+    "react-currency-input-field": "^3.6.11",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.45.4",
     "react-toastify": "^9.1.3",

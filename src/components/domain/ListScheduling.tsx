@@ -18,7 +18,7 @@ export const ListScheduling = () => {
           <div className="px-9">
             <Lottie animationData={empty} loop={true} />
           </div>
-          <p>Nenhum agendamento encontrado...</p>
+          <p className="text-center">Nenhum agendamento encontrado...</p>
           <Link href="/schedule">
             <Button text="Agendar" />
           </Link>

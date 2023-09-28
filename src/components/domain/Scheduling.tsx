@@ -16,6 +16,8 @@ import {
   getStudentByName,
   listStudents,
 } from "@/src/service/api";
+import CurrencyInput from "react-currency-input-field";
+import { InputCurrency } from "../form/input/Currency";
 
 type ValuePiece = Date | string | null;
 
@@ -48,6 +50,7 @@ export const Scheduling = () => {
   };
 
   const onSubmit = (data: FormCreateScheduling) => {
+    console.log("data = ", data);
     if (!data.date) return toast.error("Data é obrigatória");
     setLoading(true);
     createScheduling(data);
@@ -84,9 +87,9 @@ export const Scheduling = () => {
               }))}
             />
             <div className="flex gap-3">
-              <InputNumeric
-                required
+              <InputCurrency
                 name="price"
+                required
                 label="Valor por aula"
                 className="w-1/2"
               />
@@ -99,7 +102,7 @@ export const Scheduling = () => {
             </div>
 
             {watch("name") && (
-              <div className="transition-all w-full overflow-hidden">
+              <div className="w-full overflow-hidden">
                 <Calendar
                   onChange={(dt) => handleDate(dt as Date)}
                   {...(watch("date") && {
@@ -113,7 +116,7 @@ export const Scheduling = () => {
                 />
               </div>
             )}
-            <Button text="Salvar" variant="success" />
+            <Button text="Agendar" variant="success" />
           </form>
         )}
       </FormProvider>

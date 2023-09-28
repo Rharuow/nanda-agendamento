@@ -1,13 +1,15 @@
 import "./globals.css";
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
-import { ToastContainer } from "react-toastify";
-
+import "sweetalert2/src/sweetalert2.scss";
 import "react-toastify/dist/ReactToastify.css";
 import "react-calendar/dist/Calendar.css";
-import "sweetalert2/src/sweetalert2.scss";
+import type { Metadata } from "next";
+import { Poppins } from "next/font/google";
+import { ToastContainer } from "react-toastify";
 
-const inter = Inter({ subsets: ["latin"] });
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -21,7 +23,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="pt-BR">
-      <body className={inter.className}>
+      <body className={poppins.className}>
         <ToastContainer limit={1} theme="dark" />
         {children}
       </body>
