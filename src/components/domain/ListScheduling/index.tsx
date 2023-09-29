@@ -1,15 +1,14 @@
-import Lottie from "lottie-react";
+import { getSchedulesWithStudent } from "@/src/service/api";
 
-import { listSchedules } from "@/src/service/api";
-
-import empty from "@/public/empty.json";
-import { Button } from "../../Button";
-import Link from "next/link";
-import { Text } from "../../Text";
 import { Empty } from "./Empty";
+import { List } from "./List";
 
 export const ListScheduling = () => {
-  const schedules = listSchedules();
+  const schedules = getSchedulesWithStudent();
 
-  return <div>{schedules.length > 0 ? <Text>LISTAR</Text> : <Empty />}</div>;
+  return (
+    <div>
+      {schedules.length > 0 ? <List schedules={schedules} /> : <Empty />}
+    </div>
+  );
 };

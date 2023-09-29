@@ -12,14 +12,16 @@ const mockedStudents: Array<Student> = [
   { ...mockedStudent, name: "Sicrano" },
 ];
 
-const mockedSchedules: Array<Schedule> = Array(2).map((el, index) => ({
-  amountTime: 2,
-  date: dayjs().toDate().toISOString(),
-  id: String(index),
-  paid: false,
-  pricePerTime: 25.5 * (index + 1),
-  student_id: "1",
-}));
+const mockedSchedules: Array<Schedule> = new Array(2)
+  .fill(null)
+  .map((el, index) => ({
+    amountTime: 2,
+    date: dayjs().toDate().toISOString(),
+    id: String(index),
+    paid: false,
+    pricePerTime: 25.5 * (index + 1),
+    student_id: "1",
+  }));
 
 export const listStudents = () => mockedStudents;
 
@@ -36,6 +38,16 @@ export const getSchedule = (id: string) =>
 
 export const getSchedulesPerStudent = (id: string) =>
   mockedSchedules.filter((schedule) => schedule.student_id === id);
+
+export const getSchedulesWithStudent: () => Array<
+  Schedule & { student: Student }
+> = () =>
+  mockedSchedules
+    .filter((schedule) => getStudent(schedule.student_id))
+    .map((schedule) => ({
+      ...schedule,
+      student: getStudent(schedule.student_id) as Student,
+    }));
 
 export const getStudentsPerSchedule = (id: string) =>
   mockedStudents.filter((student) => student.schedules_id?.includes(id));
