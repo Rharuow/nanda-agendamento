@@ -2,13 +2,17 @@ import { Schedule, Student } from "@/src/service";
 import React from "react";
 import Accordion from "../../Accordion";
 import { Text } from "../../Text";
-import { CaretDown } from "@phosphor-icons/react";
 import dayjs from "dayjs";
+import classNames from "classnames";
+
+import weekday from "dayjs/plugin/weekday";
+
+dayjs.extend(weekday);
 
 export const List = ({
   schedules,
 }: {
-  schedules: Array<Schedule & { student: Student }>;
+  schedules: Array<Schedule & { student?: Student }>;
 }) => {
   return (
     <div className="flex flex-col w-full gap-2">
@@ -19,13 +23,33 @@ export const List = ({
             iconClassName="text-white"
             headerChildren={
               <div className="flex justify-between w-full">
-                <Text>{schedule.student.name}</Text>
+                <Text>{schedule.student?.name}</Text>
+                <Text>
+                  {schedule.amountTime > 1
+                    ? `${schedule.amountTime} horários`
+                    : `${schedule.amountTime} horário`}
+                </Text>
                 <Text>{dayjs(schedule.date).format("DD/MM/YYYY")}</Text>
+                <Text>
+                  {dayjs(schedule.date)
+                    .toDate()
+                    .toLocaleString("pt-BR", { weekday: "short" })}
+                </Text>
               </div>
             }
             bodyChildren={
-              <div className="flex flex-col bg-slate-500 rounded px-2">
-                <Text>Pago? {schedule.paid}</Text>
+              <div className="flex flex-col bg-slate-500/30 rounded px-2 py-1">
+                <div className="flex justify-around">
+                  <Text className="font-bold">Pago?</Text>
+                  <Text
+                    className={classNames("font-bold px-2 rounded-full", {
+                      "text-red-700 bg-red-700/20": !schedule.paid,
+                      "text-green-700 bg-green-700/20 ": schedule.paid,
+                    })}
+                  >
+                    {schedule.paid ? "Sim" : "Não"}
+                  </Text>
+                </div>
               </div>
             }
           />

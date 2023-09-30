@@ -6,17 +6,16 @@ import { toast } from "react-toastify";
 import { ArrowCircleLeft } from "@phosphor-icons/react";
 import Link from "next/link";
 
-import { InputNumeric } from "../form/input/Numeric";
-import { Button } from "../Button";
-import { InputSelectText } from "../form/input/SelectText";
-import { Text } from "../Text";
-import {
-  createScheduling,
-  getSchedulesPerStudent,
-  getStudentByName,
-  listStudents,
-} from "@/src/service/api";
-import { InputCurrency } from "../form/input/Currency";
+import { InputNumeric } from "../../form/input/Numeric";
+import { Button } from "../../Button";
+import { InputSelectText } from "../../form/input/SelectText";
+import { Text } from "../../Text";
+import { createScheduling } from "@/src/service/api";
+import { InputCurrency } from "../../form/input/Currency";
+import { useStudents } from "../../../service/hooks/useStudents";
+import { useGetStudentByName } from "../../../service/hooks/useGetStudentByName";
+import { useGetSchedulesPerStudent } from "../../../service/hooks/useGetSchedulesPerStudent";
+import { Loading } from "../../Loading";
 
 type ValuePiece = Date | string | null;
 
@@ -30,19 +29,20 @@ export type FormCreateScheduling = {
 };
 
 export const Scheduling = () => {
-  const [loading, setLoading] = useState<boolean>(false);
-
-  const students = listStudents();
-
   const methods = useForm<FormCreateScheduling>();
 
   const { watch, handleSubmit, setValue, register } = methods;
 
-  const student = getStudentByName(watch("name"));
+  const { data: students, isLoading: studentsIsLoading } = useStudents();
 
-  const schedulingByStudents = student
-    ? getSchedulesPerStudent(student.id)
-    : [];
+  const { data: student, isLoading: studentIsLoading } = useGetStudentByName(
+    watch("name")
+  );
+
+  const {
+    data: schedulingByStudents,
+    isLoading: schedulingByStudentsIsLoading,
+  } = useGetSchedulesPerStudent(student?.id);
 
   const handleDate = (date: Date) => {
     setValue("date", date.toString());
@@ -57,8 +57,12 @@ export const Scheduling = () => {
     setLoading(false);
   };
 
+  const [loading, setLoading] = useState<boolean>(
+    studentIsLoading && studentsIsLoading && schedulingByStudentsIsLoading
+  );
+
   return (
-    <div className="flex flex-wrap">
+    <div className="flex w-full flex-wrap">
       <div className="w-full self-start">
         <Text>
           <Link href="/">
@@ -68,9 +72,8 @@ export const Scheduling = () => {
       </div>
       <FormProvider {...methods}>
         {loading ? (
-          <div className="flex flex-col items-center gap-2">
-            <div className="animate-spin h-5 w-5 rounded-full border-white border-l-[3px]"></div>
-            <Text>Carregando...</Text>
+          <div className="flex flex-col w-full items-center gap-2">
+            <Loading />
           </div>
         ) : (
           <form
@@ -82,10 +85,14 @@ export const Scheduling = () => {
               name="name"
               label="Nome do aluno"
               required
-              options={students.map((student) => ({
-                label: student.name,
-                value: student.name,
-              }))}
+              options={
+                students
+                  ? students.map((student) => ({
+                      label: student.name,
+                      value: student.name,
+                    }))
+                  : []
+              }
             />
             <div className="flex gap-3">
               <InputCurrency
@@ -103,17 +110,17 @@ export const Scheduling = () => {
             </div>
 
             {watch("name") && (
-              <div className="w-full overflow-hidden">
+              <div className="w-full flex justify-center overflow-hidden">
                 <Calendar
                   onChange={(dt) => handleDate(dt as Date)}
-                  {...(watch("date") && {
-                    value: watch("date") as Value,
-                    tileDisabled: ({ date }) =>
-                      schedulingByStudents &&
-                      schedulingByStudents.some((dt) =>
-                        dayjs(dt.date).isSame(dayjs(date))
-                      ),
-                  })}
+                  {...(watch("date") &&
+                    schedulingByStudents && {
+                      value: watch("date") as Value,
+                      tileDisabled: ({ date }) =>
+                        schedulingByStudents.some((dt) =>
+                          dayjs(dt.date).isSame(dayjs(date))
+                        ),
+                    })}
                 />
               </div>
             )}

@@ -1,5 +1,5 @@
 export type Student = {
-  id: string;
+  id?: string;
   name: string;
   schedules_id?: Array<Schedule.id>;
 };
