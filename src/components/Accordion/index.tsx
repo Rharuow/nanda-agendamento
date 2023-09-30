@@ -11,8 +11,12 @@ export default function Accordion({
   id,
   textHeader,
   textBody,
+  buttonClassName,
+  bodyClassName,
   bodyChildren,
   headerChildren,
+  withArrow,
+  iconClassName,
 }: AccordionProps) {
   const [accordionOpen, setAccordionOpen] = useState<boolean>(false);
 
@@ -23,7 +27,7 @@ export default function Accordion({
   return (
     <div className="py-2">
       <button
-        className="flex items-center justify-between w-full text-left font-semibold py-2"
+        className={`flex items-center justify-between w-full text-left font-semibold py-2 ${buttonClassName}`}
         onClick={(e) => {
           e.preventDefault();
           setAccordionOpen(!accordionOpen);
@@ -35,21 +39,33 @@ export default function Accordion({
           <>
             <Text>{textHeader}</Text>
             <CaretDown
-              className={classNames("duration-500", {
+              className={classNames(`duration-500 ${iconClassName ?? " "}`, {
                 "rotate-180": accordionOpen,
               })}
               size={32}
             />
           </>
         ) : (
-          headerChildren
+          <>
+            {headerChildren}
+            {withArrow && (
+              <CaretDown
+                className={classNames(`duration-500 ${iconClassName ?? " "}`, {
+                  "rotate-180": accordionOpen,
+                })}
+                size={32}
+              />
+            )}
+          </>
         )}
       </button>
       <div
         id={`accordion-${id}`}
         role="region"
         aria-labelledby={`accordion-header-${id}`}
-        className={`grid text-sm text-slate-600 overflow-hidden transition-all duration-300 ease-in-out ${
+        className={`grid ${
+          bodyClassName ?? " "
+        } text-sm text-slate-600 overflow-hidden transition-all duration-300 ease-in-out ${
           accordionOpen
             ? "grid-rows-[1fr] opacity-100"
             : "grid-rows-[0fr] opacity-0"

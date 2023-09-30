@@ -5,5 +5,9 @@ export type AccordionProps = {
   textBody?: string;
   headerChildren?: ReactNode;
   bodyChildren?: ReactNode;
+  withArrow?: boolean;
+  iconClassName?: string;
+  buttonClassName?: string;
+  bodyClassName?: string;
   id: number | string;
 };
