@@ -4,7 +4,7 @@ import { Scheduling } from "@/src/components/domain/Scheduling";
 
 const page = () => {
   return (
-    <main className="flex min-h-screen p-3">
+    <main className="flex min-h-screen">
       <Scheduling />
     </main>
   );

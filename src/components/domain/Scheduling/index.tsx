@@ -35,13 +35,16 @@ export const Scheduling = () => {
 
   const { data: students, isLoading: studentsIsLoading } = useStudents();
 
-  const { data: student, isLoading: studentIsLoading } = useGetStudentByName(
-    watch("name")
-  );
+  const {
+    data: student,
+    isLoading: studentIsLoading,
+    isFetching: studentIsFetching,
+  } = useGetStudentByName(watch("name"));
 
   const {
     data: schedulingByStudents,
     isLoading: schedulingByStudentsIsLoading,
+    isFetching: schedulingByStudentsIsFetching,
   } = useGetSchedulesPerStudent(student?.id);
 
   const handleDate = (date: Date) => {
@@ -51,19 +54,13 @@ export const Scheduling = () => {
   const onSubmit = (data: FormCreateScheduling) => {
     console.log("data = ", data);
     if (!data.date) return toast.error("Data é obrigatória");
-    setLoading(true);
     createScheduling(data);
     toast.success("Agendamento feito com sucesso...");
-    setLoading(false);
   };
 
-  const [loading, setLoading] = useState<boolean>(
-    studentIsLoading && studentsIsLoading && schedulingByStudentsIsLoading
-  );
-
   return (
-    <div className="flex w-full flex-wrap">
-      <div className="w-full self-start">
+    <div className="flex w-full flex-wrap p-3">
+      <div className="self-start">
         <Text>
           <Link href="/">
             <ArrowCircleLeft size={28} />
@@ -71,13 +68,15 @@ export const Scheduling = () => {
         </Text>
       </div>
       <FormProvider {...methods}>
-        {loading ? (
+        {studentIsLoading &&
+        studentsIsLoading &&
+        schedulingByStudentsIsLoading ? (
           <div className="flex flex-col w-full items-center gap-2">
             <Loading />
           </div>
         ) : (
           <form
-            className="flex flex-col gap-3"
+            className="flex flex-col gap-3 pe-3"
             onSubmit={handleSubmit(onSubmit)}
           >
             <input type="text" hidden {...register("date")} />
