@@ -1,6 +1,6 @@
 import { addDoc, doc, updateDoc } from "firebase/firestore";
-import { Schedule, Student } from "..";
-import { studentsCollection } from "../collections";
+import { Schedule } from "..";
+import { schedulesCollection, studentsCollection } from "../collections";
 import { FormCreateScheduling } from "@/src/components/domain/Scheduling";
 import { createStudent, getStudentByName } from "../students";
 import { db } from "../firebase";
@@ -11,17 +11,14 @@ export const createScheduling = async (schedule: FormCreateScheduling) => {
     amountTime: scheduleData.amount,
     date: schedule.date,
     paid: false,
-    pricePerTime: schedule.price,
+    pricePerTime: parseFloat(schedule.price.replace(",", ".")),
   };
   try {
     const hasStudent = await getStudentByName({ name: schedule.name });
 
     if (hasStudent) {
       const scheduleDoc = await addDoc(studentsCollection, {
-        amountTime: scheduleData.amount,
-        date: schedule.date,
-        paid: false,
-        pricePerTime: schedule.price,
+        ...scheduleFormatted,
         student_id: hasStudent.id,
       } as Schedule);
 
@@ -33,7 +30,7 @@ export const createScheduling = async (schedule: FormCreateScheduling) => {
       return scheduleDoc;
     }
 
-    const scheduleDoc = await addDoc(studentsCollection, scheduleFormatted);
+    const scheduleDoc = await addDoc(schedulesCollection, scheduleFormatted);
 
     const studentId = (
       await createStudent({
@@ -45,9 +42,8 @@ export const createScheduling = async (schedule: FormCreateScheduling) => {
     const scheduleRef = doc(db, "schedules", scheduleDoc.id);
 
     await updateDoc(scheduleRef, {
-      ...scheduleFormatted,
       student_id: studentId,
-    } as Schedule);
+    });
 
     return scheduleDoc;
   } catch (error: any) {

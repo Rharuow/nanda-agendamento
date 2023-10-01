@@ -7,7 +7,7 @@ export const getStudentByName = async ({ name }: { name: string }) => {
     const q = query(studentsCollection, where("name", "==", name));
     const student = (await getDocs(q)).docs[0];
     if (student) return { ...student.data(), id: student.id } as Student;
-    throw new Error("Student não encontrado.");
+    return false;
   } catch (error: any) {
     console.log(error);
     throw new Error(`${error.message}`);

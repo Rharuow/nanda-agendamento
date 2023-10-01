@@ -11,7 +11,16 @@ export function InputSelectText<T extends OptionValue>({
   ...rest
 }: Props<T>) {
   const [isFocused, setIsFocused] = useState<boolean>(false);
-  const [options, setOption] = useState(rest.options);
+  const [options, setOption] = useState(
+    rest.options.length > 0
+      ? rest.options.filter((_, index) => index < amount)
+      : [
+          {
+            label: rest.emptyLabel ? rest.emptyLabel : "Nenhuma opção",
+            value: undefined,
+          },
+        ]
+  );
 
   const { register, control, setValue } = useFormContext();
 
@@ -27,7 +36,16 @@ export function InputSelectText<T extends OptionValue>({
             ? filteredOptions
             : [{ label: `Adicionar ${text}`, value: "Nenhum registro" as T }]
         )
-      : setOption(rest.options);
+      : setOption(
+          rest.options.length > 0
+            ? rest.options.filter((_, index) => index < amount)
+            : [
+                {
+                  label: rest.emptyLabel ? rest.emptyLabel : "Nenhuma opção",
+                  value: undefined,
+                },
+              ]
+        );
     setValue(name, text);
   };
 

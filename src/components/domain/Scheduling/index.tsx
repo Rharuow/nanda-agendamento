@@ -10,12 +10,12 @@ import { InputNumeric } from "../../form/input/Numeric";
 import { Button } from "../../Button";
 import { InputSelectText } from "../../form/input/SelectText";
 import { Text } from "../../Text";
-import { createScheduling } from "@/src/service/api";
 import { InputCurrency } from "../../form/input/Currency";
 import { useStudents } from "../../../service/hooks/useStudents";
-import { useGetStudentByName } from "../../../service/hooks/useGetStudentByName";
 import { useGetSchedulesPerStudent } from "../../../service/hooks/useGetSchedulesPerStudent";
 import { Loading } from "../../Loading";
+import { useCreateSchedule } from "@/src/service/hooks/useCreateSchedule";
+import { Student } from "@/src/service";
 
 type ValuePiece = Date | string | null;
 
@@ -24,7 +24,7 @@ type Value = ValuePiece | [ValuePiece, ValuePiece];
 export type FormCreateScheduling = {
   name: string;
   amount: number;
-  price: number;
+  price: string;
   date: string;
 };
 
@@ -33,33 +33,46 @@ export const Scheduling = () => {
 
   const { watch, handleSubmit, setValue, register } = methods;
 
-  const { data: students, isLoading: studentsIsLoading } = useStudents();
-
   const {
-    data: student,
-    isLoading: studentIsLoading,
-    isFetching: studentIsFetching,
-  } = useGetStudentByName(watch("name"));
+    data: students,
+    isLoading: studentsIsLoading,
+    isSuccess,
+  } = useStudents();
+
+  const [student, setStudent] = useState(
+    typeof students === "object" &&
+      students.find((std) => std.name === watch("name"))
+  );
+
+  const { mutateAsync: createSchedule } = useCreateSchedule();
 
   const {
     data: schedulingByStudents,
     isLoading: schedulingByStudentsIsLoading,
     isFetching: schedulingByStudentsIsFetching,
-  } = useGetSchedulesPerStudent(student?.id);
+  } = useGetSchedulesPerStudent(
+    typeof student === "object" ? student?.id : undefined
+  );
 
   const handleDate = (date: Date) => {
     setValue("date", date.toString());
   };
 
   const onSubmit = (data: FormCreateScheduling) => {
-    console.log("data = ", data);
     if (!data.date) return toast.error("Data é obrigatória");
-    createScheduling(data);
-    toast.success("Agendamento feito com sucesso...");
+    createSchedule(data, {
+      onSuccess: (res) => {
+        toast.success("Agendamento feito com sucesso...");
+      },
+      onError: (error) => {
+        console.log("Create schedule error = ", error);
+        toast.error("Erro ao agendar...");
+      },
+    });
   };
 
   return (
-    <div className="flex w-full flex-wrap p-3">
+    <div className="flex flex-wrap">
       <div className="self-start">
         <Text>
           <Link href="/">
@@ -68,44 +81,41 @@ export const Scheduling = () => {
         </Text>
       </div>
       <FormProvider {...methods}>
-        {studentIsLoading &&
-        studentsIsLoading &&
-        schedulingByStudentsIsLoading ? (
-          <div className="flex flex-col w-full items-center gap-2">
+        {(studentsIsLoading || schedulingByStudentsIsLoading) &&
+        schedulingByStudentsIsFetching ? (
+          <div className="flex flex-col w-screen items-center gap-2">
             <Loading />
           </div>
         ) : (
           <form
-            className="flex flex-col gap-3 pe-3"
+            className="flex flex-col gap-3"
             onSubmit={handleSubmit(onSubmit)}
           >
             <input type="text" hidden {...register("date")} />
             <InputSelectText<string>
               name="name"
+              key={`${studentsIsLoading}`}
               label="Nome do aluno"
               required
+              emptyLabel="Aluno não cadastrado"
               options={
-                students
+                students && students.length > 0
                   ? students.map((student) => ({
                       label: student.name,
                       value: student.name,
                     }))
                   : []
               }
+              onChange={(e) => {
+                setStudent(
+                  typeof students === "object" &&
+                    students.find((std) => std.name === e)
+                );
+              }}
             />
             <div className="flex gap-3">
-              <InputCurrency
-                name="price"
-                required
-                label="Valor por aula"
-                className="w-1/2"
-              />
-              <InputNumeric
-                name="amount"
-                required
-                label="Quantidade aulas"
-                className="w-1/2"
-              />
+              <InputCurrency name="price" required label="Valor por aula" />
+              <InputNumeric name="amount" required label="Quantidade aulas" />
             </div>
 
             {watch("name") && (
