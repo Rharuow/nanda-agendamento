@@ -123,14 +123,13 @@ export const Scheduling = () => {
               <div className="w-full flex justify-center overflow-hidden">
                 <Calendar
                   onChange={(dt) => handleDate(dt as Date)}
-                  {...(watch("date") &&
-                    schedulingByStudents && {
-                      value: watch("date") as Value,
-                      tileDisabled: ({ date }) =>
-                        schedulingByStudents.some((dt) =>
-                          dayjs(dt.date).isSame(dayjs(date))
-                        ),
-                    })}
+                  {...(schedulingByStudents && {
+                    value: watch("date") as Value,
+                    tileDisabled: ({ date }) =>
+                      schedulingByStudents.some((dt) =>
+                        dayjs(dt.date).isSame(dayjs(date))
+                      ),
+                  })}
                 />
               </div>
             )}
