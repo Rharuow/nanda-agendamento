@@ -1,10 +1,10 @@
-import { getDocs, query, where } from "firebase/firestore";
-import { studentsCollection } from "../collections";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
 export const getStudent = async (id: string) => {
   try {
-    const q = query(studentsCollection, where("id", "==", id));
-    const student = (await getDocs(q)).docs[0];
+    const docStudentRef = doc(db, "students", id);
+    const student = await getDoc(docStudentRef);
     if (student) return { ...student.data(), id: student.id };
     throw new Error("Student não encontrado.");
   } catch (error: any) {

@@ -15,7 +15,7 @@ import { useStudents } from "../../../service/hooks/useStudents";
 import { useGetSchedulesPerStudent } from "../../../service/hooks/useGetSchedulesPerStudent";
 import { Loading } from "../../Loading";
 import { useCreateSchedule } from "@/src/service/hooks/useCreateSchedule";
-import { Student } from "@/src/service";
+import { compare } from "@/src/utils/compareStrings";
 
 type ValuePiece = Date | string | null;
 
@@ -81,7 +81,8 @@ export const Scheduling = () => {
         </Text>
       </div>
       <FormProvider {...methods}>
-        {(studentsIsLoading || schedulingByStudentsIsLoading) &&
+        {studentsIsLoading &&
+        schedulingByStudentsIsLoading &&
         schedulingByStudentsIsFetching ? (
           <div className="flex flex-col w-screen items-center gap-2">
             <Loading />
@@ -109,7 +110,7 @@ export const Scheduling = () => {
               onChange={(e) => {
                 setStudent(
                   typeof students === "object" &&
-                    students.find((std) => std.name === e)
+                    students.find((std) => compare(std.name, e))
                 );
               }}
             />

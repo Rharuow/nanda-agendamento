@@ -1,10 +1,10 @@
-import { getDocs, query, where } from "firebase/firestore";
-import { schedulesCollection } from "../collections";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../firebase";
 
 export const getSchedule = async (id: string) => {
   try {
-    const q = query(schedulesCollection, where("id", "==", id));
-    const schedule = (await getDocs(q)).docs[0];
+    const scheduleRef = doc(db, "schedules", id);
+    const schedule = await getDoc(scheduleRef);
     if (schedule) return { ...schedule.data(), id: schedule.id };
     throw new Error("Schedule não encontrado.");
   } catch (error: any) {
