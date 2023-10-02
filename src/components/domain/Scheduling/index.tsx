@@ -36,7 +36,7 @@ export const Scheduling = () => {
   const {
     data: students,
     isLoading: studentsIsLoading,
-    isSuccess,
+    refetch: refetchStudent,
   } = useStudents();
 
   const [student, setStudent] = useState(
@@ -63,6 +63,7 @@ export const Scheduling = () => {
     createSchedule(data, {
       onSuccess: (res) => {
         toast.success("Agendamento feito com sucesso...");
+        refetchStudent();
       },
       onError: (error) => {
         console.log("Create schedule error = ", error);

@@ -13,15 +13,14 @@ export const createScheduling = async (schedule: FormCreateScheduling) => {
     paid: false,
     pricePerTime: parseFloat(schedule.price.replace(",", ".")),
   };
+  console.log("scheduleFormatted = ", scheduleFormatted);
   try {
     const hasStudent = await getStudentByName({ name: schedule.name });
-
     if (hasStudent) {
       const scheduleDoc = await addDoc(studentsCollection, {
         ...scheduleFormatted,
         student_id: hasStudent.id,
       } as Schedule);
-
       const studentRef = doc(db, "students", String(hasStudent.id));
       updateDoc(studentRef, {
         ...hasStudent,
@@ -29,22 +28,17 @@ export const createScheduling = async (schedule: FormCreateScheduling) => {
       });
       return scheduleDoc;
     }
-
     const scheduleDoc = await addDoc(schedulesCollection, scheduleFormatted);
-
     const studentId = (
       await createStudent({
         name: schedule.name,
         schedules_id: [scheduleDoc.id],
       })
     ).id;
-
     const scheduleRef = doc(db, "schedules", scheduleDoc.id);
-
     await updateDoc(scheduleRef, {
       student_id: studentId,
     });
-
     return scheduleDoc;
   } catch (error: any) {
     console.log("error to create schedule = ", error);
