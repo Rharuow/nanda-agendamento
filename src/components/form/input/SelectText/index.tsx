@@ -52,7 +52,7 @@ export function InputSelectText<T extends OptionValue>({
   const selectField = useRef<HTMLInputElement>(null);
 
   return (
-    <div className={`relative ${rest.className || " "}`}>
+    <div className={`relative w-full ${rest.className || " "}`}>
       {label && (
         <label
           htmlFor={name}

@@ -13,7 +13,7 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="flex w-full min-h-screen items-center justify-center px-3">
+    <main className="min-h-screen p-3">
       {user ? <ListScheduling /> : <SignIn setUser={setUser} />}
     </main>
   );

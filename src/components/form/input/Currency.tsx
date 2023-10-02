@@ -22,7 +22,7 @@ export const InputCurrency = ({
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
   return (
-    <div className={`relative ${rest.className || " "}`}>
+    <div className={`relative w-full ${rest.className || " "}`}>
       {label && (
         <label
           htmlFor={name}

@@ -17,6 +17,7 @@ export const ListScheduling = () => {
           (student) => student.id === schedule.student_id
         ),
       }))}
+      students={students}
     />
   ) : schedulesIsLoading || studentsIsLoading ? (
     <Loading />

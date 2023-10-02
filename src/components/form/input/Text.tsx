@@ -21,7 +21,7 @@ export const InputText = ({
   const watchField = useWatch({ control, name });
 
   return (
-    <div className={`relative ${rest.className || " "}`}>
+    <div className={`relative w-full ${rest.className || " "}`}>
       {label && (
         <label
           htmlFor={name}

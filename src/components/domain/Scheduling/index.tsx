@@ -72,7 +72,7 @@ export const Scheduling = () => {
   };
 
   return (
-    <div className="flex flex-wrap">
+    <div className="flex flex-wrap items-stretch w-full gap-2">
       <div className="self-start">
         <Text>
           <Link href="/">
@@ -80,16 +80,16 @@ export const Scheduling = () => {
           </Link>
         </Text>
       </div>
-      <FormProvider {...methods}>
-        {studentsIsLoading &&
-        schedulingByStudentsIsLoading &&
-        schedulingByStudentsIsFetching ? (
-          <div className="flex flex-col w-screen items-center gap-2">
-            <Loading />
-          </div>
-        ) : (
+      {studentsIsLoading &&
+      schedulingByStudentsIsLoading &&
+      schedulingByStudentsIsFetching ? (
+        <div className="flex flex-col w-screen items-center gap-2">
+          <Loading />
+        </div>
+      ) : (
+        <FormProvider {...methods}>
           <form
-            className="flex flex-col gap-3"
+            className="flex w-full self-stretch flex-col gap-3"
             onSubmit={handleSubmit(onSubmit)}
           >
             <input type="text" hidden {...register("date")} />
@@ -114,9 +114,19 @@ export const Scheduling = () => {
                 );
               }}
             />
-            <div className="flex gap-3">
-              <InputCurrency name="price" required label="Valor por aula" />
-              <InputNumeric name="amount" required label="Quantidade aulas" />
+            <div className="flex w-full gap-3">
+              <InputCurrency
+                name="price"
+                className="w-1/2"
+                required
+                label="Valor por aula"
+              />
+              <InputNumeric
+                className="w-1/2"
+                name="amount"
+                required
+                label="Quantidade aulas"
+              />
             </div>
 
             {watch("name") && (
@@ -135,8 +145,8 @@ export const Scheduling = () => {
             )}
             <Button text="Agendar" variant="success" />
           </form>
-        )}
-      </FormProvider>
+        </FormProvider>
+      )}
     </div>
   );
 };

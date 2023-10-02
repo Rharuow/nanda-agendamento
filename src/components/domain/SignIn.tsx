@@ -37,21 +37,23 @@ export const SignIn = ({
     }
   };
   return (
-    <div className="border p-3 border-slate-200 rounded shadow-sm shadow-slate-200 mx-5">
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <div className="flex items-center border-b border-teal-500 py-2">
-          <input
-            className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
-            type="password"
-            {...register("password")}
-            placeholder="Senha"
-            aria-label="password"
-          />
-          <button className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 py-1 px-2 rounded">
-            Entrar
-          </button>
-        </div>
-      </form>
+    <div className="flex h-screen items-center">
+      <div className="border p-3 border-slate-200 rounded shadow-sm shadow-slate-200 mx-5">
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <div className="flex items-center border-b border-teal-500 py-2">
+            <input
+              className="appearance-none bg-transparent border-none w-full text-gray-700 mr-3 py-1 px-2 leading-tight focus:outline-none"
+              type="password"
+              {...register("password")}
+              placeholder="Senha"
+              aria-label="password"
+            />
+            <button className="flex-shrink-0 bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 py-1 px-2 rounded">
+              Entrar
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
