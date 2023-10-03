@@ -9,29 +9,33 @@ import Link from "next/link";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { InputSelectText } from "../../form/input/SelectText";
 import { useGetSchedulesPerStudent } from "@/src/service/hooks/useGetSchedulesPerStudent";
+import { Toggle } from "../../form/Toggle";
+import { filters } from "./util/filter";
 
 export const List = ({
-  schedules,
+  schedules: schedulesProp,
   students,
 }: {
   schedules: Array<Schedule & { student?: Student }>;
   students: Array<Student>;
 }) => {
-  const methods = useForm<{ name: string; date: string }>();
+  const methods = useForm<{
+    name: string;
+    date: string;
+    startToNow: boolean;
+  }>();
+
+  const [schedules, setSchedules] =
+    useState<Array<Schedule & { student?: Student }>>(schedulesProp);
 
   const { control } = methods;
 
-  const studantNameRef = useWatch({ control, name: "name" });
+  const studantNameWatch = useWatch({ control, name: "name" });
+  const startToNowWatch = useWatch({ control, name: "startToNow" });
 
   const [studentId, setStudentId] = useState<string>();
 
   const { data: schedulesPerStudent } = useGetSchedulesPerStudent(studentId);
-
-  useEffect(() => {
-    setStudentId(
-      students.find((student) => student.name === studantNameRef)?.id
-    );
-  }, [studantNameRef, students]);
 
   return (
     <div className="flex flex-col items-end gap-3">
@@ -49,13 +53,11 @@ export const List = ({
           name="name"
           label="Nome do Aluno"
         />
+        <Toggle name="startToNow" />
       </FormProvider>
       <div className="flex flex-col w-full gap-2">
         <h2>Agendamentos</h2>
-        {(studentId
-          ? (schedulesPerStudent as Array<Schedule & { student?: Student }>)
-          : schedules
-        ).map((schedule) => (
+        {schedules.map((schedule) => (
           <div className="bg-slate-400 px-3 rounded" key={schedule.id}>
             <Accordion
               id={schedule.id}
