@@ -16,6 +16,7 @@ import { useGetSchedulesPerStudent } from "../../../service/hooks/useGetSchedule
 import { Loading } from "../../Loading";
 import { useCreateSchedule } from "@/src/service/hooks/useCreateSchedule";
 import { compare } from "@/src/utils/compareStrings";
+import { Student } from "@/src/service";
 
 type ValuePiece = Date | string | null;
 
@@ -39,9 +40,8 @@ export const Scheduling = () => {
     refetch: refetchStudent,
   } = useStudents();
 
-  const [student, setStudent] = useState(
-    typeof students === "object" &&
-      students.find((std) => std.name === watch("name"))
+  const [student, setStudent] = useState<Student | undefined>(
+    students?.find((std) => std.name === watch("name"))
   );
 
   const { mutateAsync: createSchedule } = useCreateSchedule();
@@ -109,10 +109,7 @@ export const Scheduling = () => {
                   : []
               }
               onChange={(e) => {
-                setStudent(
-                  typeof students === "object" &&
-                    students.find((std) => compare(std.name, e))
-                );
+                setStudent(students?.find((std) => compare(std.name, e)));
               }}
             />
             <div className="flex w-full gap-3">

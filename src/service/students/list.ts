@@ -8,8 +8,8 @@ export const listStudents = async () => {
       ...student.data(),
       id: student.id,
     })) as Array<Student>;
-  } catch (error) {
+  } catch (error: any) {
     console.log("listStudent = ", error);
-    return false;
+    throw new Error(`${error.message}`);
   }
 };

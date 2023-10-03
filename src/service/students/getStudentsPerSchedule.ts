@@ -10,5 +10,8 @@ export const getStudentsPerSchedule = async (scheduleId: string) => {
     return students
       .filter((student) => student.schedules_id?.includes(schedule.id))
       .map((student) => ({ ...student, schedule }));
-  } catch (error: any) {}
+  } catch (error: any) {
+    console.log(error);
+    throw new Error(`${error.message}`);
+  }
 };

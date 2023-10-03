@@ -5,9 +5,11 @@ import { useFormContext, useWatch } from "react-hook-form";
 export const Toggle = ({
   className,
   name,
+  onClick,
   ...rest
 }: {
   className?: string;
+  onClick?: (value: boolean) => void;
   name: string;
 }) => {
   const { register, control, setValue } = useFormContext();
@@ -17,7 +19,10 @@ export const Toggle = ({
   return (
     <div
       className={`flex w-[30px] relative ${className ?? " "}`}
-      onClick={() => setValue(name, !fieldWatch)}
+      onClick={() => {
+        setValue(name, !fieldWatch);
+        onClick && onClick(!fieldWatch);
+      }}
       {...rest}
     >
       <input type="checkbox" {...register(name)} id="" className="hidden" />
