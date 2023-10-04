@@ -23,6 +23,7 @@ export const ListScheduling = () => {
     date: string;
     startToNow: boolean;
     startAt: string;
+    endedAt: string;
   }>({
     defaultValues: {
       startToNow: true,
@@ -98,6 +99,22 @@ export const ListScheduling = () => {
         });
   };
 
+  const handleEndedAtFilter = (value: string) => {
+    value
+      ? setFilter((prevState) => {
+          return {
+            q: { ...prevState?.q, endOfDate: value },
+          };
+        })
+      : setFilter((prevState) => {
+          delete prevState?.q.endOfDate;
+          if (prevState && Object.keys(prevState.q).length === 0)
+            return undefined;
+          if (prevState) return { ...prevState };
+          return undefined;
+        });
+  };
+
   useEffect(() => {
     schedules &&
       setSchedulesWithStudent(
@@ -135,22 +152,29 @@ export const ListScheduling = () => {
                     }))
                   : []
               }
-              onChange={(e) => {
-                handleFilterName(e);
-              }}
+              onChange={handleFilterName}
               name="name"
               label="Nome do Aluno"
             />
             <Toggle
               label="A partir de hoje"
               name="startToNow"
-              onClick={(value) => handleStartOfNowFilter(value)}
+              onClick={handleStartOfNowFilter}
             />
-            <InputDate
-              name="startAt"
-              label="A partir de:"
-              onChange={handleStartAtFilter}
-            />
+            <div className="flex gap-2">
+              <InputDate
+                name="startAt"
+                className="w-1/2"
+                label="A partir de:"
+                onChange={handleStartAtFilter}
+              />
+              <InputDate
+                className="w-1/2"
+                name="endedAt"
+                label="Até:"
+                onChange={handleEndedAtFilter}
+              />
+            </div>
           </FormProvider>
           <div className="flex flex-col w-full gap-2">
             <h2>Agendamentos</h2>
