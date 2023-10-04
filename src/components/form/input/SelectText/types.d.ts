@@ -16,4 +16,6 @@ export type Props<T extends OptionValue> = {
   inputClassName?: string;
   labelClassName?: string;
   onChange?: (value: T) => void;
+  onFocus?: (value: T) => void;
+  onBlur?: (value: T) => void;
 };

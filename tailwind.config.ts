@@ -66,6 +66,22 @@ const config: Config = {
             maxHeigth: "100vh",
           },
         },
+        translateToRight: {
+          "0%": {
+            transform: "translateX(0)",
+          },
+          "100%": {
+            transform: "translateX(100%)",
+          },
+        },
+        translateToLeft: {
+          "0%": {
+            transform: "translateX(100%)",
+          },
+          "100%": {
+            transform: "translateX(0)",
+          },
+        },
       },
       animation: {
         fontSizeDown: "fontSizeDown 0.5s ease-out forwards",
@@ -75,6 +91,8 @@ const config: Config = {
         paddingTopDown: "paddingTopDown 0.5s ease-out forwards",
         paddingTopUp: "paddingTopUp 0.5s ease-out forwards",
         expanded: "expanded 2.5s ease-out forwards",
+        translateToRight: "translateToRight 500ms ease-out forwards",
+        translateToLeft: "translateToLeft 500ms ease-out forwards",
         // multiple animation
         labelFocus:
           "fontWeightDown 0.5s ease-out forwards, fontSizeDown 0.5s ease-out forwards",

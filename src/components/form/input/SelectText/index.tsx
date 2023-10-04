@@ -34,7 +34,12 @@ export function InputSelectText<T extends OptionValue>({
       ? setOption(
           filteredOptions.length > 0
             ? filteredOptions
-            : [{ label: `Adicionar ${text}`, value: "Nenhum registro" as T }]
+            : [
+                {
+                  label: rest.emptyLabel || `Adicionar ${text}`,
+                  value: "Nenhum registro" as T,
+                },
+              ]
         )
       : setOption(
           rest.options.length > 0
@@ -86,11 +91,13 @@ export function InputSelectText<T extends OptionValue>({
               "border-b-0": isFocused,
             }
           )}
-          onBlur={() => {
+          onBlur={(e) => {
             setIsFocused(false);
+            rest.onBlur && rest.onBlur(e.target.value as T);
           }}
-          onFocus={() => {
+          onFocus={(e) => {
             setIsFocused(true);
+            rest.onFocus && rest.onFocus(e.target.value as T);
           }}
           onChange={(e) => {
             handleFilterOptions(e.target.value);
