@@ -6,7 +6,6 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import { ToastContainer } from "react-toastify";
 
-import { useState } from "react";
 import { TanstackProvider } from "../components/providers/TanstackProvider";
 
 const poppins = Poppins({

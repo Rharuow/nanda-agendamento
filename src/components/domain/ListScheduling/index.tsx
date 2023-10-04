@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Loading } from "../../Loading";
 import { Text } from "../../Text";
 import Link from "next/link";
-import { PlusCircle } from "@phosphor-icons/react";
+import { PlusCircle, Trash } from "@phosphor-icons/react";
 import { InputSelectText } from "../../form/input/SelectText";
 import { Toggle } from "../../form/Toggle";
 import Accordion from "../../Accordion";
@@ -33,9 +33,6 @@ export const ListScheduling = () => {
   const { control, setValue } = methods;
 
   const startToNowWatch = useWatch({ control, name: "startToNow" });
-  const startAtWatch = useWatch({ control, name: "startAt" });
-
-  console.log(!!startAtWatch);
 
   const [filter, setFilter] = useState<FilterType | undefined>({
     q: { startOfNow: startToNowWatch },
@@ -132,6 +129,10 @@ export const ListScheduling = () => {
 
   return (
     <div className="flex flex-col items-end gap-3">
+      <div
+        id="modal"
+        className="fixed left-0 top-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none p-3 bg-green-500"
+      ></div>
       {schedulesIsLoading && studentsIsLoading ? (
         <Loading />
       ) : schedules && schedules.length > 0 ? (
@@ -185,7 +186,7 @@ export const ListScheduling = () => {
                     id={schedule.id}
                     iconClassName="text-white"
                     headerChildren={
-                      <div className="flex justify-between w-full">
+                      <div className="flex justify-between items-center w-full">
                         <Text>{schedule?.student?.name}</Text>
                         <Text>
                           {schedule.amountTime > 1
@@ -198,6 +199,15 @@ export const ListScheduling = () => {
                             .toDate()
                             .toLocaleString("pt-BR", { weekday: "short" })}
                         </Text>
+                        <div
+                          className="flex bg-red-500/30 p-1 rounded"
+                          data-te-toggle="modal"
+                          data-te-target="#modal"
+                          data-te-ripple-init
+                          data-te-ripple-color="light"
+                        >
+                          <Trash className="text-red-500" />
+                        </div>
                       </div>
                     }
                     bodyChildren={

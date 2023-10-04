@@ -13,7 +13,6 @@ export const createScheduling = async (schedule: FormCreateScheduling) => {
     paid: false,
     pricePerTime: parseFloat(schedule.price.replace(",", ".")),
   };
-  console.log("scheduleFormatted = ", scheduleFormatted);
   try {
     const hasStudent = await getStudentByName({ name: schedule.name });
     if (hasStudent) {
