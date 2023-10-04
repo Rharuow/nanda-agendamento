@@ -2,7 +2,7 @@ import { addDoc, doc, updateDoc } from "firebase/firestore";
 import { Schedule } from "..";
 import { schedulesCollection, studentsCollection } from "../collections";
 import { FormCreateScheduling } from "@/src/components/domain/Scheduling";
-import { createStudent, getStudentByName } from "../students";
+import { createStudent, getStudentByName, listStudents } from "../students";
 import { db } from "../firebase";
 
 export const createScheduling = async (schedule: FormCreateScheduling) => {
@@ -13,9 +13,10 @@ export const createScheduling = async (schedule: FormCreateScheduling) => {
     paid: false,
     pricePerTime: parseFloat(schedule.price.replace(",", ".")),
   };
-  console.log("scheduleFormatted = ", scheduleFormatted);
+  const hasStudent = (await listStudents()).find(
+    (student) => student.name === name
+  );
   try {
-    const hasStudent = await getStudentByName({ name: schedule.name });
     if (hasStudent) {
       const scheduleDoc = await addDoc(studentsCollection, {
         ...scheduleFormatted,
