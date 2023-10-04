@@ -63,13 +63,13 @@ export const filterSchedules = ({
 
   schedulesFiltred = params.some((param) => param === "startOfDate")
     ? schedulesFiltred.filter((schedule) =>
-        dayjs(schedule.date).isAfter(dayjs(q.startOfDate))
+        dayjs(schedule.date).isAfter(dayjs(q.startOfDate).subtract(1, "day"))
       )
     : schedulesFiltred;
 
   schedulesFiltred = params.some((param) => param === "endOfDate")
     ? schedulesFiltred.filter((schedule) =>
-        dayjs(schedule.date).isBefore(dayjs(q.endOfDate))
+        dayjs(schedule.date).isBefore(dayjs(q.endOfDate).add(1, "day"))
       )
     : schedulesFiltred;
 

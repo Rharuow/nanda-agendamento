@@ -15,32 +15,33 @@ import { Empty } from "./Empty";
 import { Schedule, Student } from "@/src/service";
 import { FilterType } from "@/src/service/schedules/types";
 import { filterSchedules } from "@/src/service/schedules/list";
+import { InputDate } from "../../form/input/Date";
 
 export const ListScheduling = () => {
   const methods = useForm<{
     name: string;
     date: string;
     startToNow: boolean;
+    startAt: string;
+    endedAt: string;
   }>({
     defaultValues: {
       startToNow: true,
     },
   });
 
-  const { control } = methods;
+  const { control, setValue } = methods;
 
   const startToNowWatch = useWatch({ control, name: "startToNow" });
-  const nameWatch = useWatch({ control, name: "name" });
+  const startAtWatch = useWatch({ control, name: "startAt" });
+
+  console.log(!!startAtWatch);
 
   const [filter, setFilter] = useState<FilterType | undefined>({
     q: { startOfNow: startToNowWatch },
   });
 
-  const {
-    data: schedules,
-    isLoading: schedulesIsLoading,
-    refetch,
-  } = useSchedules();
+  const { data: schedules, isLoading: schedulesIsLoading } = useSchedules();
 
   const { data: students, isLoading: studentsIsLoading } = useStudents();
 
@@ -64,9 +65,13 @@ export const ListScheduling = () => {
 
   const handleStartOfNowFilter = (value: boolean) => {
     value
-      ? setFilter((prevState) => ({
-          q: { ...prevState?.q, startOfNow: value },
-        }))
+      ? setFilter((prevState) => {
+          delete prevState?.q.startOfDate;
+          setValue("startAt", "");
+          return {
+            q: { ...prevState?.q, startOfNow: value },
+          };
+        })
       : setFilter((prevState) => {
           delete prevState?.q.startOfNow;
           if (prevState && Object.keys(prevState.q).length === 0)
@@ -76,8 +81,41 @@ export const ListScheduling = () => {
         });
   };
 
+  const handleStartAtFilter = (value: string) => {
+    value
+      ? setFilter((prevState) => {
+          setValue("startToNow", false);
+          delete prevState?.q.startOfNow;
+          return {
+            q: { ...prevState?.q, startOfDate: value },
+          };
+        })
+      : setFilter((prevState) => {
+          delete prevState?.q.startOfDate;
+          if (prevState && Object.keys(prevState.q).length === 0)
+            return undefined;
+          if (prevState) return { ...prevState };
+          return undefined;
+        });
+  };
+
+  const handleEndedAtFilter = (value: string) => {
+    value
+      ? setFilter((prevState) => {
+          return {
+            q: { ...prevState?.q, endOfDate: value },
+          };
+        })
+      : setFilter((prevState) => {
+          delete prevState?.q.endOfDate;
+          if (prevState && Object.keys(prevState.q).length === 0)
+            return undefined;
+          if (prevState) return { ...prevState };
+          return undefined;
+        });
+  };
+
   useEffect(() => {
-    console.log("filter = ", filter);
     schedules &&
       setSchedulesWithStudent(
         filter
@@ -107,23 +145,36 @@ export const ListScheduling = () => {
             <InputSelectText
               emptyLabel="Nenhum aluno encontrado"
               options={
-                typeof students === "object"
+                students
                   ? students?.map((student) => ({
                       label: student.name,
                       value: student.name,
                     }))
                   : []
               }
-              onChange={(e) => {
-                handleFilterName(e);
-              }}
+              onChange={handleFilterName}
               name="name"
               label="Nome do Aluno"
             />
             <Toggle
+              label="A partir de hoje"
               name="startToNow"
-              onClick={(value) => handleStartOfNowFilter(value)}
+              onClick={handleStartOfNowFilter}
             />
+            <div className="flex gap-2">
+              <InputDate
+                name="startAt"
+                className="w-1/2"
+                label="A partir de:"
+                onChange={handleStartAtFilter}
+              />
+              <InputDate
+                className="w-1/2"
+                name="endedAt"
+                label="Até:"
+                onChange={handleEndedAtFilter}
+              />
+            </div>
           </FormProvider>
           <div className="flex flex-col w-full gap-2">
             <h2>Agendamentos</h2>
