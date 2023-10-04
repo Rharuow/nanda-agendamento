@@ -49,25 +49,26 @@ export const filterSchedules = ({
   student?: Student;
 }) => {
   const { q } = filter;
-  console.log("q = ", q);
-  console.log("schedules = ", schedules);
   const params = Object.keys(q);
-  let schedulesFiltred = student
-    ? schedules.filter((schedule) => schedule.student_id === student.id)
-    : schedules;
+  let schedulesFiltred = schedules;
+  schedulesFiltred = params.some((param) => param === "studentName")
+    ? schedulesFiltred.filter((schedule) => schedule.student_id === student?.id)
+    : schedulesFiltred;
 
   schedulesFiltred = params.some((param) => param === "startOfNow")
-    ? schedules.filter((schedule) => dayjs(schedule.date).isAfter(dayjs()))
+    ? schedulesFiltred.filter((schedule) =>
+        dayjs(schedule.date).isAfter(dayjs())
+      )
     : schedulesFiltred;
 
   schedulesFiltred = params.some((param) => param === "startOfDate")
-    ? schedules.filter((schedule) =>
+    ? schedulesFiltred.filter((schedule) =>
         dayjs(schedule.date).isAfter(dayjs(q.startOfDate))
       )
     : schedulesFiltred;
 
   schedulesFiltred = params.some((param) => param === "endOfDate")
-    ? schedules.filter((schedule) =>
+    ? schedulesFiltred.filter((schedule) =>
         dayjs(schedule.date).isBefore(dayjs(q.endOfDate))
       )
     : schedulesFiltred;

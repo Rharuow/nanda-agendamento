@@ -49,10 +49,16 @@ export const ListScheduling = () => {
 
   const handleFilterName = (studentName: string) => {
     students?.some((student) => student.name === studentName)
-      ? setFilter({ q: { studentName: studentName } })
+      ? setFilter((prevState) => ({
+          ...prevState,
+          q: { ...prevState?.q, studentName },
+        }))
       : setFilter((prevState) => {
-          if (prevState) delete prevState.q.studentName;
-          return prevState;
+          delete prevState?.q.studentName;
+          if (prevState && Object.keys(prevState.q).length === 0)
+            return undefined;
+          if (prevState) return { ...prevState };
+          return undefined;
         });
   };
 
@@ -63,18 +69,21 @@ export const ListScheduling = () => {
         }))
       : setFilter((prevState) => {
           delete prevState?.q.startOfNow;
-          console.log("prevState = ", prevState);
-          return prevState;
+          if (prevState && Object.keys(prevState.q).length === 0)
+            return undefined;
+          if (prevState) return { ...prevState };
+          return undefined;
         });
   };
 
   useEffect(() => {
+    console.log("filter = ", filter);
     schedules &&
-      setSchedulesWithStudent((prevState) =>
+      setSchedulesWithStudent(
         filter
           ? filterSchedules({
               filter,
-              schedules: prevState || schedules,
+              schedules: schedules,
               student: students?.find(
                 (std) => std.name === filter.q.studentName
               ),
@@ -82,15 +91,6 @@ export const ListScheduling = () => {
           : schedules
       );
   }, [filter, schedules, students]);
-
-  // useEffect(() => {
-  //   const stud = students?.find((stu) => stu.name === filter.q.studentName);
-  //   setSchedulesWithStudent((prevState) =>
-  //     schedules
-  //       ? filterSchedules({ filter, schedules, student: stud })
-  //       : prevState
-  //   );
-  // }, [filter, schedules, students]);
 
   return (
     <div className="flex flex-col items-end gap-3">
@@ -127,45 +127,53 @@ export const ListScheduling = () => {
           </FormProvider>
           <div className="flex flex-col w-full gap-2">
             <h2>Agendamentos</h2>
-            {schedulesWithStudent?.map((schedule) => (
-              <div className="bg-slate-400 px-3 rounded" key={schedule.id}>
-                <Accordion
-                  id={schedule.id}
-                  iconClassName="text-white"
-                  headerChildren={
-                    <div className="flex justify-between w-full">
-                      <Text>{schedule?.student?.name}</Text>
-                      <Text>
-                        {schedule.amountTime > 1
-                          ? `${schedule.amountTime} horários`
-                          : `${schedule.amountTime} horário`}
-                      </Text>
-                      <Text>{dayjs(schedule.date).format("DD/MM/YYYY")}</Text>
-                      <Text>
-                        {dayjs(schedule.date)
-                          .toDate()
-                          .toLocaleString("pt-BR", { weekday: "short" })}
-                      </Text>
-                    </div>
-                  }
-                  bodyChildren={
-                    <div className="flex flex-col bg-slate-500/30 rounded px-2 py-1">
-                      <div className="flex justify-around">
-                        <Text className="font-bold">Pago?</Text>
-                        <Text
-                          className={classNames("font-bold px-2 rounded-full", {
-                            "text-red-700 bg-red-700/20": !schedule.paid,
-                            "text-green-700 bg-green-700/20 ": schedule.paid,
-                          })}
-                        >
-                          {schedule.paid ? "Sim" : "Não"}
+            {schedulesWithStudent && schedulesWithStudent?.length > 0 ? (
+              schedulesWithStudent?.map((schedule) => (
+                <div className="bg-slate-400 px-3 rounded" key={schedule.id}>
+                  <Accordion
+                    id={schedule.id}
+                    iconClassName="text-white"
+                    headerChildren={
+                      <div className="flex justify-between w-full">
+                        <Text>{schedule?.student?.name}</Text>
+                        <Text>
+                          {schedule.amountTime > 1
+                            ? `${schedule.amountTime} horários`
+                            : `${schedule.amountTime} horário`}
+                        </Text>
+                        <Text>{dayjs(schedule.date).format("DD/MM/YYYY")}</Text>
+                        <Text>
+                          {dayjs(schedule.date)
+                            .toDate()
+                            .toLocaleString("pt-BR", { weekday: "short" })}
                         </Text>
                       </div>
-                    </div>
-                  }
-                />
-              </div>
-            ))}
+                    }
+                    bodyChildren={
+                      <div className="flex flex-col bg-slate-500/30 rounded px-2 py-1">
+                        <div className="flex justify-around">
+                          <Text className="font-bold">Pago?</Text>
+                          <Text
+                            className={classNames(
+                              "font-bold px-2 rounded-full",
+                              {
+                                "text-red-700 bg-red-700/20": !schedule.paid,
+                                "text-green-700 bg-green-700/20 ":
+                                  schedule.paid,
+                              }
+                            )}
+                          >
+                            {schedule.paid ? "Sim" : "Não"}
+                          </Text>
+                        </div>
+                      </div>
+                    }
+                  />
+                </div>
+              ))
+            ) : (
+              <Empty />
+            )}
           </div>
         </>
       ) : (
