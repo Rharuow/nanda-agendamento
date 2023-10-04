@@ -22,3 +22,7 @@ input {
 .react-calendar__tile:disabled {
   background-color: rgba(90, 0, 0, 0.4) !important;
 }
+
+::-webkit-calendar-picker-indicator {
+  filter: invert(1);
+}
