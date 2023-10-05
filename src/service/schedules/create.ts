@@ -18,14 +18,17 @@ export const createScheduling = async (schedule: FormCreateScheduling) => {
   );
   try {
     if (hasStudent) {
-      const scheduleDoc = await addDoc(studentsCollection, {
+      const scheduleDoc = await addDoc(schedulesCollection, {
         ...scheduleFormatted,
         student_id: hasStudent.id,
       } as Schedule);
       const studentRef = doc(db, "students", String(hasStudent.id));
       updateDoc(studentRef, {
         ...hasStudent,
-        schedules_id: [...(hasStudent.schedules_id as Array<string>)],
+        schedules_id: [
+          ...(hasStudent.schedules_id as Array<string>),
+          scheduleDoc.id,
+        ],
       });
       return scheduleDoc;
     }

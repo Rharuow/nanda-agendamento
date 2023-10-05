@@ -38,6 +38,7 @@ export const Modal = ({
   bodyChildren,
   footer,
   footerChildren,
+  size,
 }: {
   showModal: boolean;
   setShowModal: Dispatch<SetStateAction<boolean>>;
@@ -47,10 +48,11 @@ export const Modal = ({
   bodyChildren?: ReactNode;
   footer?: string;
   footerChildren?: ReactNode;
+  size?: "xl" | "lg" | "sm";
 }) => {
   return (
     <TEModal show={showModal} setShow={setShowModal}>
-      <TEModalDialog centered>
+      <TEModalDialog centered size={size}>
         <TEModalContent>
           {(headerChildren || header) && (
             <TEModalHeader>{headerChildren || header}</TEModalHeader>

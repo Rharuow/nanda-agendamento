@@ -62,12 +62,12 @@ export const Scheduling = () => {
     if (!data.date) return toast.error("Data é obrigatória");
     createSchedule(data, {
       onSuccess: (res) => {
-        toast.success("Agendamento feito com sucesso...");
+        toast.success("Agendamento feito com sucesso...", { autoClose: 500 });
         refetchStudent();
       },
       onError: (error) => {
         console.log("Create schedule error = ", error);
-        toast.error("Erro ao agendar...");
+        toast.error("Erro ao agendar...", { autoClose: 2000 });
       },
     });
   };

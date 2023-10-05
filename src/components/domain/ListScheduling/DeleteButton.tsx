@@ -8,14 +8,19 @@ const TERipple = dynamic(() =>
 
 export const DeleteButton = ({
   setShowModal,
+  onClick,
 }: {
   setShowModal: Dispatch<SetStateAction<boolean>>;
+  onClick?: () => void;
 }) => {
   return (
     <TERipple rippleColor="white">
       <div
         className="flex bg-red-500/30 p-1 rounded"
-        onClick={() => setShowModal(true)}
+        onClick={() => {
+          onClick && onClick();
+          setShowModal(true);
+        }}
       >
         <Trash className="text-red-500" />
       </div>

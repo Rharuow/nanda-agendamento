@@ -25,7 +25,7 @@ input {
 }
 
 .react-calendar {
-  background-color: rgba(100, 100, 100, 0.4) !important;
+  background-color: rgba(255, 255, 255, 0) !important;
 }
 
 .react-calendar__tile:disabled {
