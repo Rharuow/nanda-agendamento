@@ -17,6 +17,9 @@ import { FilterType } from "@/src/service/schedules/types";
 import { filterSchedules } from "@/src/service/schedules/list";
 import { InputDate } from "../../form/input/Date";
 
+import { Modal } from "../../Modal";
+import { DeleteButton } from "./DeleteButton";
+
 export const ListScheduling = () => {
   const methods = useForm<{
     name: string;
@@ -37,6 +40,7 @@ export const ListScheduling = () => {
   const [filter, setFilter] = useState<FilterType | undefined>({
     q: { startOfNow: startToNowWatch },
   });
+  const [showModal, setShowModal] = useState(false);
 
   const { data: schedules, isLoading: schedulesIsLoading } = useSchedules();
 
@@ -129,10 +133,7 @@ export const ListScheduling = () => {
 
   return (
     <div className="flex flex-col items-end gap-3">
-      <div
-        id="modal"
-        className="fixed left-0 top-0 z-[1055] hidden h-full w-full overflow-y-auto overflow-x-hidden outline-none p-3 bg-green-500"
-      ></div>
+      <Modal setShowModal={setShowModal} showModal={showModal}></Modal>
       {schedulesIsLoading && studentsIsLoading ? (
         <Loading />
       ) : schedules && schedules.length > 0 ? (
@@ -199,15 +200,7 @@ export const ListScheduling = () => {
                             .toDate()
                             .toLocaleString("pt-BR", { weekday: "short" })}
                         </Text>
-                        <div
-                          className="flex bg-red-500/30 p-1 rounded"
-                          data-te-toggle="modal"
-                          data-te-target="#modal"
-                          data-te-ripple-init
-                          data-te-ripple-color="light"
-                        >
-                          <Trash className="text-red-500" />
-                        </div>
+                        <DeleteButton setShowModal={setShowModal} />
                       </div>
                     }
                     bodyChildren={
