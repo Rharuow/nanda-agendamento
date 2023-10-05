@@ -50,9 +50,8 @@ export const Scheduling = () => {
     data: schedulingByStudents,
     isLoading: schedulingByStudentsIsLoading,
     isFetching: schedulingByStudentsIsFetching,
-  } = useGetSchedulesPerStudent(
-    typeof student === "object" ? student?.id : undefined
-  );
+    refetch: refetchGetSchedulesPerStudent,
+  } = useGetSchedulesPerStudent(student?.id);
 
   const handleDate = (date: Date) => {
     setValue("date", date.toString());
@@ -62,12 +61,13 @@ export const Scheduling = () => {
     if (!data.date) return toast.error("Data é obrigatória");
     createSchedule(data, {
       onSuccess: (res) => {
-        toast.success("Agendamento feito com sucesso...", { autoClose: 500 });
+        toast.success("Agendamento feito com sucesso...");
         refetchStudent();
+        refetchGetSchedulesPerStudent();
       },
       onError: (error) => {
         console.log("Create schedule error = ", error);
-        toast.error("Erro ao agendar...", { autoClose: 2000 });
+        toast.error("Erro ao agendar...");
       },
     });
   };

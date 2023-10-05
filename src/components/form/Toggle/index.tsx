@@ -31,7 +31,7 @@ export const Toggle = ({
         "flex-row": labelPosition === "start",
       })}
     >
-      <Text>{label}</Text>
+      {label && <Text>{label}</Text>}
       <div
         className={`flex w-[30px] relative ${className ?? " "}`}
         onClick={() => {
