@@ -18,15 +18,18 @@ import { filterSchedules } from "@/src/service/schedules/list";
 import { InputDate } from "../../form/input/Date";
 
 import { Modal } from "../../Modal";
-import { DeleteButton } from "./DeleteButton";
 import { Button } from "../../Button";
 import { useDeleteSchedule } from "@/src/service/hooks/useDeleteSchedule";
 import { toast } from "react-toastify";
+import { Header } from "./Accordion/Header";
+import { Body } from "./Accordion/Body";
+import { useUpdatePaidSchedule } from "@/src/service/hooks/useUpdatePaidSchedule";
 
 export const ListScheduling = () => {
   const methods = useForm<{
     name: string;
     date: string;
+    paid: boolean;
     startToNow: boolean;
     startAt: string;
     endedAt: string;
@@ -55,6 +58,7 @@ export const ListScheduling = () => {
   const [schedule, setSchedule] = useState<Schedule & { student: Student }>();
 
   const { mutateAsync: deleteSchedule } = useDeleteSchedule();
+  const { mutateAsync: updateSchedule } = useUpdatePaidSchedule();
 
   const { data: students, isLoading: studentsIsLoading } = useStudents();
 
@@ -74,6 +78,19 @@ export const ListScheduling = () => {
           if (prevState) return { ...prevState };
           return undefined;
         });
+  };
+
+  const handleUpdatePaidSchedule = (id: string) => {
+    updateSchedule(id, {
+      onSuccess: () => {
+        toast.success("Agendamento atualizado com sucesso");
+        refetchSchedule();
+      },
+      onError: () => {
+        toast.error("Problemas ao atualizar o agendamento");
+        refetchSchedule();
+      },
+    });
   };
 
   const handleStartOfNowFilter = (value: boolean) => {
@@ -131,16 +148,12 @@ export const ListScheduling = () => {
   const handleDeleteSchedule = () => {
     deleteSchedule(String(schedule?.id), {
       onSuccess: () => {
-        toast.success("Agendamento apagado com sucesso...", {
-          autoClose: 1500,
-        });
+        toast.success("Agendamento apagado com sucesso...");
         setShowModal(false);
         refetchSchedule();
       },
       onError: () => {
-        toast.error("Não foi possível apagar esse agendamento", {
-          autoClose: 1500,
-        });
+        toast.error("Não foi possível apagar esse agendamento");
       },
     });
   };
@@ -176,7 +189,7 @@ export const ListScheduling = () => {
           .toLocaleString("pt-BR", {
             day: "2-digit",
             month: "long",
-            year: "2-digit",
+            year: "numeric",
           })} (${dayjs(schedule?.date).toDate().toLocaleString("pt-BR", {
           weekday: "long",
         })}) do aluno(a) ${schedule?.student.name}?`}
@@ -250,43 +263,21 @@ export const ListScheduling = () => {
                     id={schedule.id}
                     iconClassName="text-white"
                     headerChildren={
-                      <div className="flex justify-between items-center w-full">
-                        <Text>{schedule?.student?.name}</Text>
-                        <Text>
-                          {schedule.amountTime > 1
-                            ? `${schedule.amountTime} horários`
-                            : `${schedule.amountTime} horário`}
-                        </Text>
-                        <Text>{dayjs(schedule.date).format("DD/MM/YYYY")}</Text>
-                        <Text>
-                          {dayjs(schedule.date)
-                            .toDate()
-                            .toLocaleString("pt-BR", { weekday: "short" })}
-                        </Text>
-                        <DeleteButton
-                          onClick={() => setSchedule(schedule)}
-                          setShowModal={setShowModal}
-                        />
-                      </div>
+                      <Header
+                        deleteOnClick={() => {
+                          setSchedule(schedule);
+                          setShowModal(true);
+                        }}
+                        schedule={schedule}
+                      />
                     }
                     bodyChildren={
-                      <div className="flex flex-col bg-slate-500/30 rounded px-2 py-1">
-                        <div className="flex justify-around">
-                          <Text className="font-bold">Pago?</Text>
-                          <Text
-                            className={classNames(
-                              "font-bold px-2 rounded-full",
-                              {
-                                "text-red-700 bg-red-700/20": !schedule.paid,
-                                "text-green-700 bg-green-700/20 ":
-                                  schedule.paid,
-                              }
-                            )}
-                          >
-                            {schedule.paid ? "Sim" : "Não"}
-                          </Text>
-                        </div>
-                      </div>
+                      <Body
+                        onClickToogle={() =>
+                          handleUpdatePaidSchedule(schedule.id)
+                        }
+                        schedule={schedule}
+                      />
                     }
                   />
                 </div>

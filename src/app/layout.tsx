@@ -28,7 +28,7 @@ export default function RootLayout({
     <html lang="pt-BR">
       <body className={poppins.className}>
         <TanstackProvider>
-          <ToastContainer limit={1} theme="dark" />
+          <ToastContainer limit={1} theme="dark" autoClose={500} />
           {children}
         </TanstackProvider>
       </body>
