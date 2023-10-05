@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { Loading } from "../../Loading";
 import { Text } from "../../Text";
 import Link from "next/link";
-import { PlusCircle } from "@phosphor-icons/react";
+import { PlusCircle, Trash } from "@phosphor-icons/react";
 import { InputSelectText } from "../../form/input/SelectText";
 import { Toggle } from "../../form/Toggle";
 import Accordion from "../../Accordion";
@@ -16,6 +16,12 @@ import { Schedule, Student } from "@/src/service";
 import { FilterType } from "@/src/service/schedules/types";
 import { filterSchedules } from "@/src/service/schedules/list";
 import { InputDate } from "../../form/input/Date";
+
+import { Modal } from "../../Modal";
+import { DeleteButton } from "./DeleteButton";
+import { Button } from "../../Button";
+import { useDeleteSchedule } from "@/src/service/hooks/useDeleteSchedule";
+import { toast } from "react-toastify";
 
 export const ListScheduling = () => {
   const methods = useForm<{
@@ -33,15 +39,22 @@ export const ListScheduling = () => {
   const { control, setValue } = methods;
 
   const startToNowWatch = useWatch({ control, name: "startToNow" });
-  const startAtWatch = useWatch({ control, name: "startAt" });
-
-  console.log(!!startAtWatch);
 
   const [filter, setFilter] = useState<FilterType | undefined>({
     q: { startOfNow: startToNowWatch },
   });
 
-  const { data: schedules, isLoading: schedulesIsLoading } = useSchedules();
+  const [showModal, setShowModal] = useState<boolean>(false);
+
+  const {
+    data: schedules,
+    isLoading: schedulesIsLoading,
+    refetch: refetchSchedule,
+  } = useSchedules();
+
+  const [schedule, setSchedule] = useState<Schedule & { student: Student }>();
+
+  const { mutateAsync: deleteSchedule } = useDeleteSchedule();
 
   const { data: students, isLoading: studentsIsLoading } = useStudents();
 
@@ -115,6 +128,23 @@ export const ListScheduling = () => {
         });
   };
 
+  const handleDeleteSchedule = () => {
+    deleteSchedule(String(schedule?.id), {
+      onSuccess: () => {
+        toast.success("Agendamento apagado com sucesso...", {
+          autoClose: 1500,
+        });
+        setShowModal(false);
+        refetchSchedule();
+      },
+      onError: () => {
+        toast.error("Não foi possível apagar esse agendamento", {
+          autoClose: 1500,
+        });
+      },
+    });
+  };
+
   useEffect(() => {
     schedules &&
       setSchedulesWithStudent(
@@ -130,8 +160,43 @@ export const ListScheduling = () => {
       );
   }, [filter, schedules, students]);
 
+  useEffect(() => {
+    !showModal && setSchedule(undefined);
+  }, [showModal]);
+
   return (
     <div className="flex flex-col items-end gap-3">
+      <Modal
+        setShowModal={setShowModal}
+        showModal={showModal}
+        key={schedule?.id}
+        size="sm"
+        body={`Apagar o agendamento de ${dayjs(schedule?.date)
+          .toDate()
+          .toLocaleString("pt-BR", {
+            day: "2-digit",
+            month: "long",
+            year: "2-digit",
+          })} (${dayjs(schedule?.date).toDate().toLocaleString("pt-BR", {
+          weekday: "long",
+        })}) do aluno(a) ${schedule?.student.name}?`}
+        footerChildren={
+          <div className="flex w-full justify-between gap-2">
+            <Button
+              text="Cancelar"
+              variant="outline"
+              className="grow"
+              onClick={() => setShowModal(false)}
+            />
+            <Button
+              text="Apagar"
+              variant="danger"
+              className="grow"
+              onClick={() => handleDeleteSchedule()}
+            />
+          </div>
+        }
+      />
       {schedulesIsLoading && studentsIsLoading ? (
         <Loading />
       ) : schedules && schedules.length > 0 ? (
@@ -185,7 +250,7 @@ export const ListScheduling = () => {
                     id={schedule.id}
                     iconClassName="text-white"
                     headerChildren={
-                      <div className="flex justify-between w-full">
+                      <div className="flex justify-between items-center w-full">
                         <Text>{schedule?.student?.name}</Text>
                         <Text>
                           {schedule.amountTime > 1
@@ -198,6 +263,10 @@ export const ListScheduling = () => {
                             .toDate()
                             .toLocaleString("pt-BR", { weekday: "short" })}
                         </Text>
+                        <DeleteButton
+                          onClick={() => setSchedule(schedule)}
+                          setShowModal={setShowModal}
+                        />
                       </div>
                     }
                     bodyChildren={

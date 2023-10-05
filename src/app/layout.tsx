@@ -1,12 +1,12 @@
 import "./globals.css";
 import "sweetalert2/src/sweetalert2.scss";
 import "react-toastify/dist/ReactToastify.css";
+import "tw-elements-react/dist/css/tw-elements-react.min.css";
 import "react-calendar/dist/Calendar.css";
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import { ToastContainer } from "react-toastify";
 
-import { useState } from "react";
 import { TanstackProvider } from "../components/providers/TanstackProvider";
 
 const poppins = Poppins({

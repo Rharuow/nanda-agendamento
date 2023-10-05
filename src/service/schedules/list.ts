@@ -57,7 +57,7 @@ export const filterSchedules = ({
 
   schedulesFiltred = params.some((param) => param === "startOfNow")
     ? schedulesFiltred.filter((schedule) =>
-        dayjs(schedule.date).isAfter(dayjs())
+        dayjs(schedule.date).isAfter(dayjs().subtract(1, "day"))
       )
     : schedulesFiltred;
 
