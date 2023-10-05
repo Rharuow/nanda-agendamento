@@ -4,7 +4,7 @@ import { useStudents } from "@/src/service/hooks/useStudents";
 import { useEffect, useState } from "react";
 import { Loading } from "../../Loading";
 import Link from "next/link";
-import { PlusCircle, Trash } from "@phosphor-icons/react";
+import { List } from "@phosphor-icons/react";
 import { InputSelectText } from "../../form/input/SelectText";
 import { Toggle } from "../../form/Toggle";
 import Accordion from "../../Accordion";
@@ -231,7 +231,7 @@ export const ListScheduling = () => {
         <>
           <Link href="/schedule">
             <div className="flex">
-              <PlusCircle className="text-white self-end" size={24} />
+              <List className="text-white self-end" size={24} />
             </div>
           </Link>
           <FormProvider {...methods}>
