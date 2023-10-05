@@ -73,5 +73,9 @@ export const filterSchedules = ({
       )
     : schedulesFiltred;
 
+  schedulesFiltred = params.some((param) => param === "paid")
+    ? schedulesFiltred.filter((schedule) => schedule.paid === q.paid)
+    : schedulesFiltred;
+
   return schedulesFiltred;
 };

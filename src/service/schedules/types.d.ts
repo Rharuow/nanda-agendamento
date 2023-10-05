@@ -3,6 +3,7 @@ export type FilterType = {
     studentName?: string;
     startOfDate?: string;
     endOfDate?: string;
+    paid?: boolean;
     startOfNow?: boolean;
   };
 };

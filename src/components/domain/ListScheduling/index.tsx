@@ -3,14 +3,12 @@ import { useSchedules } from "@/src/service/hooks/useSchedules";
 import { useStudents } from "@/src/service/hooks/useStudents";
 import { useEffect, useState } from "react";
 import { Loading } from "../../Loading";
-import { Text } from "../../Text";
 import Link from "next/link";
 import { PlusCircle, Trash } from "@phosphor-icons/react";
 import { InputSelectText } from "../../form/input/SelectText";
 import { Toggle } from "../../form/Toggle";
 import Accordion from "../../Accordion";
 import dayjs from "dayjs";
-import classNames from "classnames";
 import { Empty } from "./Empty";
 import { Schedule, Student } from "@/src/service";
 import { FilterType } from "@/src/service/schedules/types";
@@ -104,6 +102,23 @@ export const ListScheduling = () => {
         })
       : setFilter((prevState) => {
           delete prevState?.q.startOfNow;
+          if (prevState && Object.keys(prevState.q).length === 0)
+            return undefined;
+          if (prevState) return { ...prevState };
+          return undefined;
+        });
+  };
+
+  const handlePaidFilter = (value: boolean) => {
+    value
+      ? setFilter((prevState) => {
+          setValue("paid", value);
+          return {
+            q: { ...prevState?.q, paid: value },
+          };
+        })
+      : setFilter((prevState) => {
+          delete prevState?.q.paid;
           if (prevState && Object.keys(prevState.q).length === 0)
             return undefined;
           if (prevState) return { ...prevState };
@@ -234,11 +249,15 @@ export const ListScheduling = () => {
               name="name"
               label="Nome do Aluno"
             />
-            <Toggle
-              label="A partir de hoje"
-              name="startToNow"
-              onClick={handleStartOfNowFilter}
-            />
+            <div className="flex w-full justify-between gap-2">
+              <Toggle
+                labelPosition="end"
+                label="A partir de hoje"
+                name="startToNow"
+                onClick={handleStartOfNowFilter}
+              />
+              <Toggle label="Pagos" name="paid" onClick={handlePaidFilter} />
+            </div>
             <div className="flex gap-2">
               <InputDate
                 name="startAt"
