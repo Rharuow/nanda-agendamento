@@ -3,7 +3,11 @@ import { useSchedules } from "@/src/service/hooks/useSchedules";
 import { useStudents } from "@/src/service/hooks/useStudents";
 import { useEffect, useState } from "react";
 import { Loading } from "../../Loading";
-import { List } from "@phosphor-icons/react";
+import {
+  BookBookmark,
+  List,
+  Student as StudentIcon,
+} from "@phosphor-icons/react";
 import { InputSelectText } from "../../form/input/SelectText";
 import { Toggle } from "../../form/Toggle";
 import Accordion from "../../Accordion";
@@ -238,7 +242,22 @@ export const ListScheduling = () => {
           >
             <List className="text-white self-end" size={24} />
           </div>
-          <Menu show={showMenu} setShow={setShowMenu} />
+          <Menu
+            show={showMenu}
+            setShow={setShowMenu}
+            items={[
+              {
+                icon: BookBookmark,
+                label: "Criar reservas",
+                route: "/schedule",
+              },
+              {
+                icon: StudentIcon,
+                label: "Alunos",
+                route: "/students",
+              },
+            ]}
+          />
           <FormProvider {...methods}>
             <InputSelectText
               emptyLabel="Nenhum aluno encontrado"
