@@ -3,7 +3,6 @@ import { useSchedules } from "@/src/service/hooks/useSchedules";
 import { useStudents } from "@/src/service/hooks/useStudents";
 import { useEffect, useState } from "react";
 import { Loading } from "../../Loading";
-import Link from "next/link";
 import { List } from "@phosphor-icons/react";
 import { InputSelectText } from "../../form/input/SelectText";
 import { Toggle } from "../../form/Toggle";
@@ -22,6 +21,7 @@ import { toast } from "react-toastify";
 import { Header } from "./Accordion/Header";
 import { Body } from "./Accordion/Body";
 import { useUpdatePaidSchedule } from "@/src/service/hooks/useUpdatePaidSchedule";
+import { Menu } from "../../Menu";
 
 export const ListScheduling = () => {
   const methods = useForm<{
@@ -46,6 +46,7 @@ export const ListScheduling = () => {
   });
 
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [showMenu, setShowMenu] = useState<boolean>(false);
 
   const {
     data: schedules,
@@ -229,11 +230,15 @@ export const ListScheduling = () => {
         <Loading />
       ) : schedules && schedules.length > 0 ? (
         <>
-          <Link href="/schedule">
-            <div className="flex">
-              <List className="text-white self-end" size={24} />
-            </div>
-          </Link>
+          <div
+            className="flex"
+            onClick={() => {
+              setShowMenu(true);
+            }}
+          >
+            <List className="text-white self-end" size={24} />
+          </div>
+          {showMenu && <Menu />}
           <FormProvider {...methods}>
             <InputSelectText
               emptyLabel="Nenhum aluno encontrado"
