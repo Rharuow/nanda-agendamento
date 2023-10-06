@@ -238,7 +238,7 @@ export const ListScheduling = () => {
           >
             <List className="text-white self-end" size={24} />
           </div>
-          {showMenu && <Menu />}
+          <Menu show={showMenu} setShow={setShowMenu} />
           <FormProvider {...methods}>
             <InputSelectText
               emptyLabel="Nenhum aluno encontrado"

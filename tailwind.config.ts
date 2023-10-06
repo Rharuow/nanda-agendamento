@@ -83,6 +83,54 @@ const config: Config = {
             transform: "translateX(0)",
           },
         },
+        growToLeft: {
+          "0%": {
+            width: "100%",
+          },
+          "100%": {
+            width: "0",
+          },
+        },
+        growToRigth: {
+          "0%": {
+            width: "0",
+          },
+          "100%": {
+            width: "100%",
+          },
+        },
+        easeOut: {
+          "0%": {
+            opacity: "1",
+          },
+          "100%": {
+            opacity: "0",
+          },
+        },
+        easeIn: {
+          "0%": {
+            opacity: "0",
+          },
+          "100%": {
+            opacity: "1",
+          },
+        },
+        paddingOff: {
+          "0": {
+            padding: "24px",
+          },
+          "100%": {
+            padding: "0",
+          },
+        },
+        paddingOn: {
+          "0": {
+            padding: "0",
+          },
+          "100%": {
+            padding: "24px",
+          },
+        },
       },
       animation: {
         fontSizeDown: "fontSizeDown 0.5s ease-out forwards",
@@ -94,7 +142,17 @@ const config: Config = {
         expanded: "expanded 2.5s ease-out forwards",
         translateToRight: "translateToRight 500ms ease-out forwards",
         translateToLeft: "translateToLeft 500ms ease-out forwards",
+        growToRigth: "growToRigth 500ms ease-out forwards",
+        growToLeft: "growToLeft 500ms ease-in forwards",
+        easeOut: "easeOut 500ms ease-out forwards",
+        easeIn: "easeIn 500ms ease-out forwards",
+        paddingOn: "paddingOn 500ms ease-in forwards",
+        paddingOff: "paddingOff 500ms ease-in forwards",
         // multiple animation
+        menuOpen:
+          "growToRigth 500ms ease-out forwards, paddingOn 500ms ease-in forwards",
+        menuClose:
+          "growToLeft 500ms ease-out forwards, paddingOff 500ms ease-out forwards",
         labelFocus:
           "fontWeightDown 0.5s ease-out forwards, fontSizeDown 0.5s ease-out forwards",
         labelBlur:
