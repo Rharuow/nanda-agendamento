@@ -11,12 +11,14 @@ export default function Accordion({
   id,
   textHeader,
   textBody,
+  iconSize,
   buttonClassName,
   bodyClassName,
   bodyChildren,
   headerChildren,
   withArrow,
   iconClassName,
+  className,
 }: AccordionProps) {
   const [accordionOpen, setAccordionOpen] = useState<boolean>(false);
 
@@ -25,7 +27,7 @@ export default function Accordion({
   }, []);
 
   return (
-    <div className="py-2">
+    <div className={`py-2 ${className ?? " "}`}>
       <button
         className={`flex items-center justify-between w-full text-left font-semibold py-2 ${buttonClassName}`}
         onClick={(e) => {
@@ -42,7 +44,7 @@ export default function Accordion({
               className={classNames(`duration-500 ${iconClassName ?? " "}`, {
                 "rotate-180": accordionOpen,
               })}
-              size={32}
+              size={iconSize ?? 32}
             />
           </>
         ) : (
@@ -53,7 +55,7 @@ export default function Accordion({
                 className={classNames(`duration-500 ${iconClassName ?? " "}`, {
                   "rotate-180": accordionOpen,
                 })}
-                size={32}
+                size={iconSize ?? 32}
               />
             )}
           </>

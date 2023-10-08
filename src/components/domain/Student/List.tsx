@@ -10,6 +10,8 @@ import { Loading } from "../../Loading";
 import { Schedule, Student } from "@/src/service";
 import { Text } from "../../Text";
 import classNames from "classnames";
+import Accordion from "../../Accordion";
+import { Body } from "./Accordion/Body";
 
 export const List = () => {
   const { data, isLoading, isError } = useStudents({ q: { schedules: true } });
@@ -20,6 +22,8 @@ export const List = () => {
   const { back } = useRouter();
 
   const [showModal, setShowModal] = useState<boolean>(false);
+
+  console.log(data);
 
   useEffect(() => {
     data &&
@@ -48,21 +52,25 @@ export const List = () => {
         ) : students?.length === 0 ? (
           <Empty action={() => setShowModal(true)} />
         ) : (
-          students?.map((student) => (
-            <div
-              key={student.id}
-              className={classNames("flex", {
-                "bg-green-500": student.schedules?.every(
-                  (schedule) => schedule.paid
-                ),
-                "bg-red-500": student.schedules?.some(
-                  (schedule) => !schedule.paid
-                ),
-              })}
-            >
-              {student.name}
-            </div>
-          ))
+          <div className="flex flex-col gap-2">
+            {students?.map((student) => (
+              <Accordion
+                key={student.id}
+                id={String(student.id)}
+                className={classNames("px-4", {
+                  "bg-green-700": student.schedules?.every(
+                    (schedule) => schedule.paid
+                  ),
+                  "bg-red-700": student.schedules?.some(
+                    (schedule) => !schedule.paid
+                  ),
+                })}
+                textHeader={student.name}
+                bodyChildren={<Body student={student} />}
+                iconSize={18}
+              />
+            ))}
+          </div>
         )}
       </div>
     </>

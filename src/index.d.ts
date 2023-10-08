@@ -3,4 +3,6 @@ export type Variant =
   | "danger"
   | "success-outline"
   | "danger-outline"
+  | "info"
+  | "info-outline"
   | "outline";
