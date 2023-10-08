@@ -1,10 +1,14 @@
 import { getDocs } from "firebase/firestore";
 import { studentsCollection } from "../collections";
-import { Student } from "..";
+import { Schedule, Student } from "..";
 import { listSchedules } from "../schedules";
 import { FilterType } from "./types";
 
-export const listStudents = async (filter?: FilterType) => {
+export const listStudents: (
+  filter?: FilterType
+) => Promise<
+  Array<Student | (Student & { schedules: Array<Schedule> })>
+> = async (filter?: FilterType) => {
   try {
     const students = (await getDocs(studentsCollection)).docs.map(
       (student) => ({
