@@ -20,6 +20,8 @@ export const List = () => {
   const [students, setStudents] =
     useState<Array<Student & { schedules: Array<Schedule> }>>();
 
+  console.log(students);
+
   const { back } = useRouter();
 
   const [showModal, setShowModal] = useState<boolean>(false);
@@ -83,6 +85,7 @@ export const List = () => {
                   textHeader={student.name}
                   bodyChildren={<Body student={student} />}
                   iconSize={18}
+                  iconClassName="text-white"
                 />
               ))}
             </div>

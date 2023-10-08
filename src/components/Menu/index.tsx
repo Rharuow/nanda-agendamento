@@ -11,7 +11,7 @@ export const Menu = ({
   items,
 }: {
   show: boolean;
-  setShow: Dispatch<SetStateAction<boolean>>;
+  setShow: Dispatch<SetStateAction<boolean | undefined>>;
   items: Array<{ icon: Icon; label: string; route: string }>;
 }) => {
   return createPortal(

@@ -14,7 +14,7 @@ export const Body = ({
         <div className="flex justify-between">
           <Text>Quantidade de totais aulas:</Text>
           <Text>
-            {student.schedules.reduce(
+            {student.schedules?.reduce(
               (accumulator, current) =>
                 accumulator + Number(current.amountTime),
               0
@@ -25,7 +25,7 @@ export const Body = ({
           <Text>Quantidade de aulas não pagas:</Text>
           <Text>
             {student.schedules
-              .filter((schedule) => !schedule.paid)
+              ?.filter((schedule) => !schedule.paid)
               .reduce(
                 (accumulator, current) =>
                   accumulator + Number(current.amountTime),
@@ -33,8 +33,21 @@ export const Body = ({
               )}
           </Text>
         </div>
+        <div className="flex justify-between">
+          <Text>Débito total:</Text>
+          <Text>
+            {student.schedules
+              ?.filter((schedule) => !schedule.paid)
+              .reduce(
+                (accumulator, current) =>
+                  accumulator +
+                  Number(current.pricePerTime) * Number(current.amountTime),
+                0
+              )}
+          </Text>
+        </div>
       </div>
-      {student.schedules.some((schedule) => !schedule.paid) && (
+      {student.schedules?.some((schedule) => !schedule.paid) && (
         <div className="flex flex-col gap-2 border-t-2 pt-2">
           <div className="flex justify-end">
             <Button text="Gerar Recibo" className="text-white" />
