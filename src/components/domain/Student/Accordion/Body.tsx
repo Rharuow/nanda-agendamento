@@ -1,6 +1,7 @@
 import { Button } from "@/src/components/Button";
 import { Text } from "@/src/components/Text";
 import { Schedule, Student } from "@/src/service";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 export const Body = ({
@@ -8,6 +9,8 @@ export const Body = ({
 }: {
   student: Student & { schedules: Array<Schedule> };
 }) => {
+  const { push } = useRouter();
+  const handleNavigate = (id: string) => push(`/students/${id}/reciept`);
   return (
     <div className="flex flex-col gap-4">
       <div className="flex flex-col gap-2">
@@ -50,7 +53,11 @@ export const Body = ({
       {student.schedules?.some((schedule) => !schedule.paid) && (
         <div className="flex flex-col gap-2 border-t-2 pt-2">
           <div className="flex justify-end">
-            <Button text="Gerar Recibo" className="text-white" />
+            <Button
+              text="Gerar Recibo"
+              onClick={() => handleNavigate(String(student.id))}
+              className="text-white"
+            />
           </div>
         </div>
       )}
