@@ -11,14 +11,16 @@ import { Student } from "@/src/service";
 import { Text } from "../../Text";
 
 export const List = () => {
-  const { data, isLoading, isError } = useStudents();
+  const { data, isLoading, isError } = useStudents({ q: { schedules: true } });
 
   const [students, setStudents] = useState<Array<Student>>();
+
   const { back } = useRouter();
 
   const [showModal, setShowModal] = useState<boolean>(false);
 
   useEffect(() => {
+    console.log("data = ", data);
     data && setStudents(data);
   }, [data]);
 

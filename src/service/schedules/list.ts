@@ -23,7 +23,7 @@ export const listSchedules = async (filter?: FilterType) => {
         student: students.find((std) =>
           std.schedules_id?.includes(schedule.id)
         ) as Student,
-      }));
+      })) as Array<Schedule & { student: Student }>;
 
     const student: Student | undefined =
       filter && Object.keys(filter.q).some((param) => param === "studentName")
