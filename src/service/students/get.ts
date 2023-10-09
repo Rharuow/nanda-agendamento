@@ -1,6 +1,6 @@
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
-import { Student } from "..";
+import { Schedule, Student } from "..";
 import { listSchedules } from "../schedules";
 
 export const getStudent = async ({
@@ -19,7 +19,7 @@ export const getStudent = async ({
             ...student.data(),
             id: student.id,
           } as Student)
-        : { ...student.data(), id: student.id, schedules: [] };
+        : { ...(student.data() as Student), id: student.id, schedules: [] };
     throw new Error("Student não encontrado.");
   } catch (error: any) {
     console.log(error);
