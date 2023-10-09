@@ -1,8 +1,10 @@
 import { Button } from "@/src/components/Button";
+import { Modal } from "@/src/components/Modal";
 import { Text } from "@/src/components/Text";
 import { Schedule, Student } from "@/src/service";
+import { Receipt, Trash } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 
 export const Body = ({
   student,
@@ -11,8 +13,26 @@ export const Body = ({
 }) => {
   const { push } = useRouter();
   const handleNavigate = (id: string) => push(`/students/${id}/reciept`);
+
+  const [showModal, setShowModal] = useState(false);
+
   return (
     <div className="flex flex-col gap-4">
+      <Modal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        body="Deseja apagar esse aluno e todos os seus agendamentos?"
+        footerChildren={
+          <div className="flex gap-2 justify-around">
+            <Button text="Sim" variant="danger-outline" />
+            <Button
+              text="Não"
+              variant="secondary-outline"
+              onClick={() => setShowModal(false)}
+            />
+          </div>
+        }
+      />
       <div className="flex flex-col gap-2">
         <div className="flex justify-between">
           <Text>Quantidade de totais aulas:</Text>
@@ -50,17 +70,33 @@ export const Body = ({
           </Text>
         </div>
       </div>
-      {student.schedules?.some((schedule) => !schedule.paid) && (
-        <div className="flex flex-col gap-2 border-t-2 pt-2">
+      <div className="flex justify-between gap-2 border-t-2 pt-2">
+        <div className="flex justify-end">
+          <Button
+            iconButton={Trash}
+            sizeIcon={18}
+            weigthIcon="fill"
+            variant={
+              student.schedules.some((schedule) => !schedule.paid)
+                ? "secondary"
+                : "danger"
+            }
+            onClick={() => setShowModal(true)}
+          />
+        </div>
+        {student.schedules?.some((schedule) => !schedule.paid) && (
           <div className="flex justify-end">
             <Button
               text="Gerar Recibo"
+              iconButton={Receipt}
+              sizeIcon={18}
+              weigthIcon="fill"
               onClick={() => handleNavigate(String(student.id))}
               className="text-white"
             />
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };
