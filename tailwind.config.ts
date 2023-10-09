@@ -161,6 +161,10 @@ const config: Config = {
         inputFocus: "paddingTopUp 0.5s ease-out forwards",
         inputBlur: "paddingTopDown 0.5s ease-out forwards",
       },
+      screens: {
+        print: { raw: "print" },
+        // => @media  print { ... }
+      },
     },
   },
   plugins: [require("tw-elements-react/dist/plugin.cjs")],

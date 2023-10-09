@@ -6,7 +6,7 @@ import { useScreenshot, createFileName } from "use-react-screenshot";
 import { useGetStudent } from "@/src/service/hooks/useGetStudent";
 import { ArrowCircleLeft } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 import { Empty } from "./Empty";
 import { Error } from "./Error";
 import { Loading } from "@/src/components/Loading";
@@ -23,18 +23,28 @@ export const Reciept = ({ id }: { id: string }) => {
   const [image, takeScreenshot] = useScreenshot();
   const { back } = useRouter();
 
-  const handleScreeShot = async () => {
-    takeScreenshot(document.getElementById("receipt"));
-    console.log(image);
-    const downloadElement = document.createElement("a");
-    downloadElement.href = image;
-    downloadElement.download = createFileName("png", String(data?.name));
-    downloadElement.click();
+  const handleScreeShot = () => {
+    // takeScreenshot(document.getElementById("receipt"));
+    window.print();
   };
+
+  useEffect(() => {
+    console.log(image);
+    if (image) {
+      const downloadElement = document.createElement("a");
+      downloadElement.href = image;
+      downloadElement.download = createFileName(
+        "jpeg",
+        `${String(data?.name)}-reciept`
+      );
+      downloadElement.click();
+      downloadElement.remove();
+    }
+  }, [data?.name, image]);
 
   return (
     <div className="flex flex-col grow">
-      <div className="absolute">
+      <div className="absolute print:hidden">
         <Text onClick={() => back()}>
           <ArrowCircleLeft size={28} />
         </Text>
@@ -54,7 +64,9 @@ export const Reciept = ({ id }: { id: string }) => {
         </div>
       ) : (
         <div className="flex flex-col gap-4" id="receipt">
-          <Text className="text-center font-bold text-lg">Extrato</Text>
+          <Text className="text-center font-bold text-lg print:hidden">
+            Extrato
+          </Text>
           <div className="grid grid-cols-6 gap-3 bg-slate-700 p-1 rounded">
             <Text className="text-center col-span-3">Data</Text>
             <Text className="text-center col-span-2">Valor/aula</Text>
@@ -106,7 +118,11 @@ export const Reciept = ({ id }: { id: string }) => {
               }
             />
           </div>
-          <Button text="Imprimir" onClick={() => handleScreeShot()} />
+          <Button
+            className="print:hidden"
+            text="Imprimir"
+            onClick={() => handleScreeShot()}
+          />
         </div>
       )}
     </div>
