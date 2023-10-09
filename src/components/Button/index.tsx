@@ -26,7 +26,7 @@ export const Button = ({
         "text-blue-700 bg-transparent border-[1px] border-blue-700 hover:text-blue-400":
           rest.variant === "info-outline",
         "text-slate-500 bg-transparent": rest.variant === "outline",
-        "bg-slate-500 hover:bg-slate-500/50": !rest.variant,
+        "bg-slate-500 hover:bg-slate-500/50 text-white": !rest.variant,
       })}
       {...rest}
     >

@@ -1,12 +1,10 @@
 "use client";
 import "./calendar.css";
 import { Text } from "@/src/components/Text";
-// @ts-ignore
-import { useScreenshot, createFileName } from "use-react-screenshot";
 import { useGetStudent } from "@/src/service/hooks/useGetStudent";
 import { ArrowCircleLeft } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React from "react";
 import { Empty } from "./Empty";
 import { Error } from "./Error";
 import { Loading } from "@/src/components/Loading";
@@ -19,51 +17,15 @@ export const Reciept = ({ id }: { id: string }) => {
     id,
     withSchedules: true,
   });
-  const [image, takeScreenshot] = useScreenshot();
   const { back } = useRouter();
 
   const handleScreeShot = () => {
-    const hiddenElements = document.getElementsByClassName("print-hidden");
-    const arrayElements = new Array(hiddenElements.length).fill(null);
-    arrayElements.forEach((_, index) => {
-      const element = hiddenElements.item(index);
-      if (element !== null) {
-        element.className = element.className.replace(
-          "print-hidden",
-          " hidden "
-        );
-      }
-    });
-    console.log("Before = ", hiddenElements);
-    takeScreenshot(document.getElementById("receipt"));
-    arrayElements.forEach((_, index) => {
-      const element = hiddenElements.item(index);
-      if (element !== null) {
-        element.className = element.className.replaceAll(
-          " hidden ",
-          "print-hidden"
-        );
-      }
-    });
-    console.log("after = ", hiddenElements);
+    window.print();
   };
 
-  useEffect(() => {
-    if (image) {
-      const downloadElement = document.createElement("a");
-      downloadElement.href = image;
-      downloadElement.download = createFileName(
-        "jpeg",
-        `${String(data?.name)}-reciept`
-      );
-      downloadElement.click();
-      downloadElement.remove();
-    }
-  }, [data?.name, image]);
-
   return (
-    <div className="flex flex-col grow" id="receipt">
-      <div className="absolute print-hidden">
+    <div className="flex flex-col grow">
+      <div className="absolute print:hidden">
         <Text onClick={() => back()}>
           <ArrowCircleLeft size={28} />
         </Text>
@@ -84,6 +46,9 @@ export const Reciept = ({ id }: { id: string }) => {
       ) : (
         <div className="flex flex-col gap-4">
           <Text className="text-center font-bold text-lg">Extrato</Text>
+          <div className="flex justify-center bg-slate-700 p-1 rounded">
+            <Text className="text-center font-bold text-lg">{data.name}</Text>
+          </div>
           <div className="grid grid-cols-6 gap-3 bg-slate-700 p-1 rounded">
             <Text className="text-center col-span-3">Data</Text>
             <Text className="text-center col-span-2">Valor/aula</Text>
@@ -136,7 +101,7 @@ export const Reciept = ({ id }: { id: string }) => {
             />
           </div>
           <Button
-            className="print-hidden"
+            className="print:hidden"
             text="Imprimir"
             onClick={() => handleScreeShot()}
           />

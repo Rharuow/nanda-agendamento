@@ -5,3 +5,9 @@ body {
 .react-calendar__tile--now {
   background-color: white !important;
 }
+
+@media print {
+  body {
+    print-color-adjust: exact;
+  }
+}
