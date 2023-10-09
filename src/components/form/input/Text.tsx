@@ -1,6 +1,8 @@
 import classNames from "classnames";
 import React, { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
+import { ErrorMessage } from "@hookform/error-message";
+import { Text } from "../../Text";
 
 export const InputText = ({
   name,
@@ -16,7 +18,11 @@ export const InputText = ({
 }) => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
-  const { register, control } = useFormContext();
+  const {
+    register,
+    control,
+    formState: { errors },
+  } = useFormContext();
 
   const watchField = useWatch({ control, name });
 
@@ -48,9 +54,22 @@ export const InputText = ({
             "animate-inputBlur": !watchField,
           }
         )}
-        {...register(name, { ...(rest.required && { required: true }) })}
+        {...register(name, {
+          ...(rest.required && {
+            required: { value: true, message: "Esse campo é obrigatório" },
+          }),
+        })}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
+      />
+      <ErrorMessage
+        errors={errors}
+        name={name}
+        render={({ message }) => (
+          <Text color="red-500" className="text-[12px] font-bold">
+            {message}
+          </Text>
+        )}
       />
     </div>
   );

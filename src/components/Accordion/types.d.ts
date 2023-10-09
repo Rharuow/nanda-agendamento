@@ -2,6 +2,8 @@ import { ReactNode } from "react";
 
 export type AccordionProps = {
   textHeader?: string;
+  iconSize?: number;
+  className?: string;
   textBody?: string;
   headerChildren?: ReactNode;
   bodyChildren?: ReactNode;

@@ -1,10 +1,11 @@
 import { listStudents } from "@/src/service/students";
 import { useQuery } from "@tanstack/react-query";
+import { FilterType } from "../students/types";
 
-export function useStudents(staleTime?: number) {
+export function useStudents(filter?: FilterType, staleTime?: number) {
   return useQuery({
     queryKey: ["list-students"],
-    queryFn: () => listStudents(),
+    queryFn: () => listStudents(filter),
     retry: false,
     ...(staleTime && { staleTime }),
   });

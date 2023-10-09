@@ -1,10 +1,10 @@
+"use client";
 import React, { useState } from "react";
 import Calendar from "react-calendar";
 import { FormProvider, useForm } from "react-hook-form";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
 import { ArrowCircleLeft } from "@phosphor-icons/react";
-import Link from "next/link";
 
 import { InputNumeric } from "../../form/input/Numeric";
 import { Button } from "../../Button";
@@ -17,6 +17,7 @@ import { Loading } from "../../Loading";
 import { useCreateSchedule } from "@/src/service/hooks/useCreateSchedule";
 import { compare } from "@/src/utils/compareStrings";
 import { Student } from "@/src/service";
+import { useRouter } from "next/navigation";
 
 type ValuePiece = Date | string | null;
 
@@ -31,6 +32,8 @@ export type FormCreateScheduling = {
 
 export const Scheduling = () => {
   const methods = useForm<FormCreateScheduling>();
+
+  const router = useRouter();
 
   const { watch, handleSubmit, setValue, register } = methods;
 
@@ -75,10 +78,8 @@ export const Scheduling = () => {
   return (
     <div className="flex flex-wrap items-stretch w-full gap-2">
       <div className="self-start">
-        <Text>
-          <Link href="/">
-            <ArrowCircleLeft size={28} />
-          </Link>
+        <Text onClick={() => router.back()}>
+          <ArrowCircleLeft size={28} />
         </Text>
       </div>
       {studentsIsLoading &&

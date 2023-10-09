@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import { Scheduling } from "@/src/components/domain/Scheduling";
 

@@ -24,12 +24,12 @@ input {
   color: white;
 }
 
-.react-calendar {
+/* .react-calendar {
   background-color: rgba(255, 255, 255, 0) !important;
-}
+} */
 
 .react-calendar__tile:disabled {
-  background-color: rgba(90, 0, 0, 0.4) !important;
+  background-color: rgba(150, 0, 0, 0.4) !important;
 }
 
 ::-webkit-calendar-picker-indicator {

@@ -3,8 +3,11 @@ import { useSchedules } from "@/src/service/hooks/useSchedules";
 import { useStudents } from "@/src/service/hooks/useStudents";
 import { useEffect, useState } from "react";
 import { Loading } from "../../Loading";
-import Link from "next/link";
-import { PlusCircle, Trash } from "@phosphor-icons/react";
+import {
+  BookBookmark,
+  List,
+  Student as StudentIcon,
+} from "@phosphor-icons/react";
 import { InputSelectText } from "../../form/input/SelectText";
 import { Toggle } from "../../form/Toggle";
 import Accordion from "../../Accordion";
@@ -22,6 +25,7 @@ import { toast } from "react-toastify";
 import { Header } from "./Accordion/Header";
 import { Body } from "./Accordion/Body";
 import { useUpdatePaidSchedule } from "@/src/service/hooks/useUpdatePaidSchedule";
+import { Menu } from "../../Menu";
 
 export const ListScheduling = () => {
   const methods = useForm<{
@@ -46,6 +50,7 @@ export const ListScheduling = () => {
   });
 
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [showMenu, setShowMenu] = useState<boolean>();
 
   const {
     data: schedules,
@@ -226,88 +231,114 @@ export const ListScheduling = () => {
         }
       />
       {schedulesIsLoading && studentsIsLoading ? (
-        <Loading />
-      ) : schedules && schedules.length > 0 ? (
-        <>
-          <Link href="/schedule">
-            <div className="flex">
-              <PlusCircle className="text-white self-end" size={24} />
-            </div>
-          </Link>
-          <FormProvider {...methods}>
-            <InputSelectText
-              emptyLabel="Nenhum aluno encontrado"
-              options={
-                students
-                  ? students?.map((student) => ({
-                      label: student.name,
-                      value: student.name,
-                    }))
-                  : []
-              }
-              onChange={handleFilterName}
-              name="name"
-              label="Nome do Aluno"
-            />
-            <div className="flex w-full justify-between gap-2">
-              <Toggle
-                labelPosition="end"
-                label="A partir de hoje"
-                name="startToNow"
-                onClick={handleStartOfNowFilter}
-              />
-              <Toggle label="Pagos" name="paid" onClick={handlePaidFilter} />
-            </div>
-            <div className="flex gap-2">
-              <InputDate
-                name="startAt"
-                className="w-1/2"
-                label="A partir de:"
-                onChange={handleStartAtFilter}
-              />
-              <InputDate
-                className="w-1/2"
-                name="endedAt"
-                label="Até:"
-                onChange={handleEndedAtFilter}
-              />
-            </div>
-          </FormProvider>
-          <div className="flex flex-col w-full gap-2">
-            <h2>Agendamentos</h2>
-            {schedulesWithStudent && schedulesWithStudent?.length > 0 ? (
-              schedulesWithStudent?.map((schedule) => (
-                <div className="bg-slate-400 px-3 rounded" key={schedule.id}>
-                  <Accordion
-                    id={schedule.id}
-                    iconClassName="text-white"
-                    headerChildren={
-                      <Header
-                        deleteOnClick={() => {
-                          setSchedule(schedule);
-                          setShowModal(true);
-                        }}
-                        schedule={schedule}
-                      />
-                    }
-                    bodyChildren={
-                      <Body
-                        onClickToogle={() =>
-                          handleUpdatePaidSchedule(schedule.id)
-                        }
-                        schedule={schedule}
-                      />
-                    }
-                  />
-                </div>
-              ))
-            ) : (
-              <Empty />
-            )}
-          </div>
-        </>
-      ) : (
+        <div className="h-screen flex self-center justify-center items-center">
+          <Loading />
+        </div>
+      ) : schedules && schedules.length === 0 ? (
         <Empty />
+      ) : (
+        schedules &&
+        schedules.length > 0 && (
+          <>
+            <div
+              className="flex"
+              onClick={() => {
+                setShowMenu(true);
+              }}
+            >
+              <List className="text-white self-end" size={24} />
+            </div>
+            {showMenu !== undefined && (
+              <Menu
+                show={showMenu}
+                setShow={setShowMenu}
+                items={[
+                  {
+                    icon: BookBookmark,
+                    label: "Criar reservas",
+                    route: "/schedule",
+                  },
+                  {
+                    icon: StudentIcon,
+                    label: "Alunos",
+                    route: "/students",
+                  },
+                ]}
+              />
+            )}
+            <FormProvider {...methods}>
+              <InputSelectText
+                emptyLabel="Nenhum aluno encontrado"
+                options={
+                  students
+                    ? students?.map((student) => ({
+                        label: student.name,
+                        value: student.name,
+                      }))
+                    : []
+                }
+                onChange={handleFilterName}
+                name="name"
+                label="Nome do Aluno"
+              />
+              <div className="flex w-full justify-between gap-2">
+                <Toggle
+                  labelPosition="end"
+                  label="A partir de hoje"
+                  name="startToNow"
+                  onClick={handleStartOfNowFilter}
+                />
+                <Toggle label="Pagos" name="paid" onClick={handlePaidFilter} />
+              </div>
+              <div className="flex gap-2">
+                <InputDate
+                  name="startAt"
+                  className="w-1/2"
+                  label="A partir de:"
+                  onChange={handleStartAtFilter}
+                />
+                <InputDate
+                  className="w-1/2"
+                  name="endedAt"
+                  label="Até:"
+                  onChange={handleEndedAtFilter}
+                />
+              </div>
+            </FormProvider>
+            <div className="flex flex-col w-full gap-2">
+              <h2>Agendamentos</h2>
+              {schedulesWithStudent && schedulesWithStudent?.length > 0 ? (
+                schedulesWithStudent?.map((schedule) => (
+                  <div className="bg-slate-400 px-3 rounded" key={schedule.id}>
+                    <Accordion
+                      id={schedule.id}
+                      iconClassName="text-white"
+                      headerChildren={
+                        <Header
+                          deleteOnClick={() => {
+                            setSchedule(schedule);
+                            setShowModal(true);
+                          }}
+                          schedule={schedule}
+                        />
+                      }
+                      bodyChildren={
+                        <Body
+                          onClickToogle={() =>
+                            handleUpdatePaidSchedule(schedule.id)
+                          }
+                          schedule={schedule}
+                        />
+                      }
+                    />
+                  </div>
+                ))
+              ) : (
+                <Empty />
+              )}
+            </div>
+          </>
+        )
       )}
     </div>
   );

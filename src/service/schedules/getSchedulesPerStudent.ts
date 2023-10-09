@@ -4,7 +4,7 @@ import { getStudent } from "../students";
 
 export const getSchedulesPerStudent = async (studentId: string) => {
   try {
-    const student = await getStudent(studentId);
+    const student = await getStudent({ id: studentId });
     if (!student) return [];
     const schedules = (await listSchedules()) as Array<Schedule>;
     return schedules
