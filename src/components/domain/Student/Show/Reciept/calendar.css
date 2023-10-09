@@ -1,3 +1,7 @@
+body {
+  background: black;
+}
+
 .react-calendar__tile--now {
   background-color: white !important;
 }

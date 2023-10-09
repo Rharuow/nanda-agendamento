@@ -31,11 +31,6 @@ input {
 .react-calendar__tile:disabled {
   background-color: rgba(150, 0, 0, 0.4) !important;
 }
-/* 
-.react-calendar__tile--now {
-  background-color: red !important;
-} 
-*/
 
 ::-webkit-calendar-picker-indicator {
   filter: invert(1);

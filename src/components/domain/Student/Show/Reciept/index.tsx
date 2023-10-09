@@ -13,7 +13,6 @@ import { Loading } from "@/src/components/Loading";
 import dayjs from "dayjs";
 import Calendar from "react-calendar";
 import { Button } from "@/src/components/Button";
-import { Student } from "@/src/service";
 
 export const Reciept = ({ id }: { id: string }) => {
   const { data, isLoading, isError } = useGetStudent({
@@ -24,12 +23,32 @@ export const Reciept = ({ id }: { id: string }) => {
   const { back } = useRouter();
 
   const handleScreeShot = () => {
-    // takeScreenshot(document.getElementById("receipt"));
-    window.print();
+    const hiddenElements = document.getElementsByClassName("print-hidden");
+    const arrayElements = new Array(hiddenElements.length).fill(null);
+    arrayElements.forEach((_, index) => {
+      const element = hiddenElements.item(index);
+      if (element !== null) {
+        element.className = element.className.replace(
+          "print-hidden",
+          " hidden "
+        );
+      }
+    });
+    console.log("Before = ", hiddenElements);
+    takeScreenshot(document.getElementById("receipt"));
+    arrayElements.forEach((_, index) => {
+      const element = hiddenElements.item(index);
+      if (element !== null) {
+        element.className = element.className.replaceAll(
+          " hidden ",
+          "print-hidden"
+        );
+      }
+    });
+    console.log("after = ", hiddenElements);
   };
 
   useEffect(() => {
-    console.log(image);
     if (image) {
       const downloadElement = document.createElement("a");
       downloadElement.href = image;
@@ -43,8 +62,8 @@ export const Reciept = ({ id }: { id: string }) => {
   }, [data?.name, image]);
 
   return (
-    <div className="flex flex-col grow">
-      <div className="absolute print:hidden">
+    <div className="flex flex-col grow" id="receipt">
+      <div className="absolute print-hidden">
         <Text onClick={() => back()}>
           <ArrowCircleLeft size={28} />
         </Text>
@@ -63,10 +82,8 @@ export const Reciept = ({ id }: { id: string }) => {
           <Loading />
         </div>
       ) : (
-        <div className="flex flex-col gap-4" id="receipt">
-          <Text className="text-center font-bold text-lg print:hidden">
-            Extrato
-          </Text>
+        <div className="flex flex-col gap-4">
+          <Text className="text-center font-bold text-lg">Extrato</Text>
           <div className="grid grid-cols-6 gap-3 bg-slate-700 p-1 rounded">
             <Text className="text-center col-span-3">Data</Text>
             <Text className="text-center col-span-2">Valor/aula</Text>
@@ -119,7 +136,7 @@ export const Reciept = ({ id }: { id: string }) => {
             />
           </div>
           <Button
-            className="print:hidden"
+            className="print-hidden"
             text="Imprimir"
             onClick={() => handleScreeShot()}
           />
