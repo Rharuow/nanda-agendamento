@@ -1,15 +1,22 @@
 import { doc, updateDoc } from "firebase/firestore";
+import { Student } from "..";
 import { db } from "../firebase";
-import { getSchedule } from ".";
 
-export const updatePaid = async ({ id }: { id: string }) => {
+export const updatePaid = async ({
+  id,
+  student,
+}: {
+  id: number;
+  student: Student;
+}) => {
   try {
-    const schedule = await getSchedule(id);
-    const scheduleRef = doc(db, "schedules", id);
-    await updateDoc(scheduleRef, {
-      paid: !schedule.paid,
+    const studentRef = doc(db, "students", String(student.id));
+    const studentDoc = await updateDoc(studentRef, {
+      schedules: student.schedules.map((schedule, index) =>
+        index === id ? { ...schedule, paid: !schedule?.paid } : schedule
+      ),
     });
-    return schedule;
+    return studentDoc;
   } catch (error: any) {
     console.log("error to update paid schedule = ", error);
     throw new Error(`${error.message}`);
