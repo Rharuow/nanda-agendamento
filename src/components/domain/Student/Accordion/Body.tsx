@@ -2,17 +2,40 @@ import { Button } from "@/src/components/Button";
 import { Modal } from "@/src/components/Modal";
 import { Text } from "@/src/components/Text";
 import { Student } from "@/src/service";
+import { useDeleteStudent } from "@/src/service/hooks/useDeleteStudent";
 import { Receipt, Trash } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 
-export const Body = ({ student }: { student: Student }) => {
+export const Body = ({
+  student,
+  refetch,
+}: {
+  student: Student;
+  refetch: () => void;
+}) => {
   const { push } = useRouter();
   const handleNavigate = (id: string) => push(`/students/${id}/reciept`);
 
   const [showModal, setShowModal] = useState(false);
 
-  const handleDeleteStudent = () => {};
+  const { mutateAsync: deleteStudent } = useDeleteStudent();
+
+  const handleDeleteStudent = () => {
+    deleteStudent(
+      { id: String(student.id) },
+      {
+        onSuccess: () => {
+          toast.success("Estudande apagado com sucesso...");
+          refetch();
+        },
+        onError: () => {
+          toast.error("Erro ao apagar estudante...", { autoClose: 2000 });
+        },
+      }
+    );
+  };
 
   return (
     <div className="flex flex-col gap-4">

@@ -15,7 +15,7 @@ import { Body } from "./Accordion/Body";
 import { ArrowCircleLeft } from "@phosphor-icons/react";
 
 export const List = () => {
-  const { data, isLoading, isError } = useStudents();
+  const { data, isLoading, isError, refetch } = useStudents();
 
   const [students, setStudents] =
     useState<Array<Student & { schedules: Array<Schedule> }>>();
@@ -81,7 +81,7 @@ export const List = () => {
                     ),
                   })}
                   textHeader={student.name}
-                  bodyChildren={<Body student={student} />}
+                  bodyChildren={<Body student={student} refetch={refetch} />}
                   iconSize={18}
                   iconClassName="text-white"
                 />
