@@ -48,7 +48,9 @@ export const Scheduling = () => {
     isLoading: studentIsLoading,
     isFetching: studentIsFetching,
   } = useGetStudentByName(
-    students?.find((std) => std.name === watch("name"))?.name
+    students && students.some((std) => std.name === watch("name"))
+      ? students.find((std) => std.name === watch("name"))?.name
+      : undefined
   );
 
   const { mutateAsync: createSchedule } = useCreateSchedule();

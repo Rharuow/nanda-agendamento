@@ -2,32 +2,43 @@ import { doc, updateDoc } from "firebase/firestore";
 import { FormCreateScheduling } from "@/src/components/domain/Scheduling";
 import { createStudent, getStudentByName } from "../students";
 import { db } from "../firebase";
+import { Student } from "..";
 
-export const createScheduling = async (schedule: FormCreateScheduling) => {
-  const { name, ...scheduleData } = schedule;
-  const scheduleFormatted = {
+export const createScheduling = async ({
+  name,
+  ...scheduleData
+}: FormCreateScheduling) => {
+  const schedule = {
     amountTime: scheduleData.amount,
-    date: schedule.date,
+    date: scheduleData.date,
     paid: false,
-    pricePerTime: parseFloat(schedule.price.replace(",", ".")),
+    pricePerTime: parseFloat(scheduleData.price.replace(",", ".")),
   };
-  const hasStudent = await getStudentByName({ name });
+
   try {
+    const hasStudent = await getStudentByName({ name });
     if (hasStudent) {
       const studentRef = doc(db, "students", String(hasStudent.id));
       await updateDoc(studentRef, {
-        ...hasStudent,
-        schedules: [...hasStudent.schedules, scheduleFormatted],
+        debitTotal:
+          hasStudent.debitTotal + schedule.amountTime * schedule.pricePerTime,
+        schedules: [...hasStudent.schedules, schedule],
+        totalTime: hasStudent.schedules.reduce(
+          (acc, curr) => (curr?.amountTime ? acc + curr?.amountTime : 0),
+          0
+        ),
       });
       return hasStudent;
     }
 
-    const studentId = (
-      await createStudent({
-        name: schedule.name,
-        schedules: [scheduleFormatted],
-      })
-    ).id;
+    const student: Student = {
+      name,
+      debitTotal: schedule.amountTime * schedule.pricePerTime,
+      schedules: [schedule],
+      totalTime: schedule.amountTime,
+    };
+
+    const studentId = (await createStudent(student)).id;
 
     return studentId;
   } catch (error: any) {
