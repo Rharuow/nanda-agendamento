@@ -361,7 +361,10 @@ export const ListScheduling = () => {
                       bodyChildren={
                         <Body
                           onClickToogle={() =>
-                            handleUpdatePaidSchedule(index, sche.student)
+                            handleUpdatePaidSchedule(
+                              sche.position,
+                              sche.student
+                            )
                           }
                           schedule={sche as Schedule & { student: Student }}
                         />

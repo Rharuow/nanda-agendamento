@@ -11,6 +11,7 @@ export const updatePaid = async ({
 }) => {
   try {
     const studentRef = doc(db, "students", String(student.id));
+
     const studentDoc = await updateDoc(studentRef, {
       schedules: student.schedules.map((schedule, index) =>
         index === id ? { ...schedule, paid: !schedule?.paid } : schedule

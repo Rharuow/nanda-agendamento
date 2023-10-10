@@ -15,7 +15,7 @@ import { Body } from "./Accordion/Body";
 import { ArrowCircleLeft } from "@phosphor-icons/react";
 
 export const List = () => {
-  const { data, isLoading, isError } = useStudents({ q: { schedules: true } });
+  const { data, isLoading, isError } = useStudents();
 
   const [students, setStudents] =
     useState<Array<Student & { schedules: Array<Schedule> }>>();
@@ -74,10 +74,10 @@ export const List = () => {
                   id={String(student.id)}
                   className={classNames("px-4 rounded", {
                     "bg-green-700": student.schedules?.every(
-                      (schedule) => schedule.paid
+                      (schedule) => schedule?.paid
                     ),
                     "bg-red-700": student.schedules?.some(
-                      (schedule) => !schedule.paid
+                      (schedule) => !schedule?.paid
                     ),
                   })}
                   textHeader={student.name}
