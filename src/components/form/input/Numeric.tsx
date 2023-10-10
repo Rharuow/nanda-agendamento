@@ -47,6 +47,7 @@ export const InputNumeric = ({
           }
         )}
         {...register(name, {
+          valueAsNumber: true,
           ...(rest.required && { required: true }),
         })}
         onFocus={() => setIsFocused(true)}
