@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import { FormProvider, useForm } from "react-hook-form";
 import dayjs from "dayjs";
@@ -17,6 +17,7 @@ import { useCreateSchedule } from "@/src/service/hooks/useCreateSchedule";
 import { useRouter } from "next/navigation";
 import { useGetStudentByName } from "@/src/service/hooks/useGetStudentByName";
 import { QueryClient } from "@tanstack/react-query";
+import { Student } from "@/src/service";
 
 type ValuePiece = Date | string | null;
 
@@ -42,16 +43,7 @@ export const Scheduling = () => {
     refetch: studentsRefetch,
   } = useStudents({ staleTime: 0 });
 
-  const {
-    data: student,
-    refetch: studentRefetech,
-    isLoading: studentIsLoading,
-    isFetching: studentIsFetching,
-  } = useGetStudentByName(
-    students && students.some((std) => std.name === watch("name"))
-      ? students.find((std) => std.name === watch("name"))?.name
-      : undefined
-  );
+  const [student, setStudent] = useState<Student>();
 
   const { mutateAsync: createSchedule } = useCreateSchedule();
 
@@ -65,7 +57,6 @@ export const Scheduling = () => {
       onSuccess: (res) => {
         toast.success("Agendamento feito com sucesso...");
         studentsRefetch();
-        studentRefetech();
       },
       onError: (error) => {
         console.log("Create schedule error = ", error);
@@ -74,6 +65,12 @@ export const Scheduling = () => {
     });
   };
 
+  useEffect(() => {
+    students &&
+      students.some((stu) => stu.name === watch("name")) &&
+      setStudent(students.find((stu) => stu.name === watch("name")));
+  }, [students, watch]);
+
   return (
     <div className="flex flex-wrap items-stretch w-full gap-2">
       <div className="self-start">
@@ -81,7 +78,7 @@ export const Scheduling = () => {
           <ArrowCircleLeft size={28} />
         </Text>
       </div>
-      {studentsIsLoading && studentIsLoading && studentIsFetching ? (
+      {studentsIsLoading ? (
         <div className="flex flex-col w-screen items-center gap-2">
           <Loading />
         </div>
@@ -125,7 +122,6 @@ export const Scheduling = () => {
             {watch("name") && (
               <div className="w-full flex justify-center overflow-hidden">
                 <Calendar
-                  key={student?.id}
                   onChange={(dt) => handleDate(dt as Date)}
                   {...(student &&
                     student.schedules.length > 0 && {

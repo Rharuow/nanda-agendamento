@@ -13,6 +13,7 @@ export const InputCurrency = ({
   label?: string;
   defaultValue?: number;
   className?: string;
+  autoComplete?: string;
   inputClassName?: string;
   labelClassName?: string;
   required?: boolean;
@@ -38,6 +39,8 @@ export const InputCurrency = ({
         </label>
       )}
       <CurrencyInput
+        id={name}
+        autoComplete={rest.autoComplete ?? "currency-value"}
         {...(defaultValue && { defaultValue })}
         className={classNames(
           `w-full text-white bg-transparent border-b-[1px] animate-inputBlur focus:outline-none caret-white focus:animate-inputFocus ${

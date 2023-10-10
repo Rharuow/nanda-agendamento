@@ -9,6 +9,7 @@ export const InputNumeric = ({
 }: {
   name: string;
   label?: string;
+  autoComplete?: string;
   className?: string;
   inputClassName?: string;
   required?: boolean;
@@ -37,6 +38,7 @@ export const InputNumeric = ({
         pattern="[0-9]*"
         inputMode="numeric"
         type="number"
+        autoComplete={rest.autoComplete ?? "numeric-value"}
         className={classNames(
           `bg-transparent text-white w-full border-b-[1px] animate-inputBlur focus:outline-none caret-white focus:animate-inputFocus ${
             rest.inputClassName || " "

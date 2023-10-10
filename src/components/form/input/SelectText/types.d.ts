@@ -9,6 +9,7 @@ export type Props<T extends OptionValue> = {
   options: Array<Option<T>>;
   name: string;
   required?: boolean;
+  autoComplete?: string;
   emptyLabel?: string;
   amount?: number;
   label?: string;

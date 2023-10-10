@@ -78,7 +78,8 @@ export function InputSelectText<T extends OptionValue>({
           {...register(name, { ...(rest.required && { required: true }) })}
         />
         <input
-          id={`${name}-select`}
+          id={name}
+          autoComplete={rest.autoComplete ?? "choose-option"}
           ref={selectField}
           type="text"
           className={classNames(

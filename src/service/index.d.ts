@@ -3,10 +3,12 @@ export type Student = {
   name: string;
   totalTime: number;
   debitTotal: number;
-  schedules: Array<{
-    pricePerTime: number;
-    amountTime: number;
-    paid: boolean;
-    date: Date | string;
-  } | null>;
+  schedules: Array<Schedule | null>;
+};
+
+export type Schedule = {
+  pricePerTime: number;
+  amountTime: number;
+  paid: boolean;
+  date: Date | string;
 };
