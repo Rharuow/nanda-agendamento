@@ -195,18 +195,30 @@ export const ListScheduling = () => {
   }, [showModal]);
 
   useEffect(() => {
-    console.log(schedulesData);
-    setSchedules(
-      filter && schedulesData
-        ? filterSchedules({
-            filter,
-            schedules: schedulesData as Array<
-              Schedule & { student: Student; position: number }
-            >,
-          })
-        : schedulesData
-    );
+    if (schedulesData) {
+      setSchedules(
+        filter
+          ? filterSchedules({
+              filter,
+              schedules: schedulesData as Array<
+                Schedule & { student: Student; position: number }
+              >,
+            })
+          : schedulesData
+      );
+    }
   }, [filter, schedulesData]);
+
+  useEffect(() => {
+    setStudents(
+      schedules
+        ?.map((schedule) => schedule.student)
+        .filter(
+          (student, index, self) =>
+            index === 0 || self[index - 1].name !== student.name
+        )
+    );
+  }, [schedules]);
 
   return (
     <div className="flex flex-col items-end gap-3">
