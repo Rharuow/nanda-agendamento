@@ -15,7 +15,6 @@ import { Button } from "@/src/components/Button";
 export const Reciept = ({ id }: { id: string }) => {
   const { data, isLoading, isError } = useGetStudent({
     id,
-    withSchedules: true,
   });
   const { back } = useRouter();
 
@@ -55,26 +54,26 @@ export const Reciept = ({ id }: { id: string }) => {
             <Text className="text-center truncate">Aulas</Text>
           </div>
           {data.schedules
-            .filter((schedule) => !schedule.paid)
+            .filter((schedule) => !schedule?.paid)
             .sort((prev, next) =>
-              dayjs(prev.date).isAfter(dayjs(next.date)) ? 1 : -1
+              dayjs(prev?.date).isAfter(dayjs(next?.date)) ? 1 : -1
             )
-            .map((schedule) => (
+            .map((schedule, index) => (
               <div
                 className="grid grid-cols-6 gap-3 bg-slate-700 p-2 rounded"
-                key={schedule.id}
+                key={index}
               >
                 <Text className="col-span-3">
-                  {dayjs(schedule.date).toDate().toLocaleString("pt-BR", {
+                  {dayjs(schedule?.date).toDate().toLocaleString("pt-BR", {
                     day: "numeric",
                     month: "short",
                     year: "2-digit",
                   })}
                 </Text>
                 <Text className="col-span-2 text-center">
-                  R$ {schedule.pricePerTime}
+                  R$ {schedule?.pricePerTime}
                 </Text>
-                <Text className="text-center">{schedule.amountTime}</Text>
+                <Text className="text-center">{schedule?.amountTime}</Text>
               </div>
             ))}
           <div className="flex justify-center items-center gap-3 bg-slate-700 p-2 rounded">
@@ -82,10 +81,11 @@ export const Reciept = ({ id }: { id: string }) => {
             <Text className="text-center">
               R${" "}
               {data.schedules
-                .filter((schedule) => !schedule.paid)
+                .filter((schedule) => !schedule?.paid)
                 .reduce(
                   (accumulator, current) =>
-                    Number(current.pricePerTime) * current.amountTime +
+                    Number(current?.pricePerTime) *
+                      Number(current?.amountTime) +
                     accumulator,
                   0
                 )}
@@ -95,8 +95,8 @@ export const Reciept = ({ id }: { id: string }) => {
             <Calendar
               tileDisabled={({ date }) =>
                 data.schedules
-                  .filter((schedule) => !schedule.paid)
-                  .some((dt) => dayjs(dt.date).isSame(dayjs(date)))
+                  .filter((schedule) => !schedule?.paid)
+                  .some((dt) => dayjs(dt?.date).isSame(dayjs(date)))
               }
             />
           </div>
