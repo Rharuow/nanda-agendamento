@@ -10,6 +10,7 @@ export const InputText = ({
   ...rest
 }: {
   name: string;
+  autoComplete?: string;
   label?: string;
   className?: string;
   inputClassName?: string;
@@ -44,9 +45,10 @@ export const InputText = ({
       )}
       <input
         id={name}
+        autoComplete={rest.autoComplete ?? "text-value"}
         type="text"
         className={classNames(
-          `w-full bg-transparent border-b-[1px] animate-inputBlur focus:outline-none caret-white focus:animate-inputFocus ${
+          `w-full text-white bg-transparent border-b-[1px] animate-inputBlur focus:outline-none caret-white focus:animate-inputFocus ${
             rest.inputClassName || " "
           }`,
           {

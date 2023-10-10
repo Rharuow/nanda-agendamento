@@ -11,6 +11,7 @@ export const InputDate = ({
   label?: string;
   className?: string;
   inputClassName?: string;
+  autoComplete?: string;
   onChange?: (value: string) => void;
   labelClassName?: string;
   required?: boolean;
@@ -41,8 +42,9 @@ export const InputDate = ({
       <input
         id={name}
         type={type}
+        autoComplete={rest.autoComplete ?? "date-value"}
         className={classNames(
-          `w-full bg-transparent border-b-[1px] animate-inputBlur focus:outline-none caret-white focus:animate-inputFocus ${
+          `w-full text-white bg-transparent border-b-[1px] animate-inputBlur focus:outline-none caret-white focus:animate-inputFocus ${
             rest.inputClassName || " "
           }`,
           {

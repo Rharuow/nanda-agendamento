@@ -8,8 +8,8 @@ export const Body = ({
   schedule,
   onClickToogle,
 }: {
-  schedule: Schedule & { student: Student };
-  onClickToogle: (scheduleId: string) => void;
+  schedule: Schedule & { student: Student; position: number };
+  onClickToogle: (scheduleId: number) => void;
 }) => {
   const methods = useForm<{ paid: boolean }>({
     defaultValues: {
@@ -22,7 +22,10 @@ export const Body = ({
       <div className="flex justify-around">
         <Text className="font-bold">Pago?</Text>
         <FormProvider {...methods}>
-          <Toggle name="paid" onClick={() => onClickToogle(schedule.id)} />
+          <Toggle
+            name="paid"
+            onClick={() => onClickToogle(schedule.position)}
+          />
         </FormProvider>
       </div>
     </div>

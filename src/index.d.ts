@@ -5,4 +5,6 @@ export type Variant =
   | "danger-outline"
   | "info"
   | "info-outline"
+  | "secondary-outline"
+  | "secondary"
   | "outline";

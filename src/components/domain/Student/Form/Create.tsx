@@ -4,7 +4,9 @@ import { useCreateStudent } from "@/src/service/hooks/useCreateStudent";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 
-export type FormCreateStudentType = { name: string };
+export type FormCreateStudentType = {
+  name: string;
+};
 
 export const FormCreateStudent = () => {
   const methods = useForm<FormCreateStudentType>();
@@ -14,14 +16,17 @@ export const FormCreateStudent = () => {
   const { mutateAsync } = useCreateStudent();
 
   const onSubmit = (data: FormCreateStudentType) => {
-    mutateAsync(data, {
-      onSuccess: () => {
-        toast.success("Aluno cadastrado com sucesso...");
-      },
-      onError: () => {
-        toast.error("Erro ao cadastrar aluno...");
-      },
-    });
+    mutateAsync(
+      { ...data, totalTime: 0, debitTotal: 0, schedules: [] },
+      {
+        onSuccess: () => {
+          toast.success("Aluno cadastrado com sucesso...");
+        },
+        onError: () => {
+          toast.error("Erro ao cadastrar aluno...");
+        },
+      }
+    );
   };
 
   return (

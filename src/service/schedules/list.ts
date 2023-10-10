@@ -1,38 +1,28 @@
-import { getDocs } from "firebase/firestore";
-import { schedulesCollection } from "../collections";
 import { Schedule, Student } from "..";
 import dayjs from "dayjs";
 import { FilterType } from "./types";
-import { getStudentByName, listStudents } from "../students";
+import { listStudents } from "../students";
 
 export const listSchedules = async (filter?: FilterType) => {
   try {
     const students = await listStudents();
-
-    const schedules = (
-      (await getDocs(schedulesCollection)).docs.map((schedule) => ({
-        ...schedule.data(),
-        id: schedule.id,
-      })) as Array<Schedule>
-    )
-      .sort((current, next) => {
-        return dayjs(current.date).isBefore(dayjs(next.date)) ? 0 : -1;
-      })
-      .map((schedule) => ({
-        ...schedule,
-        student: students.find((std) =>
-          std.schedules_id?.includes(schedule.id)
-        ) as Student,
-      })) as Array<Schedule & { student: Student }>;
-
-    const student: Student | undefined =
-      filter && Object.keys(filter.q).some((param) => param === "studentName")
-        ? ((await getStudentByName({
-            name: String(filter.q.studentName),
-          })) as Student)
-        : undefined;
-
-    return filter ? filterSchedules({ filter, schedules, student }) : schedules;
+    const schedules = students
+      .map((student) =>
+        student.schedules.map((schedule, index) => ({
+          ...schedule,
+          student,
+          position: index,
+        }))
+      )
+      .flat();
+    return filter
+      ? filterSchedules({
+          filter,
+          schedules: schedules as Array<
+            Schedule & { student: Student; position: number }
+          >,
+        })
+      : schedules;
   } catch (error: any) {
     console.log("listStudent = ", error);
     throw new Error(`${error.message}`);
@@ -42,17 +32,17 @@ export const listSchedules = async (filter?: FilterType) => {
 export const filterSchedules = ({
   filter,
   schedules,
-  student,
 }: {
   filter: FilterType;
-  schedules: Array<Schedule & { student: Student }>;
-  student?: Student;
+  schedules: Array<Schedule & { student: Student; position: number }>;
 }) => {
   const { q } = filter;
   const params = Object.keys(q);
   let schedulesFiltred = schedules;
   schedulesFiltred = params.some((param) => param === "studentName")
-    ? schedulesFiltred.filter((schedule) => schedule.student_id === student?.id)
+    ? schedulesFiltred.filter(
+        (schedule) => schedule.student.name === q.studentName
+      )
     : schedulesFiltred;
 
   schedulesFiltred = params.some((param) => param === "startOfNow")

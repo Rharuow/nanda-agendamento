@@ -1,6 +1,5 @@
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useSchedules } from "@/src/service/hooks/useSchedules";
-import { useStudents } from "@/src/service/hooks/useStudents";
 import { useEffect, useState } from "react";
 import { Loading } from "../../Loading";
 import {
@@ -15,7 +14,6 @@ import dayjs from "dayjs";
 import { Empty } from "./Empty";
 import { Schedule, Student } from "@/src/service";
 import { FilterType } from "@/src/service/schedules/types";
-import { filterSchedules } from "@/src/service/schedules/list";
 import { InputDate } from "../../form/input/Date";
 
 import { Modal } from "../../Modal";
@@ -26,6 +24,7 @@ import { Header } from "./Accordion/Header";
 import { Body } from "./Accordion/Body";
 import { useUpdatePaidSchedule } from "@/src/service/hooks/useUpdatePaidSchedule";
 import { Menu } from "../../Menu";
+import { filterSchedules } from "@/src/service/schedules/list";
 
 export const ListScheduling = () => {
   const methods = useForm<{
@@ -52,21 +51,22 @@ export const ListScheduling = () => {
   const [showModal, setShowModal] = useState<boolean>(false);
   const [showMenu, setShowMenu] = useState<boolean>();
 
+  const [students, setStudents] = useState<Array<Student>>();
+
   const {
-    data: schedules,
-    isLoading: schedulesIsLoading,
+    data: schedulesData,
+    isLoading: schedulesDataIsLoading,
     refetch: refetchSchedule,
   } = useSchedules();
 
-  const [schedule, setSchedule] = useState<Schedule & { student: Student }>();
+  const [schedules, setSchedules] = useState(schedulesData);
+
+  const [schedule, setSchedule] = useState<
+    Schedule & { index: number } & { student: Student }
+  >();
 
   const { mutateAsync: deleteSchedule } = useDeleteSchedule();
   const { mutateAsync: updateSchedule } = useUpdatePaidSchedule();
-
-  const { data: students, isLoading: studentsIsLoading } = useStudents();
-
-  const [schedulesWithStudent, setSchedulesWithStudent] =
-    useState<Array<Schedule & { student: Student }>>();
 
   const handleFilterName = (studentName: string) => {
     students?.some((student) => student.name === studentName)
@@ -83,17 +83,20 @@ export const ListScheduling = () => {
         });
   };
 
-  const handleUpdatePaidSchedule = (id: string) => {
-    updateSchedule(id, {
-      onSuccess: () => {
-        toast.success("Agendamento atualizado com sucesso");
-        refetchSchedule();
-      },
-      onError: () => {
-        toast.error("Problemas ao atualizar o agendamento");
-        refetchSchedule();
-      },
-    });
+  const handleUpdatePaidSchedule = (id: number, student: Student) => {
+    updateSchedule(
+      { id, student },
+      {
+        onSuccess: () => {
+          toast.success("Agendamento atualizado com sucesso");
+          refetchSchedule();
+        },
+        onError: () => {
+          toast.error("Problemas ao atualizar o agendamento");
+          refetchSchedule();
+        },
+      }
+    );
   };
 
   const handleStartOfNowFilter = (value: boolean) => {
@@ -165,44 +168,64 @@ export const ListScheduling = () => {
         });
   };
 
-  const handleDeleteSchedule = () => {
-    deleteSchedule(String(schedule?.id), {
-      onSuccess: () => {
-        toast.success("Agendamento apagado com sucesso...");
-        setShowModal(false);
-        refetchSchedule();
-      },
-      onError: () => {
-        toast.error("Não foi possível apagar esse agendamento");
-      },
-    });
+  const handleDeleteSchedule = ({
+    id,
+    student,
+  }: {
+    id: number;
+    student: Student;
+  }) => {
+    deleteSchedule(
+      { id, student },
+      {
+        onSuccess: () => {
+          toast.success("Agendamento apagado com sucesso...");
+          setShowModal(false);
+          refetchSchedule();
+        },
+        onError: () => {
+          toast.error("Não foi possível apagar esse agendamento");
+        },
+      }
+    );
   };
-
-  useEffect(() => {
-    schedules &&
-      setSchedulesWithStudent(
-        filter
-          ? filterSchedules({
-              filter,
-              schedules: schedules,
-              student: students?.find(
-                (std) => std.name === filter.q.studentName
-              ),
-            })
-          : schedules
-      );
-  }, [filter, schedules, students]);
 
   useEffect(() => {
     !showModal && setSchedule(undefined);
   }, [showModal]);
+
+  useEffect(() => {
+    if (schedulesData) {
+      setSchedules(
+        filter
+          ? filterSchedules({
+              filter,
+              schedules: schedulesData as Array<
+                Schedule & { student: Student; position: number }
+              >,
+            })
+          : schedulesData
+      );
+    }
+  }, [filter, schedulesData]);
+
+  useEffect(() => {
+    setStudents(
+      schedules
+        ?.map((schedule) => schedule.student)
+        .filter(
+          (student, index, self) =>
+            index === 0 || self[index - 1].name !== student.name
+        )
+    );
+  }, [schedules]);
 
   return (
     <div className="flex flex-col items-end gap-3">
       <Modal
         setShowModal={setShowModal}
         showModal={showModal}
-        key={schedule?.id}
+        key={schedule?.index}
         size="sm"
         body={`Apagar o agendamento de ${dayjs(schedule?.date)
           .toDate()
@@ -225,12 +248,18 @@ export const ListScheduling = () => {
               text="Apagar"
               variant="danger"
               className="grow"
-              onClick={() => handleDeleteSchedule()}
+              onClick={() =>
+                schedule &&
+                handleDeleteSchedule({
+                  id: schedule.index,
+                  student: schedule.student,
+                })
+              }
             />
           </div>
         }
       />
-      {schedulesIsLoading && studentsIsLoading ? (
+      {schedulesDataIsLoading ? (
         <div className="h-screen flex self-center justify-center items-center">
           <Loading />
         </div>
@@ -307,27 +336,42 @@ export const ListScheduling = () => {
             </FormProvider>
             <div className="flex flex-col w-full gap-2">
               <h2>Agendamentos</h2>
-              {schedulesWithStudent && schedulesWithStudent?.length > 0 ? (
-                schedulesWithStudent?.map((schedule) => (
-                  <div className="bg-slate-400 px-3 rounded" key={schedule.id}>
+              {schedules && schedules?.length > 0 ? (
+                schedules?.map((sche, index) => (
+                  <div className="bg-slate-400 px-3 rounded" key={index}>
                     <Accordion
-                      id={schedule.id}
+                      id={index}
                       iconClassName="text-white"
                       headerChildren={
                         <Header
                           deleteOnClick={() => {
-                            setSchedule(schedule);
+                            setSchedule({
+                              amountTime: Number(sche.amountTime),
+                              date: String(sche.date),
+                              paid: Boolean(sche.paid),
+                              index,
+                              pricePerTime: Number(sche.pricePerTime),
+                              student: sche.student,
+                            });
                             setShowModal(true);
                           }}
-                          schedule={schedule}
+                          schedule={sche as Schedule & { student: Student }}
                         />
                       }
                       bodyChildren={
                         <Body
                           onClickToogle={() =>
-                            handleUpdatePaidSchedule(schedule.id)
+                            handleUpdatePaidSchedule(
+                              sche.position,
+                              sche.student
+                            )
                           }
-                          schedule={schedule}
+                          schedule={
+                            sche as Schedule & {
+                              student: Student;
+                              position: number;
+                            }
+                          }
                         />
                       }
                     />

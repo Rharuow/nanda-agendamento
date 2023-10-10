@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import { FormProvider, useForm } from "react-hook-form";
 import dayjs from "dayjs";
@@ -12,12 +12,12 @@ import { InputSelectText } from "../../form/input/SelectText";
 import { Text } from "../../Text";
 import { InputCurrency } from "../../form/input/Currency";
 import { useStudents } from "../../../service/hooks/useStudents";
-import { useGetSchedulesPerStudent } from "../../../service/hooks/useGetSchedulesPerStudent";
 import { Loading } from "../../Loading";
 import { useCreateSchedule } from "@/src/service/hooks/useCreateSchedule";
-import { compare } from "@/src/utils/compareStrings";
-import { Student } from "@/src/service";
 import { useRouter } from "next/navigation";
+import { useGetStudentByName } from "@/src/service/hooks/useGetStudentByName";
+import { QueryClient } from "@tanstack/react-query";
+import { Student } from "@/src/service";
 
 type ValuePiece = Date | string | null;
 
@@ -40,33 +40,23 @@ export const Scheduling = () => {
   const {
     data: students,
     isLoading: studentsIsLoading,
-    refetch: refetchStudent,
-  } = useStudents();
+    refetch: studentsRefetch,
+  } = useStudents({ staleTime: 0 });
 
-  const [student, setStudent] = useState<Student | undefined>(
-    students?.find((std) => std.name === watch("name"))
-  );
+  const [student, setStudent] = useState<Student>();
 
   const { mutateAsync: createSchedule } = useCreateSchedule();
-
-  const {
-    data: schedulingByStudents,
-    isLoading: schedulingByStudentsIsLoading,
-    isFetching: schedulingByStudentsIsFetching,
-    refetch: refetchGetSchedulesPerStudent,
-  } = useGetSchedulesPerStudent(student?.id);
 
   const handleDate = (date: Date) => {
     setValue("date", date.toString());
   };
 
-  const onSubmit = (data: FormCreateScheduling) => {
+  const onSubmit = async (data: FormCreateScheduling) => {
     if (!data.date) return toast.error("Data é obrigatória");
-    createSchedule(data, {
+    await createSchedule(data, {
       onSuccess: (res) => {
         toast.success("Agendamento feito com sucesso...");
-        refetchStudent();
-        refetchGetSchedulesPerStudent();
+        studentsRefetch();
       },
       onError: (error) => {
         console.log("Create schedule error = ", error);
@@ -75,6 +65,12 @@ export const Scheduling = () => {
     });
   };
 
+  useEffect(() => {
+    students &&
+      students.some((stu) => stu.name === watch("name")) &&
+      setStudent(students.find((stu) => stu.name === watch("name")));
+  }, [students, watch]);
+
   return (
     <div className="flex flex-wrap items-stretch w-full gap-2">
       <div className="self-start">
@@ -82,9 +78,7 @@ export const Scheduling = () => {
           <ArrowCircleLeft size={28} />
         </Text>
       </div>
-      {studentsIsLoading &&
-      schedulingByStudentsIsLoading &&
-      schedulingByStudentsIsFetching ? (
+      {studentsIsLoading ? (
         <div className="flex flex-col w-screen items-center gap-2">
           <Loading />
         </div>
@@ -109,9 +103,6 @@ export const Scheduling = () => {
                     }))
                   : []
               }
-              onChange={(e) => {
-                setStudent(students?.find((std) => compare(std.name, e)));
-              }}
             />
             <div className="flex w-full gap-3">
               <InputCurrency
@@ -132,13 +123,14 @@ export const Scheduling = () => {
               <div className="w-full flex justify-center overflow-hidden">
                 <Calendar
                   onChange={(dt) => handleDate(dt as Date)}
-                  {...(schedulingByStudents && {
-                    value: watch("date") as Value,
-                    tileDisabled: ({ date }) =>
-                      schedulingByStudents.some((dt) =>
-                        dayjs(dt.date).isSame(dayjs(date))
-                      ),
-                  })}
+                  {...(student &&
+                    student.schedules.length > 0 && {
+                      value: watch("date") as Value,
+                      tileDisabled: ({ date }) =>
+                        student.schedules.some((schedule) =>
+                          dayjs(schedule?.date).isSame(dayjs(date))
+                        ),
+                    })}
                 />
               </div>
             )}
