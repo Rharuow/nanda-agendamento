@@ -1,5 +1,5 @@
 import { listSchedules } from ".";
-import { Schedule, Student } from "..";
+import { Schedule } from "..";
 import { getStudent } from "../students";
 
 export const getSchedulesPerStudent = async (studentId: string) => {

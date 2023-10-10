@@ -46,7 +46,7 @@ export const InputText = ({
         id={name}
         type="text"
         className={classNames(
-          `w-full bg-transparent border-b-[1px] animate-inputBlur focus:outline-none caret-white focus:animate-inputFocus ${
+          `w-full text-white bg-transparent border-b-[1px] animate-inputBlur focus:outline-none caret-white focus:animate-inputFocus ${
             rest.inputClassName || " "
           }`,
           {

@@ -82,7 +82,7 @@ export function InputSelectText<T extends OptionValue>({
           ref={selectField}
           type="text"
           className={classNames(
-            `bg-transparent border-b-[1px] animate-inputBlur focus:outline-none caret-white focus:animate-inputFocus ${
+            `bg-transparent text-white border-b-[1px] animate-inputBlur focus:outline-none caret-white focus:animate-inputFocus ${
               rest.inputClassName || " "
             }`,
             {
@@ -107,7 +107,7 @@ export function InputSelectText<T extends OptionValue>({
         />
         <div
           className={classNames(
-            "flex-col transition-all bg-slate-700  rounded gap-1",
+            "flex-col transition-all bg-slate-700 text-white rounded gap-1",
             { "p-2 animate-expanded": isFocused, "max-h-0": !isFocused }
           )}
         >

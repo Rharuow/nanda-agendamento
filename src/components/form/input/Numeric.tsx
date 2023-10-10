@@ -38,7 +38,7 @@ export const InputNumeric = ({
         inputMode="numeric"
         type="number"
         className={classNames(
-          `bg-transparent w-full border-b-[1px] animate-inputBlur focus:outline-none caret-white focus:animate-inputFocus ${
+          `bg-transparent text-white w-full border-b-[1px] animate-inputBlur focus:outline-none caret-white focus:animate-inputFocus ${
             rest.inputClassName || " "
           }`,
           {

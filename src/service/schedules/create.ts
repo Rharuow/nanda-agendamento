@@ -1,8 +1,6 @@
-import { addDoc, doc, updateDoc } from "firebase/firestore";
-import { Schedule } from "..";
-import { schedulesCollection, studentsCollection } from "../collections";
+import { doc, updateDoc } from "firebase/firestore";
 import { FormCreateScheduling } from "@/src/components/domain/Scheduling";
-import { createStudent, getStudentByName, listStudents } from "../students";
+import { createStudent, getStudentByName } from "../students";
 import { db } from "../firebase";
 
 export const createScheduling = async (schedule: FormCreateScheduling) => {
@@ -13,37 +11,25 @@ export const createScheduling = async (schedule: FormCreateScheduling) => {
     paid: false,
     pricePerTime: parseFloat(schedule.price.replace(",", ".")),
   };
-  const hasStudent = (await listStudents()).find(
-    (student) => student.name === name
-  );
+  const hasStudent = await getStudentByName({ name });
   try {
     if (hasStudent) {
-      const scheduleDoc = await addDoc(schedulesCollection, {
-        ...scheduleFormatted,
-        student_id: hasStudent.id,
-      } as Schedule);
       const studentRef = doc(db, "students", String(hasStudent.id));
-      updateDoc(studentRef, {
+      await updateDoc(studentRef, {
         ...hasStudent,
-        schedules_id: [
-          ...(hasStudent.schedules_id as Array<string>),
-          scheduleDoc.id,
-        ],
+        schedules: [...hasStudent.schedules, scheduleFormatted],
       });
-      return scheduleDoc;
+      return hasStudent;
     }
-    const scheduleDoc = await addDoc(schedulesCollection, scheduleFormatted);
+
     const studentId = (
       await createStudent({
         name: schedule.name,
-        schedules_id: [scheduleDoc.id],
+        schedules: [scheduleFormatted],
       })
     ).id;
-    const scheduleRef = doc(db, "schedules", scheduleDoc.id);
-    await updateDoc(scheduleRef, {
-      student_id: studentId,
-    });
-    return scheduleDoc;
+
+    return studentId;
   } catch (error: any) {
     console.log("error to create schedule = ", error);
     throw new Error(`${error.message}`);
