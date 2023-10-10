@@ -366,7 +366,12 @@ export const ListScheduling = () => {
                               sche.student
                             )
                           }
-                          schedule={sche as Schedule & { student: Student }}
+                          schedule={
+                            sche as Schedule & {
+                              student: Student;
+                              position: number;
+                            }
+                          }
                         />
                       }
                     />

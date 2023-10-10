@@ -1,20 +1,18 @@
 import { Button } from "@/src/components/Button";
 import { Modal } from "@/src/components/Modal";
 import { Text } from "@/src/components/Text";
-import { Schedule, Student } from "@/src/service";
+import { Student } from "@/src/service";
 import { Receipt, Trash } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
-export const Body = ({
-  student,
-}: {
-  student: Student & { schedules: Array<Schedule> };
-}) => {
+export const Body = ({ student }: { student: Student }) => {
   const { push } = useRouter();
   const handleNavigate = (id: string) => push(`/students/${id}/reciept`);
 
   const [showModal, setShowModal] = useState(false);
+
+  const handleDeleteStudent = () => {};
 
   return (
     <div className="flex flex-col gap-4">
@@ -24,7 +22,11 @@ export const Body = ({
         body="Deseja apagar esse aluno e todos os seus agendamentos?"
         footerChildren={
           <div className="flex gap-2 justify-around">
-            <Button text="Sim" variant="danger-outline" />
+            <Button
+              text="Sim"
+              variant="danger-outline"
+              onClick={() => handleDeleteStudent()}
+            />
             <Button
               text="Não"
               variant="secondary-outline"
@@ -39,7 +41,7 @@ export const Body = ({
           <Text>
             {student.schedules?.reduce(
               (accumulator, current) =>
-                accumulator + Number(current.amountTime),
+                accumulator + Number(current?.amountTime),
               0
             )}
           </Text>
@@ -48,10 +50,10 @@ export const Body = ({
           <Text>Quantidade de aulas não pagas:</Text>
           <Text>
             {student.schedules
-              ?.filter((schedule) => !schedule.paid)
+              ?.filter((schedule) => !schedule?.paid)
               .reduce(
                 (accumulator, current) =>
-                  accumulator + Number(current.amountTime),
+                  accumulator + Number(current?.amountTime),
                 0
               )}
           </Text>
@@ -60,11 +62,11 @@ export const Body = ({
           <Text>Débito total:</Text>
           <Text>
             {student.schedules
-              ?.filter((schedule) => !schedule.paid)
+              ?.filter((schedule) => !schedule?.paid)
               .reduce(
                 (accumulator, current) =>
                   accumulator +
-                  Number(current.pricePerTime) * Number(current.amountTime),
+                  Number(current?.pricePerTime) * Number(current?.amountTime),
                 0
               )}
           </Text>
@@ -77,14 +79,14 @@ export const Body = ({
             sizeIcon={18}
             weigthIcon="fill"
             variant={
-              student.schedules.some((schedule) => !schedule.paid)
+              student.schedules.some((schedule) => !schedule?.paid)
                 ? "secondary"
                 : "danger"
             }
             onClick={() => setShowModal(true)}
           />
         </div>
-        {student.schedules?.some((schedule) => !schedule.paid) && (
+        {student.schedules?.some((schedule) => !schedule?.paid) && (
           <div className="flex justify-end">
             <Button
               text="Gerar Recibo"
