@@ -1,6 +1,5 @@
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useSchedules } from "@/src/service/hooks/useSchedules";
-import { useStudents } from "@/src/service/hooks/useStudents";
 import { useEffect, useState } from "react";
 import { Loading } from "../../Loading";
 import {
@@ -15,7 +14,6 @@ import dayjs from "dayjs";
 import { Empty } from "./Empty";
 import { Schedule, Student } from "@/src/service";
 import { FilterType } from "@/src/service/schedules/types";
-import { filterSchedules } from "@/src/service/schedules/list";
 import { InputDate } from "../../form/input/Date";
 
 import { Modal } from "../../Modal";
@@ -26,6 +24,7 @@ import { Header } from "./Accordion/Header";
 import { Body } from "./Accordion/Body";
 import { useUpdatePaidSchedule } from "@/src/service/hooks/useUpdatePaidSchedule";
 import { Menu } from "../../Menu";
+import { filterSchedules } from "@/src/service/schedules/list";
 
 export const ListScheduling = () => {
   const methods = useForm<{
@@ -55,10 +54,12 @@ export const ListScheduling = () => {
   const [students, setStudents] = useState<Array<Student>>();
 
   const {
-    data: schedules,
-    isLoading: schedulesIsLoading,
+    data: schedulesData,
+    isLoading: schedulesDataIsLoading,
     refetch: refetchSchedule,
   } = useSchedules();
+
+  const [schedules, setSchedules] = useState(schedulesData);
 
   const [schedule, setSchedule] = useState<
     Schedule & { index: number } & { student: Student }
@@ -194,16 +195,18 @@ export const ListScheduling = () => {
   }, [showModal]);
 
   useEffect(() => {
-    schedules &&
-      setStudents(
-        schedules
-          .map((sche) => sche.student)
-          .filter(
-            (student, index, self) =>
-              index === 0 || self[index - 1].id !== student.id
-          )
-      );
-  }, [schedules]);
+    console.log(schedulesData);
+    setSchedules(
+      filter && schedulesData
+        ? filterSchedules({
+            filter,
+            schedules: schedulesData as Array<
+              Schedule & { student: Student; position: number }
+            >,
+          })
+        : schedulesData
+    );
+  }, [filter, schedulesData]);
 
   return (
     <div className="flex flex-col items-end gap-3">
@@ -244,7 +247,7 @@ export const ListScheduling = () => {
           </div>
         }
       />
-      {schedulesIsLoading ? (
+      {schedulesDataIsLoading ? (
         <div className="h-screen flex self-center justify-center items-center">
           <Loading />
         </div>

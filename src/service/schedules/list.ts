@@ -15,7 +15,14 @@ export const listSchedules = async (filter?: FilterType) => {
         }))
       )
       .flat();
-    return schedules;
+    return filter
+      ? filterSchedules({
+          filter,
+          schedules: schedules as Array<
+            Schedule & { student: Student; position: number }
+          >,
+        })
+      : schedules;
   } catch (error: any) {
     console.log("listStudent = ", error);
     throw new Error(`${error.message}`);
@@ -27,7 +34,7 @@ export const filterSchedules = ({
   schedules,
 }: {
   filter: FilterType;
-  schedules: Array<Schedule & { student: Student }>;
+  schedules: Array<Schedule & { student: Student; position: number }>;
 }) => {
   const { q } = filter;
   const params = Object.keys(q);
