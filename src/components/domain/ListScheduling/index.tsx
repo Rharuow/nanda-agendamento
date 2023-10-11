@@ -2,11 +2,6 @@ import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useSchedules } from "@/src/service/hooks/useSchedules";
 import { useEffect, useState } from "react";
 import { Loading } from "../../Loading";
-import {
-  BookBookmark,
-  List,
-  Student as StudentIcon,
-} from "@phosphor-icons/react";
 import { InputSelectText } from "../../form/input/SelectText";
 import { Toggle } from "../../form/Toggle";
 import Accordion from "../../Accordion";
@@ -23,7 +18,6 @@ import { toast } from "react-toastify";
 import { Header } from "./Accordion/Header";
 import { Body } from "./Accordion/Body";
 import { useUpdatePaidSchedule } from "@/src/service/hooks/useUpdatePaidSchedule";
-import { Menu } from "../../Menu";
 import { filterSchedules } from "@/src/service/schedules/list";
 
 export const ListScheduling = () => {
@@ -49,7 +43,6 @@ export const ListScheduling = () => {
   });
 
   const [showModal, setShowModal] = useState<boolean>(false);
-  const [showMenu, setShowMenu] = useState<boolean>();
 
   const [students, setStudents] = useState<Array<Student>>();
 
@@ -222,32 +215,6 @@ export const ListScheduling = () => {
 
   return (
     <div className="flex flex-col items-end gap-3">
-      <div
-        className="flex"
-        onClick={() => {
-          setShowMenu(true);
-        }}
-      >
-        <List className="text-white self-end" size={24} />
-      </div>
-      {showMenu !== undefined && (
-        <Menu
-          show={showMenu}
-          setShow={setShowMenu}
-          items={[
-            {
-              icon: BookBookmark,
-              label: "Criar reservas",
-              route: "/schedule",
-            },
-            {
-              icon: StudentIcon,
-              label: "Alunos",
-              route: "/students",
-            },
-          ]}
-        />
-      )}
       <Modal
         setShowModal={setShowModal}
         showModal={showModal}
