@@ -8,14 +8,16 @@ export const listSchedules = async (filter?: FilterType) => {
     const students = await listStudents();
     const schedules = students
       .map((student) =>
-        student.schedules.map((schedule, index) => ({
-          ...schedule,
-          student,
-          position: index,
-        }))
+        student.schedules && student.schedules.length > 0
+          ? student.schedules.map((schedule, index) => ({
+              ...schedule,
+              student,
+              position: index,
+            }))
+          : []
       )
       .flat();
-    return filter
+    return filter && schedules && schedules.length > 0
       ? filterSchedules({
           filter,
           schedules: schedules as Array<
