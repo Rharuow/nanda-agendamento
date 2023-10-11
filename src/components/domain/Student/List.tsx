@@ -35,12 +35,14 @@ export const List = () => {
         <Modal
           setShowModal={setShowModal}
           showModal={showModal}
-          bodyChildren={<FormCreateStudent />}
+          bodyChildren={
+            <FormCreateStudent setShowModal={setShowModal} refetch={refetch} />
+          }
         />
       )}
       <div
         className={classNames("grow flex flex-col", {
-          "h-screen w-full justify-center items-center":
+          "w-full justify-center items-center":
             isLoading || isError || students?.length === 0,
         })}
       >

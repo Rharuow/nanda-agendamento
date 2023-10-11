@@ -7,6 +7,7 @@ import { Text } from "../../Text";
 export const InputText = ({
   name,
   label,
+  theme,
   ...rest
 }: {
   name: string;
@@ -16,6 +17,7 @@ export const InputText = ({
   inputClassName?: string;
   labelClassName?: string;
   required?: boolean;
+  theme?: "light" | "dark";
 }) => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
@@ -48,12 +50,14 @@ export const InputText = ({
         autoComplete={rest.autoComplete ?? "text-value"}
         type="text"
         className={classNames(
-          `w-full text-white bg-transparent border-b-[1px] animate-inputBlur focus:outline-none caret-white focus:animate-inputFocus ${
+          `w-full  bg-transparent border-b-[1px] animate-inputBlur focus:outline-none caret-white focus:animate-inputFocus ${
             rest.inputClassName || " "
           }`,
           {
             "animate-inputFocus": watchField,
             "animate-inputBlur": !watchField,
+            "text-dark": theme === "light",
+            "text-white": !theme || theme === "dark",
           }
         )}
         {...register(name, {

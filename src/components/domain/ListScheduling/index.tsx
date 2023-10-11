@@ -222,6 +222,32 @@ export const ListScheduling = () => {
 
   return (
     <div className="flex flex-col items-end gap-3">
+      <div
+        className="flex"
+        onClick={() => {
+          setShowMenu(true);
+        }}
+      >
+        <List className="text-white self-end" size={24} />
+      </div>
+      {showMenu !== undefined && (
+        <Menu
+          show={showMenu}
+          setShow={setShowMenu}
+          items={[
+            {
+              icon: BookBookmark,
+              label: "Criar reservas",
+              route: "/schedule",
+            },
+            {
+              icon: StudentIcon,
+              label: "Alunos",
+              route: "/students",
+            },
+          ]}
+        />
+      )}
       <Modal
         setShowModal={setShowModal}
         showModal={showModal}
@@ -269,32 +295,6 @@ export const ListScheduling = () => {
         schedules &&
         schedules.length > 0 && (
           <>
-            <div
-              className="flex"
-              onClick={() => {
-                setShowMenu(true);
-              }}
-            >
-              <List className="text-white self-end" size={24} />
-            </div>
-            {showMenu !== undefined && (
-              <Menu
-                show={showMenu}
-                setShow={setShowMenu}
-                items={[
-                  {
-                    icon: BookBookmark,
-                    label: "Criar reservas",
-                    route: "/schedule",
-                  },
-                  {
-                    icon: StudentIcon,
-                    label: "Alunos",
-                    route: "/students",
-                  },
-                ]}
-              />
-            )}
             <FormProvider {...methods}>
               <InputSelectText
                 emptyLabel="Nenhum aluno encontrado"
