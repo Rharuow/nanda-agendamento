@@ -8,7 +8,13 @@ export type FormCreateStudentType = {
   name: string;
 };
 
-export const FormCreateStudent = () => {
+export const FormCreateStudent = ({
+  setShowModal,
+  refetch,
+}: {
+  setShowModal: React.Dispatch<React.SetStateAction<boolean>>;
+  refetch: () => void;
+}) => {
   const methods = useForm<FormCreateStudentType>();
 
   const { handleSubmit } = methods;
@@ -21,6 +27,8 @@ export const FormCreateStudent = () => {
       {
         onSuccess: () => {
           toast.success("Aluno cadastrado com sucesso...");
+          setShowModal(false);
+          refetch();
         },
         onError: () => {
           toast.error("Erro ao cadastrar aluno...");
@@ -36,7 +44,7 @@ export const FormCreateStudent = () => {
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col gap-3 p-3"
         >
-          <InputText name="name" label="Nome do Aluno" required />
+          <InputText name="name" label="Nome do Aluno" theme="light" required />
           <Button text="Cadastrar" variant="success" />
         </form>
       </FormProvider>
