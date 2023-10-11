@@ -26,7 +26,7 @@ export const List = () => {
 
   useEffect(() => {
     data &&
-      setStudents(data as Array<Student & { schedules: Array<Schedule> }>);
+      setStudents(data as Array<Student & { schedules?: Array<Schedule> }>);
   }, [data]);
 
   return (
@@ -73,12 +73,12 @@ export const List = () => {
                   key={student.id}
                   id={String(student.id)}
                   className={classNames("px-4 rounded", {
-                    "bg-green-700": student.schedules?.every(
-                      (schedule) => schedule?.paid
-                    ),
-                    "bg-red-700": student.schedules?.some(
-                      (schedule) => !schedule?.paid
-                    ),
+                    "bg-green-700":
+                      !student.schedules ||
+                      student.schedules?.every((schedule) => schedule?.paid),
+                    "bg-red-700":
+                      student.schedules !== undefined &&
+                      student.schedules?.some((schedule) => !schedule?.paid),
                   })}
                   textHeader={student.name}
                   bodyChildren={<Body student={student} refetch={refetch} />}

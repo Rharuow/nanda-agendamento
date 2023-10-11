@@ -62,36 +62,44 @@ export const Body = ({
         <div className="flex justify-between">
           <Text>Quantidade de totais aulas:</Text>
           <Text>
-            {student.schedules?.reduce(
-              (accumulator, current) =>
-                accumulator + Number(current?.amountTime),
-              0
-            )}
+            {!student.schedules
+              ? 0
+              : student.schedules.reduce(
+                  (accumulator, current) =>
+                    accumulator + Number(current?.amountTime),
+                  0
+                )}
           </Text>
         </div>
         <div className="flex justify-between">
           <Text>Quantidade de aulas não pagas:</Text>
           <Text>
-            {student.schedules
-              ?.filter((schedule) => !schedule?.paid)
-              .reduce(
-                (accumulator, current) =>
-                  accumulator + Number(current?.amountTime),
-                0
-              )}
+            {!student.schedules
+              ? 0
+              : student.schedules
+                  .filter((schedule) => !schedule?.paid)
+                  .reduce(
+                    (accumulator, current) =>
+                      accumulator + Number(current?.amountTime),
+                    0
+                  )}
           </Text>
         </div>
         <div className="flex justify-between">
           <Text>Débito total:</Text>
           <Text>
-            {student.schedules
-              ?.filter((schedule) => !schedule?.paid)
-              .reduce(
-                (accumulator, current) =>
-                  accumulator +
-                  Number(current?.pricePerTime) * Number(current?.amountTime),
-                0
-              )}
+            {!student.schedules
+              ? "R$ 0"
+              : "R$ " +
+                student.schedules
+                  .filter((schedule) => !schedule?.paid)
+                  .reduce(
+                    (accumulator, current) =>
+                      accumulator +
+                      Number(current?.pricePerTime) *
+                        Number(current?.amountTime),
+                    0
+                  )}
           </Text>
         </div>
       </div>
@@ -102,6 +110,7 @@ export const Body = ({
             sizeIcon={18}
             weigthIcon="fill"
             variant={
+              student.schedules &&
               student.schedules.some((schedule) => !schedule?.paid)
                 ? "secondary"
                 : "danger"
