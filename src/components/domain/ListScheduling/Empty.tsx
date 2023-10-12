@@ -14,7 +14,7 @@ export const Empty = () => {
       </div>
 
       <Text className="text-center">Nenhum agendamento encontrado...</Text>
-      <Link href="/schedule">
+      <Link href="/students/schedules/new">
         <Button text="Agendar" />
       </Link>
     </div>

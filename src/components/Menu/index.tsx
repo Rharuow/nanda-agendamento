@@ -39,12 +39,20 @@ export const Menu = ({
           return (
             <div key={index} className="flex items-center gap-2">
               <Link href={item.route}>
-                <Text className="text-[20px] font-bold">
+                <Text
+                  className="text-[20px] font-bold"
+                  onClick={() => setShow(false)}
+                >
                   <Icon />
                 </Text>
               </Link>
               <Link href={item.route}>
-                <Text className="text-[20px] font-bold">{item.label}</Text>
+                <Text
+                  className="text-[20px] font-bold"
+                  onClick={() => setShow(false)}
+                >
+                  {item.label}
+                </Text>
               </Link>
             </div>
           );

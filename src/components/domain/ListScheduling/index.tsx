@@ -19,6 +19,7 @@ import { Header } from "./Accordion/Header";
 import { Body } from "./Accordion/Body";
 import { useUpdatePaidSchedule } from "@/src/service/hooks/useUpdatePaidSchedule";
 import { filterSchedules } from "@/src/service/schedules/list";
+import { Text } from "../../Text";
 
 export const ListScheduling = () => {
   const methods = useForm<{
@@ -252,6 +253,46 @@ export const ListScheduling = () => {
           </div>
         }
       />
+      <Text className="self-center font-bold">Agendamentos</Text>
+      <FormProvider {...methods}>
+        <InputSelectText
+          emptyLabel="Nenhum aluno encontrado"
+          options={
+            students
+              ? students?.map((student) => ({
+                  label: student.name,
+                  value: student.name,
+                }))
+              : []
+          }
+          onChange={handleFilterName}
+          name="name"
+          label="Nome do Aluno"
+        />
+        <div className="flex w-full justify-between gap-2">
+          <Toggle
+            labelPosition="end"
+            label="A partir de hoje"
+            name="startToNow"
+            onClick={handleStartOfNowFilter}
+          />
+          <Toggle label="Pagos" name="paid" onClick={handlePaidFilter} />
+        </div>
+        <div className="flex gap-2">
+          <InputDate
+            name="startAt"
+            className="w-1/2"
+            label="A partir de:"
+            onChange={handleStartAtFilter}
+          />
+          <InputDate
+            className="w-1/2"
+            name="endedAt"
+            label="Até:"
+            onChange={handleEndedAtFilter}
+          />
+        </div>
+      </FormProvider>
       {schedulesDataIsLoading ? (
         <div className="h-screen flex self-center justify-center items-center">
           <Loading />
@@ -261,94 +302,50 @@ export const ListScheduling = () => {
       ) : (
         schedules &&
         schedules.length > 0 && (
-          <>
-            <FormProvider {...methods}>
-              <InputSelectText
-                emptyLabel="Nenhum aluno encontrado"
-                options={
-                  students
-                    ? students?.map((student) => ({
-                        label: student.name,
-                        value: student.name,
-                      }))
-                    : []
-                }
-                onChange={handleFilterName}
-                name="name"
-                label="Nome do Aluno"
-              />
-              <div className="flex w-full justify-between gap-2">
-                <Toggle
-                  labelPosition="end"
-                  label="A partir de hoje"
-                  name="startToNow"
-                  onClick={handleStartOfNowFilter}
-                />
-                <Toggle label="Pagos" name="paid" onClick={handlePaidFilter} />
-              </div>
-              <div className="flex gap-2">
-                <InputDate
-                  name="startAt"
-                  className="w-1/2"
-                  label="A partir de:"
-                  onChange={handleStartAtFilter}
-                />
-                <InputDate
-                  className="w-1/2"
-                  name="endedAt"
-                  label="Até:"
-                  onChange={handleEndedAtFilter}
-                />
-              </div>
-            </FormProvider>
-            <div className="flex flex-col w-full gap-2">
-              <h2>Agendamentos</h2>
-              {schedules && schedules?.length > 0 ? (
-                schedules?.map((sche, index) => (
-                  <div className="bg-slate-400 px-3 rounded" key={index}>
-                    <Accordion
-                      id={index}
-                      iconClassName="text-white"
-                      headerChildren={
-                        <Header
-                          deleteOnClick={() => {
-                            setSchedule({
-                              amountTime: Number(sche.amountTime),
-                              date: String(sche.date),
-                              paid: Boolean(sche.paid),
-                              index,
-                              pricePerTime: Number(sche.pricePerTime),
-                              student: sche.student,
-                            });
-                            setShowModal(true);
-                          }}
-                          schedule={sche as Schedule & { student: Student }}
-                        />
-                      }
-                      bodyChildren={
-                        <Body
-                          onClickToogle={() =>
-                            handleUpdatePaidSchedule(
-                              sche.position,
-                              sche.student
-                            )
+          <div className="flex flex-col w-full gap-2">
+            <h2>Agendamentos</h2>
+            {schedules && schedules?.length > 0 ? (
+              schedules?.map((sche, index) => (
+                <div className="bg-slate-400 px-3 rounded" key={index}>
+                  <Accordion
+                    id={index}
+                    iconClassName="text-white"
+                    headerChildren={
+                      <Header
+                        deleteOnClick={() => {
+                          setSchedule({
+                            amountTime: Number(sche.amountTime),
+                            date: String(sche.date),
+                            paid: Boolean(sche.paid),
+                            index,
+                            pricePerTime: Number(sche.pricePerTime),
+                            student: sche.student,
+                          });
+                          setShowModal(true);
+                        }}
+                        schedule={sche as Schedule & { student: Student }}
+                      />
+                    }
+                    bodyChildren={
+                      <Body
+                        onClickToogle={() =>
+                          handleUpdatePaidSchedule(sche.position, sche.student)
+                        }
+                        schedule={
+                          sche as Schedule & {
+                            student: Student;
+                            position: number;
                           }
-                          schedule={
-                            sche as Schedule & {
-                              student: Student;
-                              position: number;
-                            }
-                          }
-                        />
-                      }
-                    />
-                  </div>
-                ))
-              ) : (
-                <Empty />
-              )}
-            </div>
-          </>
+                        }
+                      />
+                    }
+                  />
+                </div>
+              ))
+            ) : (
+              <Empty />
+            )}
+          </div>
         )
       )}
     </div>

@@ -1,6 +1,8 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { Button } from "../components/Button";
+import { useSessionContext } from "../context/session";
+import { useEffect } from "react";
 
 export default function Home() {
   const { push } = useRouter();
@@ -12,7 +14,7 @@ export default function Home() {
           className="grow"
           variant="outline"
           text="Aulas"
-          onClick={() => push("/schedules")}
+          onClick={() => push("/students")}
         />
       </div>
       <div className="flex w-full">
