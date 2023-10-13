@@ -41,7 +41,7 @@ export const List = () => {
         />
       )}
       <div
-        className={classNames("grow flex flex-col", {
+        className={classNames("grow flex flex-col mt-4", {
           "w-full justify-center items-center":
             isLoading || isError || students?.length === 0,
         })}
@@ -52,23 +52,12 @@ export const List = () => {
           <Error action={() => back()} buttonText="Voltar" />
         ) : students?.length === 0 ? (
           <div className="flex flex-col grow h-full">
-            <div className="self-start">
-              <Text onClick={() => back()}>
-                <ArrowCircleLeft size={28} />
-              </Text>
-            </div>
             <div className="flex items-center grow">
               <Empty action={() => setShowModal(true)} />
             </div>
           </div>
         ) : (
           <div className="flex flex-col gap-6">
-            <div className="self-start flex w-full">
-              <Text onClick={() => back()} className="absolute">
-                <ArrowCircleLeft size={28} />
-              </Text>
-              <Text className="grow text-center font-bold text-lg">Alunos</Text>
-            </div>
             <div className="flex flex-col gap-2">
               {students?.map((student) => (
                 <Accordion
