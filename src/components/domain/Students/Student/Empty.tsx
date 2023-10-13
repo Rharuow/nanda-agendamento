@@ -1,7 +1,7 @@
 import Lottie from "lottie-react";
 import React from "react";
-import { Text } from "../../Text";
-import { Button } from "../../Button";
+import { Text } from "../../../Text";
+import { Button } from "../../../Button";
 
 import empty from "@/public/empty.json";
 

@@ -1,25 +1,24 @@
 import { FormProvider, useForm, useWatch } from "react-hook-form";
 import { useSchedules } from "@/src/service/hooks/useSchedules";
 import { useEffect, useState } from "react";
-import { Loading } from "../../Loading";
-import { InputSelectText } from "../../form/input/SelectText";
-import { Toggle } from "../../form/Toggle";
-import Accordion from "../../Accordion";
+import { Loading } from "../../../Loading";
+import { InputSelectText } from "../../../form/input/SelectText";
+import { Toggle } from "../../../form/Toggle";
+import Accordion from "../../../Accordion";
 import dayjs from "dayjs";
 import { Empty } from "./Empty";
 import { Schedule, Student } from "@/src/service";
 import { FilterType } from "@/src/service/schedules/types";
-import { InputDate } from "../../form/input/Date";
+import { InputDate } from "../../../form/input/Date";
 
-import { Modal } from "../../Modal";
-import { Button } from "../../Button";
+import { Modal } from "../../../Modal";
+import { Button } from "../../../Button";
 import { useDeleteSchedule } from "@/src/service/hooks/useDeleteSchedule";
 import { toast } from "react-toastify";
 import { Header } from "./Accordion/Header";
 import { Body } from "./Accordion/Body";
 import { useUpdatePaidSchedule } from "@/src/service/hooks/useUpdatePaidSchedule";
 import { filterSchedules } from "@/src/service/schedules/list";
-import { Text } from "../../Text";
 
 export const ListScheduling = () => {
   const methods = useForm<{
@@ -215,7 +214,7 @@ export const ListScheduling = () => {
   }, [schedules]);
 
   return (
-    <div className="flex flex-col items-end gap-3">
+    <div className="flex flex-col grow items-stretch relative w-full gap-2 mt-4">
       <Modal
         setShowModal={setShowModal}
         showModal={showModal}
@@ -253,7 +252,6 @@ export const ListScheduling = () => {
           </div>
         }
       />
-      <Text className="self-center font-bold">Agendamentos</Text>
       <FormProvider {...methods}>
         <InputSelectText
           emptyLabel="Nenhum aluno encontrado"
@@ -303,7 +301,6 @@ export const ListScheduling = () => {
         schedules &&
         schedules.length > 0 && (
           <div className="flex flex-col w-full gap-2">
-            <h2>Agendamentos</h2>
             {schedules && schedules?.length > 0 ? (
               schedules?.map((sche, index) => (
                 <div className="bg-slate-400 px-3 rounded" key={index}>

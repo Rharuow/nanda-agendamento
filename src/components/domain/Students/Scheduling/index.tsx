@@ -1,22 +1,20 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Calendar from "react-calendar";
 import { FormProvider, useForm } from "react-hook-form";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
 import { ArrowCircleLeft } from "@phosphor-icons/react";
 
-import { InputNumeric } from "../../form/input/Numeric";
-import { Button } from "../../Button";
-import { InputSelectText } from "../../form/input/SelectText";
-import { Text } from "../../Text";
-import { InputCurrency } from "../../form/input/Currency";
-import { useStudents } from "../../../service/hooks/useStudents";
-import { Loading } from "../../Loading";
+import { InputNumeric } from "../../../form/input/Numeric";
+import { Button } from "../../../Button";
+import { InputSelectText } from "../../../form/input/SelectText";
+import { Text } from "../../../Text";
+import { InputCurrency } from "../../../form/input/Currency";
+import { useStudents } from "../../../../service/hooks/useStudents";
+import { Loading } from "../../../Loading";
 import { useCreateSchedule } from "@/src/service/hooks/useCreateSchedule";
 import { useRouter } from "next/navigation";
-import { useGetStudentByName } from "@/src/service/hooks/useGetStudentByName";
-import { QueryClient } from "@tanstack/react-query";
 import { Student } from "@/src/service";
 
 type ValuePiece = Date | string | null;
@@ -51,6 +49,15 @@ export const Scheduling = () => {
     setValue("date", date.toString());
   };
 
+  const handleChangeNameInput = useCallback(
+    (name: string) => {
+      if (!name || !students || !students.some((stu) => stu.name === name))
+        return setStudent(undefined);
+      setStudent(students.find((stu) => stu.name === name));
+    },
+    [students]
+  );
+
   const onSubmit = async (data: FormCreateScheduling) => {
     if (!data.date) return toast.error("Data é obrigatória");
     await createSchedule(data, {
@@ -66,18 +73,11 @@ export const Scheduling = () => {
   };
 
   useEffect(() => {
-    students &&
-      students.some((stu) => stu.name === watch("name")) &&
-      setStudent(students.find((stu) => stu.name === watch("name")));
-  }, [students, watch]);
+    handleChangeNameInput(watch("name"));
+  }, [handleChangeNameInput, watch]);
 
   return (
-    <div className="flex flex-wrap items-stretch w-full gap-2">
-      <div className="self-start">
-        <Text onClick={() => router.back()}>
-          <ArrowCircleLeft size={28} />
-        </Text>
-      </div>
+    <div className="flex flex-col grow items-stretch relative w-full gap-2">
       {studentsIsLoading ? (
         <div className="flex flex-col w-screen items-center gap-2">
           <Loading />
@@ -85,16 +85,16 @@ export const Scheduling = () => {
       ) : (
         <FormProvider {...methods}>
           <form
-            className="flex w-full self-stretch flex-col gap-3"
+            className="flex w-full grow justify-center self-stretch flex-col gap-3"
             onSubmit={handleSubmit(onSubmit)}
           >
             <input type="text" hidden {...register("date")} />
             <InputSelectText<string>
               name="name"
-              key={`${studentsIsLoading}`}
               label="Nome do aluno"
               required
               emptyLabel="Aluno não cadastrado"
+              onChange={(name) => handleChangeNameInput(name)}
               options={
                 students && students.length > 0
                   ? students.map((student) => ({
@@ -122,6 +122,7 @@ export const Scheduling = () => {
             {watch("name") && (
               <div className="w-full flex justify-center overflow-hidden">
                 <Calendar
+                  key={watch("name")}
                   onChange={(dt) => handleDate(dt as Date)}
                   {...(student &&
                     student.schedules.length > 0 && {

@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { createScheduling } from "../schedules";
-import { FormCreateScheduling } from "@/src/components/domain/Scheduling";
+import { FormCreateScheduling } from "@/src/components/domain/Students/Scheduling";
 
 export const useCreateSchedule = () => {
   return useMutation({

@@ -1,4 +1,4 @@
-import { Reciept } from "@/src/components/domain/Student/Show/Reciept";
+import { Reciept } from "@/src/components/domain/Students/Student/Show/Reciept";
 import React from "react";
 
 const page = ({ params }: { params: { id: string } }) => {

@@ -1,8 +1,8 @@
 import Lottie from "lottie-react";
 import React from "react";
-import { Text } from "../../Text";
+import { Text } from "../../../Text";
 import Link from "next/link";
-import { Button } from "../../Button";
+import { Button } from "../../../Button";
 
 import empty from "@/public/empty.json";
 

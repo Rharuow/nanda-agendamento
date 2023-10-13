@@ -16,19 +16,6 @@ body {
   position: relative;
 }
 
-p,
-h1,
-h2,
-h3,
-h4,
-input {
-  color: white;
-}
-
-/* .react-calendar {
-  background-color: rgba(255, 255, 255, 0) !important;
-} */
-
 .react-calendar__tile:disabled {
   background-color: rgba(150, 0, 0, 0.4) !important;
 }

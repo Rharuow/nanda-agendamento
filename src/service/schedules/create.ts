@@ -1,5 +1,5 @@
 import { doc, updateDoc } from "firebase/firestore";
-import { FormCreateScheduling } from "@/src/components/domain/Scheduling";
+import { FormCreateScheduling } from "@/src/components/domain/Students/Scheduling";
 import { createStudent, getStudentByName } from "../students";
 import { db } from "../firebase";
 import { Student } from "..";

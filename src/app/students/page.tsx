@@ -1,4 +1,4 @@
-import { List } from "@/src/components/domain/Student/List";
+import { List } from "@/src/components/domain/Students/Student/List";
 import React from "react";
 
 const Students = () => {
