@@ -8,11 +8,9 @@ import { Error } from "./Error";
 import { useRouter } from "next/navigation";
 import { Loading } from "../../../Loading";
 import { Schedule, Student } from "@/src/service";
-import { Text } from "../../../Text";
 import classNames from "classnames";
 import Accordion from "../../../Accordion";
 import { Body } from "./Accordion/Body";
-import { ArrowCircleLeft } from "@phosphor-icons/react";
 
 export const List = () => {
   const { data, isLoading, isError, refetch } = useStudents();
