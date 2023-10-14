@@ -5,6 +5,7 @@ import { ArrowCircleLeft, List } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { items } from "./utils/items";
+import { ListPatients } from "@/src/components/domain/Patients/List";
 
 const Patients = () => {
   const router = useRouter();
@@ -23,6 +24,7 @@ const Patients = () => {
       {showMenu !== undefined && (
         <Menu show={showMenu} setShow={setShowMenu} items={items} />
       )}
+      <ListPatients />
     </main>
   );
 };

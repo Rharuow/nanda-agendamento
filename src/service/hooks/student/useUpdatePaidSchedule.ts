@@ -1,5 +1,5 @@
 import { useMutation } from "@tanstack/react-query";
-import { updatePaid } from "../../schedules/updatePaid";
+import { updatePaid } from "../../students/schedules/updatePaid";
 import { Student } from "../..";
 
 export const useUpdatePaidSchedule = () => {

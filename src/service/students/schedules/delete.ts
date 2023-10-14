@@ -1,6 +1,6 @@
 import { doc, updateDoc } from "firebase/firestore";
-import { db } from "../firebase";
-import { Student } from "..";
+import { db } from "../../firebase";
+import { Student } from "../..";
 
 export const deleteSchedule = async ({
   id,

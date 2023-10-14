@@ -8,7 +8,7 @@ import Accordion from "../../../Accordion";
 import dayjs from "dayjs";
 import { Empty } from "./Empty";
 import { Schedule, Student } from "@/src/service";
-import { FilterType } from "@/src/service/schedules/types";
+import { FilterType } from "@/src/service/students/schedules/types";
 import { InputDate } from "../../../form/input/Date";
 
 import { Modal } from "../../../Modal";
@@ -18,7 +18,7 @@ import { toast } from "react-toastify";
 import { Header } from "./Accordion/Header";
 import { Body } from "./Accordion/Body";
 import { useUpdatePaidSchedule } from "@/src/service/hooks/student/useUpdatePaidSchedule";
-import { filterSchedules } from "@/src/service/schedules/list";
+import { filterSchedules } from "@/src/service/students/schedules/list";
 
 export const ListScheduling = () => {
   const methods = useForm<{

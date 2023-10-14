@@ -1,6 +1,6 @@
 import { doc, getDoc } from "firebase/firestore";
-import { db } from "../firebase";
-import { Student } from "..";
+import { db } from "../../firebase";
+import { Student } from "../..";
 
 export const getSchedule = async ({
   id,

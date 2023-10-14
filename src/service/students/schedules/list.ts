@@ -1,7 +1,7 @@
-import { Schedule, Student } from "..";
+import { Schedule, Student } from "../..";
 import dayjs from "dayjs";
 import { FilterType } from "./types";
-import { listStudents } from "../students";
+import { listStudents } from "../../students";
 
 export const listSchedules = async (filter?: FilterType) => {
   try {

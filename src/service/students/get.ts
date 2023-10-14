@@ -1,7 +1,6 @@
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "../firebase";
-import { Schedule, Student } from "..";
-import { listSchedules } from "../schedules";
+import { Student } from "..";
 
 export const getStudent = async ({ id }: { id: string }) => {
   try {

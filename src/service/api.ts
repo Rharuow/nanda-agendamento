@@ -5,4 +5,8 @@ export {
   getStudentByName,
 } from "./students";
 
-export { listSchedules, getSchedule, createScheduling } from "./schedules";
+export {
+  listSchedules,
+  getSchedule,
+  createScheduling,
+} from "./students/schedules";

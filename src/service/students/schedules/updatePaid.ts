@@ -1,6 +1,6 @@
 import { doc, updateDoc } from "firebase/firestore";
-import { Student } from "..";
-import { db } from "../firebase";
+import { Student } from "../..";
+import { db } from "../../firebase";
 
 export const updatePaid = async ({
   id,
