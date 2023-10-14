@@ -1,14 +1,19 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { Button } from "../components/Button";
-import { useSessionContext } from "../context/session";
-import { useEffect } from "react";
 
 export default function Home() {
   const { push } = useRouter();
 
   return (
     <main className="flex w-full min-h-screen">
+      <style jsx global>
+        {`
+          body {
+            background: black;
+          }
+        `}
+      </style>
       <div className="flex w-full">
         <Button
           className="grow"

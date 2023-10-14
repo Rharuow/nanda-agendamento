@@ -7,5 +7,16 @@ export default function StudentLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <ThemeProvider>{children}</ThemeProvider>;
+  return (
+    <ThemeProvider>
+      <style jsx global>
+        {`
+          body {
+            background: rgba(30, 30, 30, 0.9);
+          }
+        `}
+      </style>
+      {children}
+    </ThemeProvider>
+  );
 }

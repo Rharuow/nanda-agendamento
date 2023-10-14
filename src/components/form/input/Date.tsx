@@ -1,3 +1,4 @@
+import { useThemeContext } from "@/src/context/theme";
 import classNames from "classnames";
 import React, { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
@@ -18,6 +19,8 @@ export const InputDate = ({
 }) => {
   const [type, setType] = useState<"text" | "date">("text");
   const [isFocused, setIsFocused] = useState<boolean>(false);
+
+  const { theme } = useThemeContext();
 
   const { register, control } = useFormContext();
 
@@ -44,12 +47,13 @@ export const InputDate = ({
         type={type}
         autoComplete={rest.autoComplete ?? "date-value"}
         className={classNames(
-          `w-full text-white bg-transparent border-b-[1px] animate-inputBlur focus:outline-none caret-white focus:animate-inputFocus ${
+          `w-full bg-transparent border-b-[1px] animate-inputBlur focus:outline-none focus:animate-inputFocus ${
             rest.inputClassName || " "
           }`,
           {
             "animate-inputFocus": watchField,
             "animate-inputBlur": !watchField,
+            "text-white caret-white": !theme || theme === "dark",
           }
         )}
         {...register(name, {

@@ -3,6 +3,7 @@ import React, { useRef, useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { OptionValue, Props } from "./types";
 import { compare } from "@/src/utils/compareStrings";
+import { useThemeContext } from "@/src/context/theme";
 
 export function InputSelectText<T extends OptionValue>({
   name,
@@ -10,6 +11,7 @@ export function InputSelectText<T extends OptionValue>({
   amount = 5,
   ...rest
 }: Props<T>) {
+  const { theme } = useThemeContext();
   const [isFocused, setIsFocused] = useState<boolean>(false);
   const [options, setOption] = useState(
     rest.options.length > 0
@@ -83,13 +85,14 @@ export function InputSelectText<T extends OptionValue>({
           ref={selectField}
           type="text"
           className={classNames(
-            `bg-transparent text-white border-b-[1px] animate-inputBlur focus:outline-none caret-white focus:animate-inputFocus ${
+            `bg-transparent border-b-[1px] animate-inputBlur focus:outline-none focus:animate-inputFocus ${
               rest.inputClassName || " "
             }`,
             {
               "animate-inputFocus": watchField,
               "animate-inputBlur": !watchField,
               "border-b-0": isFocused,
+              "text-white caret-white": !theme || theme === "dark",
             }
           )}
           onBlur={(e) => {

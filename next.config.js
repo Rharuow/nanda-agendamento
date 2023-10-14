@@ -1,4 +1,6 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {}
+const nextConfig = {
+  plugins: [["styled-jsx/babel", { optimizeForSpeed: true }]],
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

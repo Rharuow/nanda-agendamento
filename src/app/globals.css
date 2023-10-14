@@ -13,6 +13,7 @@
 
 body {
   position: relative;
+  background-color: black;
 }
 
 .react-calendar__tile:disabled {
