@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { deleteSchedule } from "../schedules/delete";
-import { Student } from "..";
+import { deleteSchedule } from "../../schedules/delete";
+import { Student } from "../..";
 
 export const useDeleteSchedule = () => {
   return useMutation({

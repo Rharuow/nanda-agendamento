@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getStudent } from "../students";
+import { getStudent } from "../../students";
 
 export function useGetStudent({
   id,

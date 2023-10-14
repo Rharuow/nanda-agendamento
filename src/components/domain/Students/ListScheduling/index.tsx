@@ -1,5 +1,5 @@
 import { FormProvider, useForm, useWatch } from "react-hook-form";
-import { useSchedules } from "@/src/service/hooks/useSchedules";
+import { useSchedules } from "@/src/service/hooks/student/useSchedules";
 import { useEffect, useState } from "react";
 import { Loading } from "../../../Loading";
 import { InputSelectText } from "../../../form/input/SelectText";
@@ -13,11 +13,11 @@ import { InputDate } from "../../../form/input/Date";
 
 import { Modal } from "../../../Modal";
 import { Button } from "../../../Button";
-import { useDeleteSchedule } from "@/src/service/hooks/useDeleteSchedule";
+import { useDeleteSchedule } from "@/src/service/hooks/student/useDeleteSchedule";
 import { toast } from "react-toastify";
 import { Header } from "./Accordion/Header";
 import { Body } from "./Accordion/Body";
-import { useUpdatePaidSchedule } from "@/src/service/hooks/useUpdatePaidSchedule";
+import { useUpdatePaidSchedule } from "@/src/service/hooks/student/useUpdatePaidSchedule";
 import { filterSchedules } from "@/src/service/schedules/list";
 
 export const ListScheduling = () => {

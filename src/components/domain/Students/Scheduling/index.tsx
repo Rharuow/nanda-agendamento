@@ -4,18 +4,16 @@ import Calendar from "react-calendar";
 import { FormProvider, useForm } from "react-hook-form";
 import dayjs from "dayjs";
 import { toast } from "react-toastify";
-import { ArrowCircleLeft } from "@phosphor-icons/react";
 
-import { InputNumeric } from "../../../form/input/Numeric";
-import { Button } from "../../../Button";
-import { InputSelectText } from "../../../form/input/SelectText";
-import { Text } from "../../../Text";
-import { InputCurrency } from "../../../form/input/Currency";
-import { useStudents } from "../../../../service/hooks/useStudents";
-import { Loading } from "../../../Loading";
-import { useCreateSchedule } from "@/src/service/hooks/useCreateSchedule";
+import { useCreateSchedule } from "@/src/service/hooks/student/useCreateSchedule";
 import { useRouter } from "next/navigation";
 import { Student } from "@/src/service";
+import { useStudents } from "@/src/service/hooks/student/useStudents";
+import { Loading } from "@/src/components/Loading";
+import { InputSelectText } from "@/src/components/form/input/SelectText";
+import { InputCurrency } from "@/src/components/form/input/Currency";
+import { InputNumeric } from "@/src/components/form/input/Numeric";
+import { Button } from "@/src/components/Button";
 
 type ValuePiece = Date | string | null;
 

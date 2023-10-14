@@ -1,7 +1,6 @@
 "use client";
 import "./calendar.css";
 import { Text } from "@/src/components/Text";
-import { useGetStudent } from "@/src/service/hooks/useGetStudent";
 import { ArrowCircleLeft } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -11,6 +10,7 @@ import { Loading } from "@/src/components/Loading";
 import dayjs from "dayjs";
 import Calendar from "react-calendar";
 import { Button } from "@/src/components/Button";
+import { useGetStudent } from "@/src/service/hooks/student/useGetStudent";
 
 export const Reciept = ({ id }: { id: string }) => {
   const { data, isLoading, isError } = useGetStudent({

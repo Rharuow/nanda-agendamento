@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
-import { createStudent } from "../students";
-import { Student } from "..";
+import { createStudent } from "../../students";
+import { Student } from "../..";
 
 export const useCreateStudent = () =>
   useMutation({

@@ -1,6 +1,6 @@
 import { Button } from "@/src/components/Button";
 import { InputText } from "@/src/components/form/input/Text";
-import { useCreateStudent } from "@/src/service/hooks/useCreateStudent";
+import { useCreateStudent } from "@/src/service/hooks/student/useCreateStudent";
 import { FormProvider, useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 

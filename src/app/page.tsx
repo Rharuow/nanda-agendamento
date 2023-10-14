@@ -10,13 +10,13 @@ export default function Home() {
       <style jsx global>
         {`
           body {
-            background: black;
+            background: rgba(30, 30, 30, 0.9);
           }
         `}
       </style>
       <div className="flex w-full">
         <Button
-          className="grow"
+          className="grow text-white"
           variant="outline"
           text="Aulas"
           onClick={() => push("/students")}

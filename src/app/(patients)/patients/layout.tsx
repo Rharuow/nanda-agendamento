@@ -1,6 +1,5 @@
 "use client";
 import { ThemeProvider } from "@/src/context/theme";
-import "./global.css";
 
 export default function PatientLayout({
   children,
@@ -8,11 +7,11 @@ export default function PatientLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ThemeProvider theme="light">
+    <ThemeProvider>
       <style jsx global>
         {`
           body {
-            background: rgba(200, 200, 200);
+            background: rgb(100, 116, 139);
           }
         `}
       </style>

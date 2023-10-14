@@ -1,16 +1,16 @@
 "use client";
-import { useStudents } from "@/src/service/hooks/useStudents";
 import React, { useEffect, useState } from "react";
 import { Empty } from "./Empty";
-import { Modal } from "../../../Modal";
 import { FormCreateStudent } from "./Form/Create";
 import { Error } from "./Error";
 import { useRouter } from "next/navigation";
-import { Loading } from "../../../Loading";
 import { Schedule, Student } from "@/src/service";
 import classNames from "classnames";
-import Accordion from "../../../Accordion";
 import { Body } from "./Accordion/Body";
+import { useStudents } from "@/src/service/hooks/student/useStudents";
+import { Modal } from "@/src/components/Modal";
+import { Loading } from "@/src/components/Loading";
+import Accordion from "@/src/components/Accordion";
 
 export const List = () => {
   const { data, isLoading, isError, refetch } = useStudents();

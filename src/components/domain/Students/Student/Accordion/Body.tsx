@@ -2,7 +2,7 @@ import { Button } from "@/src/components/Button";
 import { Modal } from "@/src/components/Modal";
 import { Text } from "@/src/components/Text";
 import { Student } from "@/src/service";
-import { useDeleteStudent } from "@/src/service/hooks/useDeleteStudent";
+import { useDeleteStudent } from "@/src/service/hooks/student/useDeleteStudent";
 import { Receipt, Trash } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
