@@ -44,7 +44,7 @@ export const FormCreateStudent = ({
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col gap-3 p-3"
         >
-          <InputText name="name" label="Nome do Aluno" theme="light" required />
+          <InputText name="name" label="Nome do Aluno" required />
           <Button text="Cadastrar" variant="success" />
         </form>
       </FormProvider>
