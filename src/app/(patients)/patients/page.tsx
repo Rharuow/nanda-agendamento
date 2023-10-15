@@ -16,9 +16,9 @@ const Patients = () => {
         <Text onClick={() => router.back()}>
           <ArrowCircleLeft size={28} />
         </Text>
-        <Text className="font-bold">Agendamentos</Text>
+        <Text className="font-bold">Pacientes</Text>
         <Text onClick={() => setShowMenu(true)}>
-          <List className=" self-end" size={24} />
+          <List className="self-end" size={24} />
         </Text>
       </div>
       {showMenu !== undefined && (

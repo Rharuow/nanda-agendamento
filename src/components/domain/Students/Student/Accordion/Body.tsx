@@ -60,7 +60,7 @@ export const Body = ({
       />
       <div className="flex flex-col gap-2">
         <div className="flex justify-between">
-          <Text>Quantidade de totais aulas:</Text>
+          <Text>Total de aulas:</Text>
           <Text>
             {!student.schedules
               ? 0
@@ -72,7 +72,7 @@ export const Body = ({
           </Text>
         </div>
         <div className="flex justify-between">
-          <Text>Quantidade de aulas não pagas:</Text>
+          <Text>Aulas não pagas:</Text>
           <Text>
             {!student.schedules
               ? 0

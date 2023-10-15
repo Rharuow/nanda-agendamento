@@ -8,11 +8,14 @@ export const Text = (
   const { theme } = useThemeContext();
   return (
     <span
-      className={classNames(className ?? " ", {
-        "text-red-500": rest.color === "red-500",
-        "text-green-500": rest.color === "green-500",
-        "text-white": !theme || theme === "dark",
-      })}
+      className={classNames(
+        className ?? {
+          "text-red-500": rest.color === "red-500",
+          "text-green-500": rest.color === "green-500",
+          "text-white": !theme || theme === "dark",
+          "text-neutral-800": theme === "light",
+        }
+      )}
       {...rest}
     >
       {children}

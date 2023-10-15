@@ -7,11 +7,11 @@ export default function PatientLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ThemeProvider>
+    <ThemeProvider theme="light">
       <style jsx global>
         {`
           body {
-            background: rgb(100, 116, 139);
+            background: rgb(150, 166, 189);
           }
         `}
       </style>

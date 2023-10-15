@@ -12,7 +12,7 @@ export const Empty = ({ action }: { action: () => void }) => {
         <Lottie animationData={empty} loop={true} />
       </div>
       <Text className="text-center">Nenhum paciente encontrado...</Text>
-      <Button text="Agendar" onClick={action} />
+      <Button text="Cadastrar" onClick={action} />
     </div>
   );
 };

@@ -2,7 +2,7 @@ import { Button } from "@/src/components/Button";
 import { Modal } from "@/src/components/Modal";
 import { Text } from "@/src/components/Text";
 import { Patient } from "@/src/service";
-import { useDeletePatient } from "@/src/service/hooks/patients/useDeleteStudent";
+import { useDeletePatient } from "@/src/service/hooks/patients/useDeletePatient";
 import { Receipt, Trash } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
@@ -60,7 +60,7 @@ export const Body = ({
       />
       <div className="flex flex-col gap-2">
         <div className="flex justify-between">
-          <Text>Quantidade de totais aulas:</Text>
+          <Text>Total de sessões:</Text>
           <Text>
             {!patient.schedules
               ? 0
@@ -72,7 +72,7 @@ export const Body = ({
           </Text>
         </div>
         <div className="flex justify-between">
-          <Text>Quantidade de aulas não pagas:</Text>
+          <Text>Sessões não pagas:</Text>
           <Text>
             {!patient.schedules
               ? 0
