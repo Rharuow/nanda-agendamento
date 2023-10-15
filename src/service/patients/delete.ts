@@ -1,7 +1,7 @@
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "../firebase";
 
-export const deleteStudente = async ({ id }: { id: string }) => {
+export const deletePatient = async ({ id }: { id: string }) => {
   try {
     const patientRef = doc(db, "patients", id);
     await deleteDoc(patientRef);

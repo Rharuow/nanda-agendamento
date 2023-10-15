@@ -1,7 +1,7 @@
 import { useMutation } from "@tanstack/react-query";
-import { deleteStudente } from "../../students/delete";
+import { deletePatient } from "../../patients/delete";
 
-export const useDeleteStudent = () =>
+export const useDeletePatient = () =>
   useMutation({
-    mutationFn: ({ id }: { id: string }) => deleteStudente({ id }),
+    mutationFn: ({ id }: { id: string }) => deletePatient({ id }),
   });

@@ -2,9 +2,11 @@ import { Button } from "@/src/components/Button";
 import { Modal } from "@/src/components/Modal";
 import { Text } from "@/src/components/Text";
 import { Patient } from "@/src/service";
+import { useDeletePatient } from "@/src/service/hooks/patients/useDeleteStudent";
 import { Receipt, Trash } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 
 export const Body = ({
   patient,
@@ -18,7 +20,22 @@ export const Body = ({
 
   const [showModal, setShowModal] = useState(false);
 
-  const handleDeletePatient = () => {};
+  const { mutateAsync: deletePatient } = useDeletePatient();
+
+  const handleDeletePatient = () => {
+    deletePatient(
+      { id: String(patient.id) },
+      {
+        onSuccess: () => {
+          toast.success("Paciente apagado com sucesso...");
+          refetch();
+        },
+        onError: () => {
+          toast.error("Erro ao apagar paciente...", { autoClose: 2000 });
+        },
+      }
+    );
+  };
 
   return (
     <div className="flex flex-col gap-4">
