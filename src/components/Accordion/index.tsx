@@ -19,6 +19,7 @@ export default function Accordion({
   withArrow,
   iconClassName,
   className,
+  onClick,
 }: AccordionProps) {
   const [accordionOpen, setAccordionOpen] = useState<boolean>(false);
 
@@ -33,6 +34,7 @@ export default function Accordion({
         onClick={(e) => {
           e.preventDefault();
           setAccordionOpen(!accordionOpen);
+          onClick && onClick();
         }}
         aria-expanded={accordionOpen}
         aria-controls={`accordion-${id}`}

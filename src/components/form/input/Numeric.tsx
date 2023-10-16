@@ -1,3 +1,4 @@
+import { useThemeContext } from "@/src/context/theme";
 import classNames from "classnames";
 import React, { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
@@ -17,6 +18,8 @@ export const InputNumeric = ({
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
   const { register, control } = useFormContext();
+
+  const { theme } = useThemeContext();
 
   const watchField = useWatch({ control, name });
 
@@ -40,12 +43,13 @@ export const InputNumeric = ({
         type="number"
         autoComplete={rest.autoComplete ?? "numeric-value"}
         className={classNames(
-          `bg-transparent text-white w-full border-b-[1px] animate-inputBlur focus:outline-none caret-white focus:animate-inputFocus ${
+          `bg-transparent w-full border-b-[1px] animate-inputBlur focus:outline-none focus:animate-inputFocus ${
             rest.inputClassName || " "
           }`,
           {
             "animate-inputFocus": watchField,
             "animate-inputBlur": !watchField,
+            "text-white caret-white": !theme || theme === "dark",
           }
         )}
         {...register(name, {

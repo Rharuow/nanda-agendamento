@@ -3,11 +3,11 @@ import React, { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import { Text } from "../../Text";
+import { useThemeContext } from "@/src/context/theme";
 
 export const InputText = ({
   name,
   label,
-  theme,
   ...rest
 }: {
   name: string;
@@ -17,9 +17,9 @@ export const InputText = ({
   inputClassName?: string;
   labelClassName?: string;
   required?: boolean;
-  theme?: "light" | "dark";
 }) => {
   const [isFocused, setIsFocused] = useState<boolean>(false);
+  const { theme } = useThemeContext();
 
   const {
     register,
@@ -50,14 +50,14 @@ export const InputText = ({
         autoComplete={rest.autoComplete ?? "text-value"}
         type="text"
         className={classNames(
-          `w-full  bg-transparent border-b-[1px] animate-inputBlur focus:outline-none caret-white focus:animate-inputFocus ${
+          `w-full  bg-transparent border-b-[1px] animate-inputBlur focus:outline-none focus:animate-inputFocus ${
             rest.inputClassName || " "
           }`,
           {
             "animate-inputFocus": watchField,
             "animate-inputBlur": !watchField,
             "text-dark": theme === "light",
-            "text-white": !theme || theme === "dark",
+            "text-white caret-white": !theme || theme === "dark",
           }
         )}
         {...register(name, {

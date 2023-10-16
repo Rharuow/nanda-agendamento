@@ -1,3 +1,4 @@
+import { useThemeContext } from "@/src/context/theme";
 import dynamic from "next/dynamic";
 import React, { Dispatch, ReactNode, SetStateAction } from "react";
 
@@ -50,10 +51,20 @@ export const Modal = ({
   footerChildren?: ReactNode;
   size?: "xl" | "lg" | "sm";
 }) => {
+  const { theme } = useThemeContext();
   return (
     <TEModal show={showModal} setShow={setShowModal}>
+      <style jsx global>
+        {`
+          .modal-body {
+            background: ${theme === "dark"
+              ? "rgb(30, 30, 30)"
+              : "rgb(200, 200, 200)"};
+          }
+        `}
+      </style>
       <TEModalDialog centered size={size}>
-        <TEModalContent>
+        <TEModalContent className="modal-body">
           {(headerChildren || header) && (
             <TEModalHeader>{headerChildren || header}</TEModalHeader>
           )}

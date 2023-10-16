@@ -1,3 +1,4 @@
+import { useThemeContext } from "@/src/context/theme";
 import classNames from "classnames";
 import React, { useState } from "react";
 import CurrencyInput from "react-currency-input-field";
@@ -22,6 +23,8 @@ export const InputCurrency = ({
   const watchField = useWatch({ control, name });
   const [isFocused, setIsFocused] = useState<boolean>(false);
 
+  const { theme } = useThemeContext();
+
   return (
     <div className={`relative w-full ${rest.className || " "}`}>
       {label && (
@@ -43,12 +46,13 @@ export const InputCurrency = ({
         autoComplete={rest.autoComplete ?? "currency-value"}
         {...(defaultValue && { defaultValue })}
         className={classNames(
-          `w-full text-white bg-transparent border-b-[1px] animate-inputBlur focus:outline-none caret-white focus:animate-inputFocus ${
+          `w-full bg-transparent border-b-[1px] animate-inputBlur focus:outline-none focus:animate-inputFocus ${
             rest.inputClassName || " "
           }`,
           {
             "animate-inputFocus": watchField,
             "animate-inputBlur": !watchField,
+            "text-white caret-white": !theme || theme === "dark",
           }
         )}
         decimalsLimit={2}
