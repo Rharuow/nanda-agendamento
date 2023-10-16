@@ -20,7 +20,7 @@ export const Menu = ({
     <div className="flex flex-row-reverse">
       <div
         className={classNames(
-          "absolute flex gap-3 flex-col overflow-hidden top-0 bg-slate-400 z-50 h-screen w-screen",
+          "absolute flex gap-3 flex-col overflow-hidden top-0 bg-slate-400 z-50 min-h-screen w-screen",
           {
             "animate-menuOpen": show,
             "animate-menuClose": !show,

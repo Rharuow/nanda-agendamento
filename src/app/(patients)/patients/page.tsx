@@ -11,8 +11,8 @@ const Patients = () => {
   const router = useRouter();
   const [showMenu, setShowMenu] = useState<boolean>();
   return (
-    <main className="min-h-screen p-3 flex flex-col">
-      <div className="flex justify-between items-center">
+    <main className="min-h-screen p-3 flex flex-col relative">
+      <div className="flex justify-between items-center bg-[--body-color] sticky top-0 z-50">
         <Text onClick={() => router.back()}>
           <ArrowCircleLeft size={28} />
         </Text>

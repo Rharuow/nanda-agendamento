@@ -8,6 +8,8 @@ import classNames from "classnames";
 import { Body } from "./Accordion/Body";
 import { Modal } from "@/src/components/Modal";
 import { FormCreatePatient } from "./Form/Create";
+import { Text } from "@/src/components/Text";
+import { UserCirclePlus, UserPlus } from "@phosphor-icons/react";
 
 export const ListPatients = () => {
   const { data, isLoading, refetch, isError } = usePatients();
@@ -36,7 +38,17 @@ export const ListPatients = () => {
         <Empty action={() => setShowModal(true)} />
       ) : (
         <div className="flex flex-col gap-6">
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-2 relative">
+            <div className="flex justify-end">
+              <div
+                className="border border-dashed border-neutral-700 rounded-full p-1"
+                onClick={() => setShowModal(true)}
+              >
+                <Text className="text-neutral-700">
+                  <UserPlus size={24} />
+                </Text>
+              </div>
+            </div>
             {data?.map((patient) => (
               <Accordion
                 key={patient.id}

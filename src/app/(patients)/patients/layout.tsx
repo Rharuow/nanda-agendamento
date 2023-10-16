@@ -10,8 +10,12 @@ export default function PatientLayout({
     <ThemeProvider theme="light">
       <style jsx global>
         {`
+          :root {
+            --body-color: rgb(150, 166, 189);
+          }
+
           body {
-            background: rgb(150, 166, 189);
+            background: var(--body-color);
           }
         `}
       </style>

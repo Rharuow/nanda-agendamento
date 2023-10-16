@@ -11,6 +11,7 @@ import { useStudents } from "@/src/service/hooks/student/useStudents";
 import { Modal } from "@/src/components/Modal";
 import { Loading } from "@/src/components/Loading";
 import Accordion from "@/src/components/Accordion";
+import { Text } from "@/src/components/Text";
 
 export const List = () => {
   const { data, isLoading, isError, refetch } = useStudents();
@@ -75,6 +76,16 @@ export const List = () => {
                   iconClassName="text-white"
                 />
               ))}
+              <Accordion
+                id={String(data?.length)}
+                className="border-dashed border-2 border-green-600"
+                onClick={() => setShowModal(true)}
+                headerChildren={
+                  <div className="flex justify-center grow">
+                    <Text>Adcionar</Text>
+                  </div>
+                }
+              />
             </div>
           </div>
         )}
