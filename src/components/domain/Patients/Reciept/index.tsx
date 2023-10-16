@@ -3,7 +3,7 @@ import "./calendar.css";
 import { Text } from "@/src/components/Text";
 import { ArrowCircleLeft } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 import { Empty } from "./Empty";
 import { Error } from "./Error";
 import { Loading } from "@/src/components/Loading";
@@ -11,12 +11,46 @@ import dayjs from "dayjs";
 import Calendar from "react-calendar";
 import { Button } from "@/src/components/Button";
 import { useGetPatient } from "@/src/service/hooks/patients/useGetPatient";
+import classNames from "classnames";
+import Image from "next/image";
+import { FormProvider, useForm } from "react-hook-form";
+import { useGenerateQrCode } from "@/src/service/hooks/qrCode/useGenerateQrCode";
+import { toast } from "react-toastify";
+import { Toggle } from "@/src/components/form/Toggle";
 
 export const Reciept = ({ id }: { id: string }) => {
   const { data, isLoading, isError } = useGetPatient({
     id,
   });
   const { back } = useRouter();
+  const [withQrCode, setWithQrCode] = useState(true);
+
+  const methods = useForm({
+    defaultValues: {
+      withQrCode,
+    },
+  });
+
+  const { data: pix } = useGenerateQrCode({
+    value: Number(
+      data?.schedules
+        .filter((schedule) => !schedule?.paid)
+        .reduce(
+          (accumulator, current) =>
+            Number(current?.pricePerTime) * Number(current?.amountTime) +
+            accumulator,
+          0
+        )
+    ),
+    message: "TESTE",
+  });
+
+  const handleCopyPixKey = () => {
+    if (pix) {
+      navigator.clipboard.writeText(pix?.key);
+      toast.success("Chave copiada...");
+    }
+  };
 
   const handleScreeShot = () => {
     window.print();
@@ -45,6 +79,17 @@ export const Reciept = ({ id }: { id: string }) => {
       ) : (
         <div className="flex flex-col gap-4">
           <Text className="text-center font-bold text-lg">Extrato</Text>
+          <div className="print:hidden">
+            <div className="flex justify-end">
+              <FormProvider {...methods}>
+                <Toggle
+                  name="withQrCode"
+                  onClick={(value) => setWithQrCode(value)}
+                  label="Com QrCode?"
+                />
+              </FormProvider>
+            </div>
+          </div>
           <div className="flex justify-center bg-slate-500 p-1 rounded">
             <Text className="text-center font-bold text-lg">{data.name}</Text>
           </div>
@@ -104,6 +149,30 @@ export const Reciept = ({ id }: { id: string }) => {
               }
             />
           </div>
+          {pix && (
+            <div
+              className={classNames({
+                "flex flex-col gap-2 items-center justify-center": withQrCode,
+                hidden: !withQrCode,
+              })}
+            >
+              <div className="flex flex-col gap-1 items-center">
+                <Text className="font-bold print:text-black">Chave:</Text>
+                <Text
+                  className="break-all print:text-black"
+                  onClick={handleCopyPixKey}
+                >
+                  {pix.key}
+                </Text>
+              </div>
+              <Image
+                alt="Qrcode Pix"
+                src={pix.qrCode}
+                width={280}
+                height={280}
+              />
+            </div>
+          )}
           <Button
             className="print:hidden"
             text="Imprimir"

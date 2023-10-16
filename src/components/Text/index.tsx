@@ -9,15 +9,10 @@ export const Text = (
   return (
     <span
       className={classNames(className || " ", {
-        "text-red-500": !className?.includes("text-") && color === "red-500",
-        "text-green-500":
-          !className?.includes("text-") && color === "green-500",
-        "text-neutral-300":
-          !className?.includes("text-") &&
-          !color &&
-          (!theme || theme === "dark"),
-        "text-neutral-800":
-          !className?.includes("text-") && !color && theme === "light",
+        "text-red-500": color === "red-500",
+        "text-green-500": color === "green-500",
+        "text-neutral-300": !color && (!theme || theme === "dark"),
+        "text-neutral-800": !color && theme === "light",
       })}
       {...rest}
     >
