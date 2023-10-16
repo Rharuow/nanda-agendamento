@@ -199,19 +199,16 @@ export const ListScheduling = () => {
             })
           : schedulesData
       );
+      setStudents(
+        schedulesData
+          ?.map((schedule) => schedule.student)
+          .filter(
+            (student, index, self) =>
+              index === 0 || self[index - 1].name !== student.name
+          )
+      );
     }
   }, [filter, schedulesData]);
-
-  useEffect(() => {
-    setStudents(
-      schedules
-        ?.map((schedule) => schedule.student)
-        .filter(
-          (student, index, self) =>
-            index === 0 || self[index - 1].name !== student.name
-        )
-    );
-  }, [schedules]);
 
   return (
     <div className="flex flex-col grow items-stretch relative w-full gap-2 mt-4">
@@ -254,6 +251,7 @@ export const ListScheduling = () => {
       />
       <FormProvider {...methods}>
         <InputSelectText
+          key={String(students !== undefined)}
           emptyLabel="Nenhum aluno encontrado"
           options={
             students
@@ -303,13 +301,15 @@ export const ListScheduling = () => {
           <div className="flex flex-col w-full gap-2">
             {schedules && schedules?.length > 0 ? (
               schedules?.map((sche, index) => (
-                <div className="bg-slate-400 px-3 rounded" key={index}>
+                <div className="bg-slate-600 px-3 rounded" key={index}>
                   <Accordion
                     id={index}
                     iconClassName="text-white"
                     headerChildren={
                       <Header
-                        deleteOnClick={() => {
+                        deleteOnClick={(e) => {
+                          e?.preventDefault();
+                          e?.stopPropagation();
                           setSchedule({
                             amountTime: Number(sche.amountTime),
                             date: String(sche.date),
