@@ -28,6 +28,7 @@
     "lottie-react": "^2.4.0",
     "next": "13.4.19",
     "postcss": "8.4.29",
+    "qrcode-pix": "^5.0.0",
     "react": "18.2.0",
     "react-calendar": "^4.6.0",
     "react-currency-input-field": "^3.6.11",
