@@ -1,6 +1,7 @@
 import { useThemeContext } from "@/src/context/theme";
 import dynamic from "next/dynamic";
 import React, { Dispatch, ReactNode, SetStateAction } from "react";
+import { Text } from "../Text";
 
 const TEModal = dynamic(() =>
   import("tw-elements-react").then((res) => res.TEModal)
@@ -66,10 +67,12 @@ export const Modal = ({
       <TEModalDialog centered size={size}>
         <TEModalContent className="modal-body">
           {(headerChildren || header) && (
-            <TEModalHeader>{headerChildren || header}</TEModalHeader>
+            <TEModalHeader>
+              {headerChildren || <Text>{header}</Text>}
+            </TEModalHeader>
           )}
           {(bodyChildren || body) && (
-            <TEModalBody>{bodyChildren || body}</TEModalBody>
+            <TEModalBody>{bodyChildren || <Text>{body}</Text>}</TEModalBody>
           )}
           {(footerChildren || footer) && (
             <TEModalFooter>{footer || footerChildren}</TEModalFooter>

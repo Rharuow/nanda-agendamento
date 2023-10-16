@@ -198,19 +198,17 @@ export const ListSchedules = () => {
             })
           : schedulesData
       );
+
+      setPatients(
+        schedulesData
+          ?.map((schedule) => schedule.patient)
+          .filter(
+            (patient, index, self) =>
+              index === 0 || self[index - 1].name !== patient.name
+          )
+      );
     }
   }, [filter, schedulesData]);
-
-  useEffect(() => {
-    setPatients(
-      schedules
-        ?.map((schedule) => schedule.patient)
-        .filter(
-          (patient, index, self) =>
-            index === 0 || self[index - 1].name !== patient.name
-        )
-    );
-  }, [schedules]);
 
   return (
     <div className="flex flex-col grow items-stretch relative w-full gap-2 mt-4">
@@ -253,10 +251,11 @@ export const ListSchedules = () => {
       />
       <FormProvider {...methods}>
         <InputSelectText
+          key={String(patients !== undefined)}
           emptyLabel="Nenhum paciente encontrado"
           options={
             patients
-              ? patients?.map((student) => ({
+              ? patients.map((student) => ({
                   label: student.name,
                   value: student.name,
                 }))
@@ -302,7 +301,7 @@ export const ListSchedules = () => {
           <div className="flex flex-col w-full gap-2">
             {schedules && schedules?.length > 0 ? (
               schedules?.map((sche, index) => (
-                <div className="bg-slate-400 px-3 rounded" key={index}>
+                <div className="bg-slate-600 px-3 rounded" key={index}>
                   <Accordion
                     id={index}
                     iconClassName="text-white"
