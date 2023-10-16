@@ -13,6 +13,7 @@ import { InputCurrency } from "@/src/components/form/input/Currency";
 import { InputNumeric } from "@/src/components/form/input/Numeric";
 import { Button } from "@/src/components/Button";
 import { usePatients } from "@/src/service/hooks/patients/usePatients";
+import { useCreateSchedule } from "@/src/service/hooks/patients/useCreateSchedule";
 
 type ValuePiece = Date | string | null;
 
@@ -53,18 +54,20 @@ export const Scheduling = () => {
     [patients]
   );
 
+  const { mutateAsync: createSchedule } = useCreateSchedule();
+
   const onSubmit = (data: FormCreateScheduling) => {
     if (!data.date) return toast.error("Data é obrigatória");
-    // createSchedule(data, {
-    //   onSuccess: (res) => {
-    //     toast.success("Agendamento feito com sucesso...");
-    //     patientsRefetch();
-    //   },
-    //   onError: (error) => {
-    //     console.log("Create schedule error = ", error);
-    //     toast.error("Erro ao agendar...");
-    //   },
-    // });
+    createSchedule(data, {
+      onSuccess: (res) => {
+        toast.success("Agendamento feito com sucesso...");
+        patientsRefetch();
+      },
+      onError: (error) => {
+        console.log("Create schedule error = ", error);
+        toast.error("Erro ao agendar...");
+      },
+    });
   };
 
   useEffect(() => {
@@ -86,7 +89,7 @@ export const Scheduling = () => {
             <input type="text" hidden {...register("date")} />
             <InputSelectText<string>
               name="name"
-              label="Nome do aluno"
+              label="Nome do paciente"
               required
               emptyLabel="Paciente não cadastrado"
               onChange={(name) => handleChangeNameInput(name)}
@@ -104,13 +107,13 @@ export const Scheduling = () => {
                 name="price"
                 className="w-1/2"
                 required
-                label="Valor por aula"
+                label="Valor por sessão"
               />
               <InputNumeric
                 className="w-1/2"
                 name="amount"
                 required
-                label="Quantidade aulas"
+                label="Quantidade sessões"
               />
             </div>
 

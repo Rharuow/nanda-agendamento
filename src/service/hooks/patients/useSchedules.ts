@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { listSchedules } from "../../students/schedules";
-import { FilterType } from "../../students/schedules/types";
+import { FilterType } from "../../patients/schedules/types";
+import { listSchedules } from "../../patients/schedules/list";
 
 export function useSchedules(filter?: FilterType, staleTime?: number) {
   return useQuery({
-    queryKey: ["list-schedules-students"],
+    queryKey: ["list-schedules-patients"],
     queryFn: () => listSchedules(filter),
     retry: false,
     ...(staleTime && { staleTime }),

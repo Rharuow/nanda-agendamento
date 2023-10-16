@@ -18,7 +18,7 @@ const Patients = () => {
         </Text>
         <Text className="font-bold">Pacientes</Text>
         <Text onClick={() => setShowMenu(true)}>
-          <List className="self-end" size={24} />
+          <List size={24} />
         </Text>
       </div>
       {showMenu !== undefined && (

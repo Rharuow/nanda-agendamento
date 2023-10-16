@@ -1,10 +1,20 @@
-import { ArrowsClockwise, BookBookmark, Person } from "@phosphor-icons/react";
+import {
+  ArrowsClockwise,
+  BookBookmark,
+  Notebook,
+  Person,
+} from "@phosphor-icons/react";
 
 export const items = [
   {
+    icon: Notebook,
+    label: "Agendamentos",
+    route: "/patients/schedules",
+  },
+  {
     icon: BookBookmark,
     label: "Agendar",
-    route: "/patients/schedules",
+    route: "/patients/schedules/new",
   },
   {
     icon: Person,

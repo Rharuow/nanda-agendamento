@@ -18,7 +18,7 @@ const Schedule = () => {
         </Text>
         <Text className="font-bold">Criar agendamento</Text>
         <Text onClick={() => setShowMenu(true)}>
-          <List className="text-white self-end" size={24} />
+          <List size={24} />
         </Text>
       </div>
       {showMenu !== undefined && (
