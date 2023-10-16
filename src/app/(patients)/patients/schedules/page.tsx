@@ -1,32 +1,30 @@
 "use client";
 import { Menu } from "@/src/components/Menu";
 import { Text } from "@/src/components/Text";
-import { List } from "@/src/components/domain/Students/Student/List";
-import { ArrowCircleLeft, List as ListIcon } from "@phosphor-icons/react";
+import { ListSchedules } from "@/src/components/domain/Patients/Schedules/List";
+import { ArrowCircleLeft, List } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
-import { items } from "./utils/items";
+import { useState } from "react";
+import { items } from "../utils/items";
 
-const Students = () => {
+export default function Schedules() {
   const router = useRouter();
   const [showMenu, setShowMenu] = useState<boolean>();
   return (
-    <main className="min-h-screen p-3 flex flex-col">
-      <div className="flex justify-between items-center bg-[--body-color] sticky top-0 z-50">
+    <main className="min-h-screen flex flex-col p-3">
+      <div className="flex justify-between items-center">
         <Text onClick={() => router.back()}>
           <ArrowCircleLeft size={28} />
         </Text>
-        <Text className="font-bold">Alunos</Text>
+        <Text className="font-bold">Agendamentos</Text>
         <Text onClick={() => setShowMenu(true)}>
-          <ListIcon className="text-white self-end" size={24} />
+          <List className="text-white self-end" size={24} />
         </Text>
       </div>
       {showMenu !== undefined && (
         <Menu show={showMenu} setShow={setShowMenu} items={items} />
       )}
-      <List />
+      <ListSchedules />
     </main>
   );
-};
-
-export default Students;
+}

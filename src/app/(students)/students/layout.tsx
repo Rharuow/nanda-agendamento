@@ -10,8 +10,11 @@ export default function StudentLayout({
     <ThemeProvider>
       <style jsx global>
         {`
+          :root {
+            --body-color: rgb(30, 30, 30);
+          }
           body {
-            background: rgba(30, 30, 30, 0.9);
+            background: var(--body-color);
           }
         `}
       </style>

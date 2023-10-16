@@ -12,6 +12,7 @@ import { Modal } from "@/src/components/Modal";
 import { Loading } from "@/src/components/Loading";
 import Accordion from "@/src/components/Accordion";
 import { Text } from "@/src/components/Text";
+import { UserPlus } from "@phosphor-icons/react";
 
 export const List = () => {
   const { data, isLoading, isError, refetch } = useStudents();
@@ -58,6 +59,16 @@ export const List = () => {
         ) : (
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-2">
+              <div className="flex justify-end">
+                <div
+                  className="border border-dashed border-neutral-300 rounded-full p-1"
+                  onClick={() => setShowModal(true)}
+                >
+                  <Text>
+                    <UserPlus size={24} />
+                  </Text>
+                </div>
+              </div>
               {students?.map((student) => (
                 <Accordion
                   key={student.id}
@@ -76,16 +87,6 @@ export const List = () => {
                   iconClassName="text-white"
                 />
               ))}
-              <Accordion
-                id={String(data?.length)}
-                className="border-dashed border-2 border-green-600"
-                onClick={() => setShowModal(true)}
-                headerChildren={
-                  <div className="flex justify-center grow">
-                    <Text>Adcionar</Text>
-                  </div>
-                }
-              />
             </div>
           </div>
         )}
