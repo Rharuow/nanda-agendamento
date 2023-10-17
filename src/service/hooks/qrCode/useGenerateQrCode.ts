@@ -11,6 +11,6 @@ export const useGenerateQrCode = ({
   return useQuery({
     queryKey: ["pix-qr-code"],
     queryFn: () => generateDynamicPix({ value, message }),
-    enabled: !!value,
+    enabled: !!value && !isNaN(value),
   });
 };
